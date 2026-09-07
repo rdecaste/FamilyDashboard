@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Parent Controls · Family Quest</title>
+<link rel="stylesheet" href="child-app.css">
+<link rel="stylesheet" href="parent.css">
+</head>
+<body>
+<main>
+<header class="top">
+<div><p class="eyebrow">Family Quest</p><h1>Parent controls</h1></div>
+<a class="dashboard-link" href="./">Dashboard</a>
+</header>
+<section class="summary"><div><strong id="completedCount">0</strong><span>Completed today</span></div><div><strong id="updated">—</strong><span>Last update</span></div></section>
+<section class="child-section"><h2>Rassell</h2><div id="rassellTasks" class="tasks"></div></section>
+<section class="child-section"><h2>Michelle</h2><div id="michelleTasks" class="tasks"></div></section>
+<p id="message" class="message" aria-live="polite"></p>
+</main>
+<dialog id="pinDialog">
+<form method="dialog" id="pinForm">
+<p class="eyebrow">Protected action</p>
+<h2>Enter parent code</h2>
+<input id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required>
+<div class="dialog-actions"><button value="cancel" class="cancel">Cancel</button><button value="confirm" class="complete">Reset task</button></div>
+</form>
+</dialog>
+<script src="parent.js"></script>
+</body>
+</html>
