@@ -33,6 +33,10 @@
     .task-dot{width:18px;height:18px;border:2px solid #aab3c477;border-radius:50%;flex:0 0 auto}
     .empty{color:#68d391;font-size:24px}
     .more{color:#aab3c4}
+    .completed-label{margin-top:22px;color:#68d391}
+    .completed li{color:#9ba6b7;text-decoration:line-through;text-decoration-color:#68d391aa}
+    .completed .task-dot{position:relative;border-color:#68d391;background:#68d391}
+    .completed .task-dot::after{content:"✓";position:absolute;inset:-5px 0 0 1px;color:#07110b;font-size:17px;font-weight:800;text-decoration:none}
     .footer{display:flex;justify-content:space-between;gap:18px;color:#aab3c4;font-size:17px;white-space:nowrap}
     @media(max-width:1100px){
       body{overflow:auto}
@@ -53,8 +57,8 @@
     <section class="live" aria-live="polite">
       <header class="live-head"><h1>Today</h1><div class="live-status"><span class="pulse"></span>Live</div></header>
       <div class="children">
-        <article class="child" data-child="rassell"><div class="child-top"><div><h2>Rassell</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label">Outstanding</div><ul class="tasks"></ul></article>
-        <article class="child" data-child="michelle"><div class="child-top"><div><h2>Michelle</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label">Outstanding</div><ul class="tasks"></ul></article>
+        <article class="child" data-child="rassell"><div class="child-top"><div><h2>Rassell</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></article>
+        <article class="child" data-child="michelle"><div class="child-top"><div><h2>Michelle</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></article>
       </div>
       <footer class="footer"><span id="date">—</span><span id="updated">Waiting for data</span></footer>
     </section>
@@ -63,7 +67,30 @@
     const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
     let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
     const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    function renderChild(key,data){const root=document.querySelector(`[data-child="${key}"]`);root.querySelector('.points strong').textContent=data.points??0;const screen=root.querySelector('.screen');screen.textContent=`Screen time: ${data.screenTime||'Yes'}`;screen.classList.toggle('no',data.screenTime==='No');const list=root.querySelector('.tasks'),tasks=data.outstandingTasks||[],visible=tasks.slice(0,4),remaining=tasks.length-visible.length;root.querySelector('.tasks-label').textContent=tasks.length?`${tasks.length} outstanding`:'Outstanding';list.innerHTML=visible.length?visible.map(t=>`<li><span class="task-dot"></span>${esc(typeof t==='string'?t:t.title)}</li>`).join('')+(remaining?`<li class="more">+${remaining} more</li>`:''):'<li class="empty">All done</li>';}
+    function taskTitle(t){return esc(typeof t==='string'?t:t.title)}
+    function renderChild(key,data){
+      const root=document.querySelector(`[data-child="${key}"]`);
+      root.querySelector('.points strong').textContent=data.points??0;
+      const screen=root.querySelector('.screen');
+      screen.textContent=`Screen time: ${data.screenTime||'Yes'}`;
+      screen.classList.toggle('no',data.screenTime==='No');
+
+      const outstanding=data.outstandingTasks||[];
+      const outstandingList=root.querySelector('.outstanding');
+      const visibleOutstanding=outstanding.slice(0,4);
+      root.querySelector('.outstanding-label').textContent=outstanding.length?`${outstanding.length} outstanding`:'Outstanding';
+      outstandingList.innerHTML=visibleOutstanding.length
+        ?visibleOutstanding.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(outstanding.length>4?`<li class="more">+${outstanding.length-4} more</li>`:'')
+        :'<li class="empty">All done</li>';
+
+      const completed=data.completedTasks||[];
+      const completedList=root.querySelector('.completed');
+      const visibleCompleted=completed.slice(0,3);
+      root.querySelector('.completed-label').textContent=completed.length?`${completed.length} completed today`:'Completed today';
+      completedList.innerHTML=visibleCompleted.length
+        ?visibleCompleted.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(completed.length>3?`<li class="more">+${completed.length-3} more</li>`:'')
+        :'<li class="more">None yet</li>';
+    }
     async function refreshData(){try{const file=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!file.ok)throw new Error(file.status);const data=await file.json();renderChild('rassell',data.children.rassell);renderChild('michelle',data.children.michelle);document.getElementById('date').textContent=new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${data.date}T12:00:00`));document.getElementById('updated').textContent=`Updated ${new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit'}).format(new Date(data.updatedAt))}`;}catch(e){document.getElementById('updated').textContent='Live data unavailable';}}
     async function refreshImage(){try{const r=await fetch(`${listUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const data=await r.json(),a=[...(data.resources||[])].sort((x,y)=>y.version-x.version)[0];if(!a)return;const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;const id=a.public_id.split('/').map(encodeURIComponent).join('/');standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto/v${a.version}/${id}.${a.format}?t=${Date.now()}`;}catch(e){console.error(e)}}
     refreshImage();refreshData();setInterval(refreshImage,30000);setInterval(refreshData,15000);
