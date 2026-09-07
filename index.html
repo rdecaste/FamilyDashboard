@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Family Quest</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #050505; }
+    #current, #next {
+      position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      opacity: 0; transition: opacity 900ms ease; background: #050505;
+    }
+    #current.visible, #next.visible { opacity: 1; }
+  </style>
+</head>
+<body>
+  <img id="current" alt="Family dashboard">
+  <img id="next" alt="" aria-hidden="true">
+  <script>
+    const cloud = 'a3xk0plk';
+    const tag = 'family-dashboard-live';
+    const listUrl = `https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
+    let active = document.getElementById('current');
+    let standby = document.getElementById('next');
+    let shownKey = '';
+
+    function assetUrl(asset) {
+      const publicId = asset.public_id.split('/').map(encodeURIComponent).join('/');
+      return `https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto/v${asset.version}/${publicId}.${asset.format}`;
+    }
+
+    async function refresh() {
+      try {
+        const response = await fetch(`${listUrl}?t=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Cloudinary list returned ${response.status}`);
+        const data = await response.json();
+        const latest = [...(data.resources || [])].sort((a, b) => b.version - a.version)[0];
+        if (!latest) return;
+        const key = `${latest.public_id}:${latest.version}`;
+        if (key === shownKey) return;
+
+        standby.onload = () => {
+          standby.classList.add('visible');
+          active.classList.remove('visible');
+          [active, standby] = [standby, active];
+          shownKey = key;
+        };
+        standby.src = `${assetUrl(latest)}?t=${Date.now()}`;
+      } catch (error) {
+        console.error('Family dashboard refresh failed:', error);
+      }
+    }
+
+    refresh();
+    setInterval(refresh, 15000);
+  </script>
+</body>
+</html>
