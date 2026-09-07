@@ -3,57 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Family Quest</title>
+  <meta http-equiv="Cache-Control" content="no-store">
+  <title>Family Dashboard</title>
   <style>
-    * { box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #050505; }
-    #current, #next {
-      position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover;
-      opacity: 0; transition: opacity 900ms ease; background: #050505;
-    }
-    #current.visible, #next.visible { opacity: 1; }
+    *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#080b12;color:#f7f8fb;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{display:grid;grid-template-rows:minmax(0,1fr) auto;height:100%;background:#080b12}.visual{position:relative;min-height:0;overflow:hidden;background:#050505}
+    .visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s ease}.visual img.show{opacity:1}
+    .state{position:absolute;left:22px;bottom:18px;padding:7px 11px;border-radius:999px;background:#05081099;backdrop-filter:blur(8px);font-size:12px;color:#ffffffc7}
+    .live{display:grid;grid-template-columns:140px minmax(0,1fr) auto;gap:22px;padding:17px 24px 19px;background:#111722;box-shadow:0 -10px 30px #0006}
+    .live-head h1{font-size:24px;font-weight:600;margin:0 0 7px}.live-status{display:flex;align-items:center;gap:7px;color:#68d391;font-size:12px}.pulse{width:8px;height:8px;border-radius:50%;background:#68d391;box-shadow:0 0 0 5px #68d39122}
+    .children{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}.child{min-width:0}.child-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.child h2{font-size:20px;margin:0 0 4px}.screen{font-size:12px;color:#68d391}.screen.no{color:#fc8181}
+    .points{text-align:right}.points strong{display:block;font-size:36px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}.points span,.tasks-label{font-size:11px;color:#aab3c4;text-transform:uppercase;letter-spacing:.08em}
+    .tasks-label{margin:13px 0 7px}.tasks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px}.tasks li{display:flex;align-items:center;gap:8px;min-width:0;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.task-dot{width:13px;height:13px;border:1.5px solid #aab3c477;border-radius:50%;flex:0 0 auto}
+    .footer{display:grid;gap:5px;justify-items:end;align-content:end;color:#aab3c4;font-size:11px;white-space:nowrap}.empty{color:#68d391;font-size:14px}
+    @media(max-width:760px){body{overflow:auto}main{height:auto;min-height:100%}.visual{min-height:54vh}.live{grid-template-columns:1fr}.children{grid-template-columns:1fr}.tasks{grid-template-columns:1fr}.footer{justify-items:start}}
   </style>
 </head>
 <body>
-  <img id="current" alt="Family dashboard">
-  <img id="next" alt="" aria-hidden="true">
+  <main>
+    <section class="visual" aria-label="Yesterday's final family image"><img id="image-a" alt="Yesterday's family dashboard visual"><img id="image-b" alt="" aria-hidden="true"><div class="state">Yesterday’s final state</div></section>
+    <section class="live" aria-live="polite">
+      <header class="live-head"><h1>Today</h1><div class="live-status"><span class="pulse"></span>Live</div></header>
+      <div class="children">
+        <article class="child" data-child="rassell"><div class="child-top"><div><h2>Rassell</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label">Outstanding</div><ul class="tasks"></ul></article>
+        <article class="child" data-child="michelle"><div class="child-top"><div><h2>Michelle</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label">Outstanding</div><ul class="tasks"></ul></article>
+      </div>
+      <footer class="footer"><span id="date">—</span><span id="updated">Waiting for data</span></footer>
+    </section>
+  </main>
   <script>
-    const cloud = 'a3xk0plk';
-    const tag = 'family-dashboard-live';
-    const listUrl = `https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
-    let active = document.getElementById('current');
-    let standby = document.getElementById('next');
-    let shownKey = '';
-
-    function assetUrl(asset) {
-      const publicId = asset.public_id.split('/').map(encodeURIComponent).join('/');
-      return `https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto/v${asset.version}/${publicId}.${asset.format}`;
-    }
-
-    async function refresh() {
-      try {
-        const response = await fetch(`${listUrl}?t=${Date.now()}`, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`Cloudinary list returned ${response.status}`);
-        const data = await response.json();
-        const latest = [...(data.resources || [])].sort((a, b) => b.version - a.version)[0];
-        if (!latest) return;
-        const key = `${latest.public_id}:${latest.version}`;
-        if (key === shownKey) return;
-
-        standby.onload = () => {
-          standby.classList.add('visible');
-          active.classList.remove('visible');
-          [active, standby] = [standby, active];
-          shownKey = key;
-        };
-        standby.src = `${assetUrl(latest)}?t=${Date.now()}`;
-      } catch (error) {
-        console.error('Family dashboard refresh failed:', error);
-      }
-    }
-
-    refresh();
-    setInterval(refresh, 15000);
+    const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
+    let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function renderChild(key,data){const root=document.querySelector(`[data-child="${key}"]`);root.querySelector('.points strong').textContent=data.points??0;const screen=root.querySelector('.screen');screen.textContent=`Screen time: ${data.screenTime||'Yes'}`;screen.classList.toggle('no',data.screenTime==='No');const list=root.querySelector('.tasks'),tasks=data.outstandingTasks||[];root.querySelector('.tasks-label').textContent=tasks.length?`${tasks.length} outstanding`:'Outstanding';list.innerHTML=tasks.length?tasks.map(t=>`<li><span class="task-dot"></span>${esc(t)}</li>`).join(''):'<li class="empty">All done</li>';}
+    async function refreshData(){try{const r=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const data=await r.json();renderChild('rassell',data.children.rassell);renderChild('michelle',data.children.michelle);document.getElementById('date').textContent=new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${data.date}T12:00:00`));document.getElementById('updated').textContent=`Updated ${new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit'}).format(new Date(data.updatedAt))}`;}catch(e){document.getElementById('updated').textContent='Live data unavailable';}}
+    async function refreshImage(){try{const r=await fetch(`${listUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const data=await r.json(),a=[...(data.resources||[])].sort((x,y)=>y.version-x.version)[0];if(!a)return;const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;const id=a.public_id.split('/').map(encodeURIComponent).join('/');standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto/v${a.version}/${id}.${a.format}?t=${Date.now()}`;}catch(e){console.error(e)}}
+    refreshImage();refreshData();setInterval(refreshImage,30000);setInterval(refreshData,15000);
   </script>
 </body>
 </html>
