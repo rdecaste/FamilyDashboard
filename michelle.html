@@ -1,1 +1,30 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-store"><title>Michelle — Family Dashboard</title><link rel="stylesheet" href="child-app.css"></head><body><main><header class="top"><div><p class="eyebrow">Today</p><h1>Michelle</h1><div class="status" id="screen"><span class="dot"></span>Screen time: —</div></div><div class="points"><strong id="points">—</strong><span>points</span></div></header><h2>Outstanding tasks</h2><section class="tasks" id="tasks"></section><p class="message" id="message" aria-live="polite"></p></main><script>const CHILD='Michelle';</script><script src="child-app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Michelle — Family Dashboard</title>
+<link rel="stylesheet" href="child-app.css">
+</head>
+<body>
+<main>
+<header class="top">
+<div><p class="eyebrow">Today</p><h1>Michelle</h1><div class="status" id="screen"><span class="dot"></span>Screen time: —</div></div>
+<div class="points"><strong id="points">—</strong><span>points</span></div>
+</header>
+<section class="rewards">
+<h2>Redeem points</h2>
+<div class="reward-grid">
+<button class="reward" type="button" data-reward="screen" data-cost="12"><strong>30 min extra screen time</strong><span>12 points</span></button>
+<button class="reward cash" type="button" data-reward="cash" data-cost="42"><strong>€5 cash</strong><span>42 points</span></button>
+</div>
+</section>
+<h2>Outstanding tasks</h2>
+<section class="tasks" id="tasks"></section>
+<p class="message" id="message" aria-live="polite"></p>
+</main>
+<script>const CHILD='Michelle';</script>
+<script src="child-app.js"></script>
+</body>
+</html>
