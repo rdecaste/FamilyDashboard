@@ -33,12 +33,15 @@
     .task-dot{width:16px;height:16px;border:2px solid #aab3c477;border-radius:50%;flex:0 0 auto}
     .empty{color:#68d391;font-size:20px}
     .more{color:#aab3c4}
-    .history{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;margin-top:4px}
+    .history{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:4px}
     .history>div{min-width:0}
     .completed-label{color:#68d391}
     .completed li{color:#9ba6b7;text-decoration:line-through;text-decoration-color:#68d391aa}
     .completed .task-dot{position:relative;border-color:#68d391;background:#68d391}
     .completed .task-dot::after{content:"✓";position:absolute;inset:-5px 0 0 1px;color:#07110b;font-size:16px;font-weight:800;text-decoration:none}
+    .redeemed-label{color:#90cdf4}
+    .redeemed li{color:#bee3f8}
+    .redeemed .task-dot{border-color:#90cdf4;background:#90cdf422}
     .yesterday-label{color:#f6ad55}
     .yesterday li{color:#f4c27f}
     .yesterday .task-dot{border-color:#f6ad55}
@@ -64,8 +67,8 @@
     <section class="live" aria-live="polite">
       <header class="live-head"><h1>Today</h1><div class="live-status"><span class="pulse"></span>Live</div></header>
       <div class="children">
-        <article class="child" data-child="rassell"><div class="child-top"><div><h2>Rassell</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="history"><div><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></div><div><div class="tasks-label yesterday-label">Incomplete yesterday</div><ul class="tasks yesterday"></ul></div></div></article>
-        <article class="child" data-child="michelle"><div class="child-top"><div><h2>Michelle</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="history"><div><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></div><div><div class="tasks-label yesterday-label">Incomplete yesterday</div><ul class="tasks yesterday"></ul></div></div></article>
+        <article class="child" data-child="rassell"><div class="child-top"><div><h2>Rassell</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="history"><div><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></div><div><div class="tasks-label redeemed-label">Redeemed today</div><ul class="tasks redeemed"></ul></div><div><div class="tasks-label yesterday-label">Incomplete yesterday</div><ul class="tasks yesterday"></ul></div></div></article>
+        <article class="child" data-child="michelle"><div class="child-top"><div><h2>Michelle</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="history"><div><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></div><div><div class="tasks-label redeemed-label">Redeemed today</div><ul class="tasks redeemed"></ul></div><div><div class="tasks-label yesterday-label">Incomplete yesterday</div><ul class="tasks yesterday"></ul></div></div></article>
       </div>
       <footer class="footer"><span id="date">—</span><span id="updated">Waiting for data</span></footer>
     </section>
@@ -73,7 +76,7 @@
   <script>
     const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
     let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
-    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
     function taskTitle(t){return esc(typeof t==='string'?t:t.title)}
     function renderChild(key,data){
       const root=document.querySelector(`[data-child="${key}"]`);
@@ -97,6 +100,14 @@
       completedList.innerHTML=visibleCompleted.length
         ?visibleCompleted.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(completed.length>2?`<li class="more">+${completed.length-2} more</li>`:'')
         :'<li class="more">None yet</li>';
+
+      const redeemed=data.redemptions||[];
+      const redeemedList=root.querySelector('.redeemed');
+      const visibleRedeemed=redeemed.slice(0,2);
+      root.querySelector('.redeemed-label').textContent=redeemed.length?`${redeemed.length} redeemed today`:'Redeemed today';
+      redeemedList.innerHTML=visibleRedeemed.length
+        ?visibleRedeemed.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(redeemed.length>2?`<li class="more">+${redeemed.length-2} more</li>`:'')
+        :'<li class="more">None</li>';
 
       const yesterday=data.yesterdayIncompleteTasks||[];
       const yesterdayList=root.querySelector('.yesterday');
