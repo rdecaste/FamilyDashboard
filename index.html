@@ -19,7 +19,7 @@
     .live-status{display:flex;align-items:center;gap:12px;color:#68d391;font-size:21px}
     .pulse{width:13px;height:13px;border-radius:50%;background:#68d391;box-shadow:0 0 0 8px #68d39122}
     .children{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:22px;flex:1;min-height:0}
-    .child{min-width:0;overflow:hidden;padding:27px 29px;background:#0c111b;border:1px solid #ffffff16;border-radius:22px}
+    .child{min-width:0;overflow:hidden;padding:25px 29px;background:#0c111b;border:1px solid #ffffff16;border-radius:22px}
     .child-top{display:flex;justify-content:space-between;gap:22px;align-items:flex-start}
     .child h2{font-size:40px;line-height:1;margin:0 0 10px}
     .screen{font-size:22px;color:#68d391}
@@ -27,16 +27,20 @@
     .points{text-align:right}
     .points strong{display:block;font-size:78px;line-height:.86;font-weight:650;font-variant-numeric:tabular-nums}
     .points span,.tasks-label{font-size:16px;color:#aab3c4;text-transform:uppercase;letter-spacing:.08em}
-    .tasks-label{margin:25px 0 13px}
-    .tasks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:13px}
-    .tasks li{display:flex;align-items:center;gap:12px;min-width:0;font-size:24px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .task-dot{width:18px;height:18px;border:2px solid #aab3c477;border-radius:50%;flex:0 0 auto}
-    .empty{color:#68d391;font-size:24px}
+    .tasks-label{margin:18px 0 9px}
+    .tasks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:8px}
+    .tasks li{display:flex;align-items:center;gap:12px;min-width:0;font-size:22px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .task-dot{width:17px;height:17px;border:2px solid #aab3c477;border-radius:50%;flex:0 0 auto}
+    .empty{color:#68d391;font-size:22px}
     .more{color:#aab3c4}
-    .completed-label{margin-top:22px;color:#68d391}
+    .completed-label{color:#68d391}
     .completed li{color:#9ba6b7;text-decoration:line-through;text-decoration-color:#68d391aa}
     .completed .task-dot{position:relative;border-color:#68d391;background:#68d391}
     .completed .task-dot::after{content:"✓";position:absolute;inset:-5px 0 0 1px;color:#07110b;font-size:17px;font-weight:800;text-decoration:none}
+    .yesterday-label{color:#f6ad55}
+    .yesterday li{color:#c8cfda}
+    .yesterday .task-dot{border-color:#f6ad55}
+    .yesterday .empty{color:#68d391}
     .footer{display:flex;justify-content:space-between;gap:18px;color:#aab3c4;font-size:17px;white-space:nowrap}
     @media(max-width:1100px){
       body{overflow:auto}
@@ -57,8 +61,8 @@
     <section class="live" aria-live="polite">
       <header class="live-head"><h1>Today</h1><div class="live-status"><span class="pulse"></span>Live</div></header>
       <div class="children">
-        <article class="child" data-child="rassell"><div class="child-top"><div><h2>Rassell</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></article>
-        <article class="child" data-child="michelle"><div class="child-top"><div><h2>Michelle</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></article>
+        <article class="child" data-child="rassell"><div class="child-top"><div><h2>Rassell</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul><div class="tasks-label yesterday-label">Incomplete yesterday</div><ul class="tasks yesterday"></ul></article>
+        <article class="child" data-child="michelle"><div class="child-top"><div><h2>Michelle</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul><div class="tasks-label yesterday-label">Incomplete yesterday</div><ul class="tasks yesterday"></ul></article>
       </div>
       <footer class="footer"><span id="date">—</span><span id="updated">Waiting for data</span></footer>
     </section>
@@ -77,19 +81,27 @@
 
       const outstanding=data.outstandingTasks||[];
       const outstandingList=root.querySelector('.outstanding');
-      const visibleOutstanding=outstanding.slice(0,4);
+      const visibleOutstanding=outstanding.slice(0,3);
       root.querySelector('.outstanding-label').textContent=outstanding.length?`${outstanding.length} outstanding`:'Outstanding';
       outstandingList.innerHTML=visibleOutstanding.length
-        ?visibleOutstanding.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(outstanding.length>4?`<li class="more">+${outstanding.length-4} more</li>`:'')
+        ?visibleOutstanding.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(outstanding.length>3?`<li class="more">+${outstanding.length-3} more</li>`:'')
         :'<li class="empty">All done</li>';
 
       const completed=data.completedTasks||[];
       const completedList=root.querySelector('.completed');
-      const visibleCompleted=completed.slice(0,3);
+      const visibleCompleted=completed.slice(0,2);
       root.querySelector('.completed-label').textContent=completed.length?`${completed.length} completed today`:'Completed today';
       completedList.innerHTML=visibleCompleted.length
-        ?visibleCompleted.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(completed.length>3?`<li class="more">+${completed.length-3} more</li>`:'')
+        ?visibleCompleted.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(completed.length>2?`<li class="more">+${completed.length-2} more</li>`:'')
         :'<li class="more">None yet</li>';
+
+      const yesterday=data.yesterdayIncompleteTasks||[];
+      const yesterdayList=root.querySelector('.yesterday');
+      const visibleYesterday=yesterday.slice(0,2);
+      root.querySelector('.yesterday-label').textContent=yesterday.length?`${yesterday.length} incomplete yesterday`:'Incomplete yesterday';
+      yesterdayList.innerHTML=visibleYesterday.length
+        ?visibleYesterday.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(yesterday.length>2?`<li class="more">+${yesterday.length-2} more</li>`:'')
+        :'<li class="empty">None 🎉</li>';
     }
     async function refreshData(){try{const file=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!file.ok)throw new Error(file.status);const data=await file.json();renderChild('rassell',data.children.rassell);renderChild('michelle',data.children.michelle);document.getElementById('date').textContent=new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${data.date}T12:00:00`));document.getElementById('updated').textContent=`Updated ${new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit'}).format(new Date(data.updatedAt))}`;}catch(e){document.getElementById('updated').textContent='Live data unavailable';}}
     async function refreshImage(){try{const r=await fetch(`${listUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const data=await r.json(),a=[...(data.resources||[])].sort((x,y)=>y.version-x.version)[0];if(!a)return;const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;const id=a.public_id.split('/').map(encodeURIComponent).join('/');standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto/v${a.version}/${id}.${a.format}?t=${Date.now()}`;}catch(e){console.error(e)}}
