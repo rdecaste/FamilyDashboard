@@ -7,58 +7,55 @@
   <title>Family Dashboard</title>
   <style>
     *{box-sizing:border-box}
-    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#080b12;color:#f7f8fb;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-    main{display:grid;grid-template-columns:minmax(700px,32%) minmax(0,1fr);width:100%;height:100%;background:#080b12}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#060b14;color:#f7f8fb;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{display:grid;grid-template-columns:minmax(720px,34%) minmax(0,1fr);width:100%;height:100%;background:radial-gradient(circle at top left,#0f1b33 0%,#09111f 45%,#060b14 100%)}
     .visual{grid-column:2;grid-row:1;position:relative;min-width:0;min-height:0;overflow:hidden;background:#050505}
     .visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;opacity:0;transition:opacity .8s ease}
     .visual img.show{opacity:1}
     .state{position:absolute;left:28px;bottom:24px;padding:10px 17px;border-radius:999px;background:#050810b8;backdrop-filter:blur(8px);font-size:18px;color:#ffffffd9}
-    .live{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:20px;min-width:0;padding:30px 34px;background:#111722;border-right:1px solid #ffffff16;box-shadow:12px 0 34px #0007;z-index:2}
+    .live{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:22px;min-width:0;padding:28px 30px;background:linear-gradient(180deg,#0a1528 0%,#09111d 100%);border-right:1px solid #ffffff16;box-shadow:18px 0 40px #0008;z-index:2}
     .live-head{display:flex;justify-content:space-between;align-items:center}
-    .live-head h1{font-size:42px;font-weight:650;margin:0}
-    .live-status{display:flex;align-items:center;gap:12px;color:#68d391;font-size:20px}
-    .pulse{width:13px;height:13px;border-radius:50%;background:#68d391;box-shadow:0 0 0 8px #68d39122}
+    .live-head h1{font-size:44px;font-weight:720;margin:0;letter-spacing:-.02em}
+    .live-status{display:flex;align-items:center;gap:12px;color:#64f0a5;font-size:22px;font-weight:600}
+    .pulse{width:13px;height:13px;border-radius:50%;background:#64f0a5;box-shadow:0 0 0 8px #64f0a522}
     .children{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:18px;flex:1;min-height:0}
-    .child{min-width:0;overflow:hidden;padding:22px 26px;background:#0c111b;border:1px solid #ffffff16;border-radius:22px}
-    .child-top{display:flex;justify-content:space-between;gap:22px;align-items:flex-start}
-    .child h2{font-size:38px;line-height:1;margin:0 0 8px}
-    .screen{font-size:21px;color:#68d391}
-    .screen.no{color:#fc8181;font-weight:650}
-    .points{text-align:right}
-    .points strong{display:block;font-size:70px;line-height:.86;font-weight:650;font-variant-numeric:tabular-nums}
-    .points span,.tasks-label{font-size:15px;color:#aab3c4;text-transform:uppercase;letter-spacing:.08em}
-    .tasks-label{margin:14px 0 7px}
-    .tasks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:6px}
-    .tasks li{display:flex;align-items:center;gap:10px;min-width:0;font-size:20px;line-height:1.12;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .task-dot{width:16px;height:16px;border:2px solid #aab3c477;border-radius:50%;flex:0 0 auto}
-    .empty{color:#68d391;font-size:20px}
-    .more{color:#aab3c4}
-    .history{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:4px}
-    .history>div{min-width:0}
-    .completed-label{color:#68d391}
-    .completed li{color:#9ba6b7;text-decoration:line-through;text-decoration-color:#68d391aa}
-    .completed .task-dot{position:relative;border-color:#68d391;background:#68d391}
-    .completed .task-dot::after{content:"✓";position:absolute;inset:-5px 0 0 1px;color:#07110b;font-size:16px;font-weight:800;text-decoration:none}
-    .redeemed-label{color:#90cdf4}
-    .redeemed li{color:#bee3f8}
-    .redeemed .task-dot{border-color:#90cdf4;background:#90cdf422}
-    .yesterday-label{color:#f6ad55}
-    .yesterday li{color:#f4c27f}
-    .yesterday .task-dot{border-color:#f6ad55}
-    .yesterday .empty{color:#68d391}
-    .footer{display:flex;justify-content:space-between;gap:18px;color:#aab3c4;font-size:16px;white-space:nowrap}
-    @media(max-width:1100px){
-      body{overflow:auto}
-      main{height:auto;min-height:100%;grid-template-columns:1fr;grid-template-rows:minmax(55vh,70vh) auto}
-      .visual{grid-column:1;grid-row:1}
-      .live{grid-column:1;grid-row:2;padding:28px}
-      .children{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}
-      .history{grid-template-columns:1fr}
-    }
-    @media(max-width:760px){
-      .children{grid-template-columns:1fr}
-      .footer{flex-direction:column}
-    }
+    .child{min-width:0;overflow:hidden;padding:22px 22px 18px;border-radius:24px;background:linear-gradient(180deg,#08111f 0%,#091423 100%);border:1px solid #ffffff14;box-shadow:inset 0 1px 0 #ffffff0d,0 12px 24px #00000030}
+    .child-top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}
+    .identity{min-width:0}
+    .child h2{font-size:36px;line-height:1;margin:0 0 10px;letter-spacing:-.02em}
+    .screen-pill{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;font-size:16px;font-weight:700;background:#0f251b;border:1px solid #64f0a544;color:#7af7b3}
+    .screen-pill.no{background:#2a1014;border-color:#ff7f8b44;color:#ff9098}
+    .screen-pill .pill-dot{width:10px;height:10px;border-radius:50%;background:currentColor;flex:0 0 auto}
+    .points{text-align:right;flex:0 0 auto}
+    .points strong{display:block;font-size:68px;line-height:.84;font-weight:760;font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+    .points span{font-size:14px;color:#9fb0c8;text-transform:uppercase;letter-spacing:.12em}
+    .focus{margin-top:6px;padding:16px 16px 14px;border-radius:18px;background:linear-gradient(180deg,#0d1729 0%,#0b1525 100%);border:1px solid #ffffff10}
+    .focus-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:10px}
+    .focus-label{font-size:15px;color:#9fb0c8;text-transform:uppercase;letter-spacing:.1em}
+    .focus-count{font-size:18px;font-weight:700;color:#f7f8fb}
+    .tasks{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+    .tasks li{display:flex;align-items:flex-start;gap:10px;min-width:0;font-size:20px;line-height:1.16;color:#edf2ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .task-dot{width:15px;height:15px;border-radius:50%;border:2px solid #9fb0c877;flex:0 0 auto;margin-top:4px}
+    .empty{color:#7af7b3;font-size:18px}
+    .more{color:#9fb0c8;font-size:17px}
+    .summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+    .summary-card{min-width:0;padding:12px 12px 10px;border-radius:16px;background:linear-gradient(180deg,#0b1628 0%,#0a1322 100%);border:1px solid #ffffff10}
+    .summary-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:8px}
+    .summary-title{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:#99aac0}
+    .summary-count{font-size:28px;line-height:1;font-weight:760;font-variant-numeric:tabular-nums}
+    .summary-card .tasks{gap:6px}
+    .summary-card .tasks li{font-size:16px;line-height:1.18;color:#d9e4f7}
+    .done-card .summary-count,.done-card .summary-title{color:#73efaa}
+    .done-card .task-dot{border-color:#73efaa;background:#73efaa;position:relative}
+    .done-card .task-dot::after{content:"✓";position:absolute;inset:-5px 0 0 1px;color:#07110b;font-size:15px;font-weight:800}
+    .reward-card .summary-count,.reward-card .summary-title{color:#8fc8ff}
+    .reward-card .task-dot{border-color:#8fc8ff}
+    .missed-card .summary-count,.missed-card .summary-title{color:#f5c06b}
+    .missed-card .task-dot{border-color:#f5c06b}
+    .footer{display:flex;justify-content:space-between;gap:18px;color:#9fb0c8;font-size:16px;white-space:nowrap}
+    @media(max-width:1200px){body{overflow:auto}main{height:auto;min-height:100%;grid-template-columns:1fr;grid-template-rows:minmax(55vh,70vh) auto}.visual{grid-column:1;grid-row:1}.live{grid-column:1;grid-row:2;padding:24px}}
+    @media(max-width:900px){.children{grid-template-columns:1fr;grid-template-rows:none}}
+    @media(max-width:760px){.summary-grid{grid-template-columns:1fr}.footer{flex-direction:column}.child-top{align-items:flex-end}}
   </style>
 </head>
 <body>
@@ -67,8 +64,24 @@
     <section class="live" aria-live="polite">
       <header class="live-head"><h1>Today</h1><div class="live-status"><span class="pulse"></span>Live</div></header>
       <div class="children">
-        <article class="child" data-child="rassell"><div class="child-top"><div><h2>Rassell</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="history"><div><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></div><div><div class="tasks-label redeemed-label">Redeemed today</div><ul class="tasks redeemed"></ul></div><div><div class="tasks-label yesterday-label">Incomplete yesterday</div><ul class="tasks yesterday"></ul></div></div></article>
-        <article class="child" data-child="michelle"><div class="child-top"><div><h2>Michelle</h2><div class="screen">Screen time: —</div></div><div class="points"><strong>—</strong><span>points</span></div></div><div class="tasks-label outstanding-label">Outstanding</div><ul class="tasks outstanding"></ul><div class="history"><div><div class="tasks-label completed-label">Completed today</div><ul class="tasks completed"></ul></div><div><div class="tasks-label redeemed-label">Redeemed today</div><ul class="tasks redeemed"></ul></div><div><div class="tasks-label yesterday-label">Incomplete yesterday</div><ul class="tasks yesterday"></ul></div></div></article>
+        <article class="child" data-child="rassell">
+          <div class="child-top"><div class="identity"><h2>Rassell</h2><div class="screen-pill"><span class="pill-dot"></span><span class="screen-text">Screen time: —</span></div></div><div class="points"><strong>—</strong><span>points</span></div></div>
+          <section class="focus"><div class="focus-head"><span class="focus-label">Outstanding today</span><span class="focus-count outstanding-count">—</span></div><ul class="tasks outstanding"></ul></section>
+          <div class="summary-grid">
+            <section class="summary-card done-card"><div class="summary-head"><span class="summary-title">Done</span><strong class="summary-count completed-count">0</strong></div><ul class="tasks completed"></ul></section>
+            <section class="summary-card reward-card"><div class="summary-head"><span class="summary-title">Rewards</span><strong class="summary-count redemptions-count">0</strong></div><ul class="tasks redemptions"></ul></section>
+            <section class="summary-card missed-card"><div class="summary-head"><span class="summary-title">Missed yesterday</span><strong class="summary-count yesterday-count">0</strong></div><ul class="tasks yesterday"></ul></section>
+          </div>
+        </article>
+        <article class="child" data-child="michelle">
+          <div class="child-top"><div class="identity"><h2>Michelle</h2><div class="screen-pill"><span class="pill-dot"></span><span class="screen-text">Screen time: —</span></div></div><div class="points"><strong>—</strong><span>points</span></div></div>
+          <section class="focus"><div class="focus-head"><span class="focus-label">Outstanding today</span><span class="focus-count outstanding-count">—</span></div><ul class="tasks outstanding"></ul></section>
+          <div class="summary-grid">
+            <section class="summary-card done-card"><div class="summary-head"><span class="summary-title">Done</span><strong class="summary-count completed-count">0</strong></div><ul class="tasks completed"></ul></section>
+            <section class="summary-card reward-card"><div class="summary-head"><span class="summary-title">Rewards</span><strong class="summary-count redemptions-count">0</strong></div><ul class="tasks redemptions"></ul></section>
+            <section class="summary-card missed-card"><div class="summary-head"><span class="summary-title">Missed yesterday</span><strong class="summary-count yesterday-count">0</strong></div><ul class="tasks yesterday"></ul></section>
+          </div>
+        </article>
       </div>
       <footer class="footer"><span id="date">—</span><span id="updated">Waiting for data</span></footer>
     </section>
@@ -76,47 +89,10 @@
   <script>
     const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
     let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
-    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
-    function taskTitle(t){return esc(typeof t==='string'?t:t.title)}
-    function renderChild(key,data){
-      const root=document.querySelector(`[data-child="${key}"]`);
-      root.querySelector('.points strong').textContent=data.points??0;
-      const screen=root.querySelector('.screen');
-      screen.textContent=`Screen time: ${data.screenTime||'Yes'}`;
-      screen.classList.toggle('no',data.screenTime==='No');
-
-      const outstanding=data.outstandingTasks||[];
-      const outstandingList=root.querySelector('.outstanding');
-      const visibleOutstanding=outstanding.slice(0,3);
-      root.querySelector('.outstanding-label').textContent=outstanding.length?`${outstanding.length} outstanding`:'Outstanding';
-      outstandingList.innerHTML=visibleOutstanding.length
-        ?visibleOutstanding.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(outstanding.length>3?`<li class="more">+${outstanding.length-3} more</li>`:'')
-        :'<li class="empty">All done</li>';
-
-      const completed=data.completedTasks||[];
-      const completedList=root.querySelector('.completed');
-      const visibleCompleted=completed.slice(0,2);
-      root.querySelector('.completed-label').textContent=completed.length?`${completed.length} completed today`:'Completed today';
-      completedList.innerHTML=visibleCompleted.length
-        ?visibleCompleted.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(completed.length>2?`<li class="more">+${completed.length-2} more</li>`:'')
-        :'<li class="more">None yet</li>';
-
-      const redeemed=data.redemptions||[];
-      const redeemedList=root.querySelector('.redeemed');
-      const visibleRedeemed=redeemed.slice(0,2);
-      root.querySelector('.redeemed-label').textContent=redeemed.length?`${redeemed.length} redeemed today`:'Redeemed today';
-      redeemedList.innerHTML=visibleRedeemed.length
-        ?visibleRedeemed.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(redeemed.length>2?`<li class="more">+${redeemed.length-2} more</li>`:'')
-        :'<li class="more">None</li>';
-
-      const yesterday=data.yesterdayIncompleteTasks||[];
-      const yesterdayList=root.querySelector('.yesterday');
-      const visibleYesterday=yesterday.slice(0,2);
-      root.querySelector('.yesterday-label').textContent=yesterday.length?`${yesterday.length} incomplete yesterday`:'Incomplete yesterday';
-      yesterdayList.innerHTML=visibleYesterday.length
-        ?visibleYesterday.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+(yesterday.length>2?`<li class="more">+${yesterday.length-2} more</li>`:'')
-        :'<li class="empty">None 🎉</li>';
-    }
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const taskTitle=t=>esc(typeof t==='string'?t:t.title);
+    function renderList(el,items,maxItems,emptyText){const visible=(items||[]).slice(0,maxItems);el.innerHTML=visible.length?visible.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+((items||[]).length>maxItems?`<li class="more">+${items.length-maxItems} more</li>`:''):`<li class="empty">${emptyText}</li>`;}
+    function renderChild(key,data){const root=document.querySelector(`[data-child="${key}"]`);if(!root||!data)return;root.querySelector('.points strong').textContent=data.points??0;const pill=root.querySelector('.screen-pill');const screenText=root.querySelector('.screen-text');const noScreen=data.screenTime==='No';pill.classList.toggle('no',noScreen);screenText.textContent=noScreen?'No screen time today':'Screen time today';const outstanding=data.outstandingTasks||[];root.querySelector('.outstanding-count').textContent=outstanding.length?`${outstanding.length} open`:'All done';renderList(root.querySelector('.outstanding'),outstanding,3,'All done ✓');const completed=data.completedTasks||[];root.querySelector('.completed-count').textContent=completed.length;renderList(root.querySelector('.completed'),completed,2,'None yet');const redemptions=data.redemptions||[];root.querySelector('.redemptions-count').textContent=redemptions.length;renderList(root.querySelector('.redemptions'),redemptions,2,'None');const yesterday=data.yesterdayIncompleteTasks||[];root.querySelector('.yesterday-count').textContent=yesterday.length;renderList(root.querySelector('.yesterday'),yesterday,2,'None 🎉');}
     async function refreshData(){try{const file=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!file.ok)throw new Error(file.status);const data=await file.json();renderChild('rassell',data.children.rassell);renderChild('michelle',data.children.michelle);document.getElementById('date').textContent=new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${data.date}T12:00:00`));document.getElementById('updated').textContent=`Updated ${new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit'}).format(new Date(data.updatedAt))}`;}catch(e){document.getElementById('updated').textContent='Live data unavailable';}}
     async function refreshImage(){try{const r=await fetch(`${listUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const data=await r.json(),a=[...(data.resources||[])].sort((x,y)=>y.version-x.version)[0];if(!a)return;const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;const id=a.public_id.split('/').map(encodeURIComponent).join('/');standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto/v${a.version}/${id}.${a.format}?t=${Date.now()}`;}catch(e){console.error(e)}}
     refreshImage();refreshData();setInterval(refreshImage,30000);setInterval(refreshData,15000);
