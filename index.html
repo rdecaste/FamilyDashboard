@@ -12,7 +12,7 @@ body{background:#06101d}
 main{position:relative;width:100vw;height:100vh;overflow:hidden;background:#07111e}
 .hero{position:absolute;inset:0;overflow:hidden;background:#07111e}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,10,19,.24) 0%,rgba(3,10,19,.03) 18%,rgba(3,10,19,.01) 54%,rgba(3,10,19,.08) 76%,rgba(3,10,19,.18) 100%);pointer-events:none}
-.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .8s ease}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;aspect-ratio:16/9;opacity:0;transition:opacity .8s ease}
 .hero img.show{opacity:1}
 .topbar{position:absolute;left:2.2vw;right:2.2vw;top:2.2vh;height:8.2vh;display:grid;grid-template-columns:1.15fr .9fr 1.35fr auto;align-items:center;gap:1vw;padding:0 1.35vw;border:1px solid rgba(255,255,255,.16);border-radius:1.3vw;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;z-index:5}
 .top-item{min-width:0;display:flex;align-items:center;gap:.75vw;font-size:1.16vw;font-weight:650;white-space:nowrap}
@@ -117,7 +117,7 @@ async function refreshImage(){
     const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;
     const id=a.public_id.split('/').map(encodeURIComponent).join('/');
     standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
-    standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto,c_fill,g_auto,ar_16:9/v${a.version}/${id}.${a.format}?t=${Date.now()}`;
+    standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto,c_fill,g_center,w_2560,h_1440/v${a.version}/${id}.${a.format}?t=${Date.now()}`;
   }catch(e){console.error('Image unavailable',e)}
 }
 const boolish=v=>v===true||v===1||['true','open','opened','geopend','ja'].includes(String(v).toLowerCase());
