@@ -16,8 +16,14 @@
     .live{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:22px;min-width:0;padding:28px 30px;background:linear-gradient(180deg,#0a1528 0%,#09111d 100%);border-right:1px solid #ffffff16;box-shadow:18px 0 40px #0008;z-index:2}
     .live-head{display:flex;justify-content:space-between;align-items:center}
     .live-head h1{font-size:44px;font-weight:720;margin:0;letter-spacing:-.02em}
+    .header-statuses{display:flex;align-items:center;gap:12px}
     .live-status{display:flex;align-items:center;gap:12px;color:#64f0a5;font-size:22px;font-weight:600}
     .pulse{width:13px;height:13px;border-radius:50%;background:#64f0a5;box-shadow:0 0 0 8px #64f0a522}
+    .bridge-status{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:999px;border:1px solid #64f0a544;background:#0f251b;color:#7af7b3;font-size:16px;font-weight:750;white-space:nowrap;transition:.25s ease}
+    .bridge-status .bridge-dot{width:10px;height:10px;border-radius:50%;background:currentColor;box-shadow:0 0 0 5px currentColor;opacity:.9}
+    .bridge-status.open{background:#2a1014;border-color:#ff7f8b55;color:#ff9098}
+    .bridge-status.soon{background:#2c2210;border-color:#f5c06b55;color:#f5c06b}
+    .bridge-status.unknown{background:#18202d;border-color:#9fb0c844;color:#9fb0c8}
     .children{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:18px;flex:1;min-height:0}
     .child{min-width:0;overflow:hidden;padding:22px 22px 18px;border-radius:24px;background:linear-gradient(180deg,#08111f 0%,#091423 100%);border:1px solid #ffffff14;box-shadow:inset 0 1px 0 #ffffff0d,0 12px 24px #00000030}
     .child-top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}
@@ -62,7 +68,7 @@
   <main>
     <section class="visual" aria-label="Yesterday's final family image"><img id="image-a" alt="Yesterday's family dashboard visual"><img id="image-b" alt="" aria-hidden="true"><div class="state">Yesterday’s final state</div></section>
     <section class="live" aria-live="polite">
-      <header class="live-head"><h1>Today</h1><div class="live-status"><span class="pulse"></span>Live</div></header>
+      <header class="live-head"><h1>Today</h1><div class="header-statuses"><div id="bridge-status" class="bridge-status unknown" title="Live status Sluiskilbrug"><span class="bridge-dot"></span><span class="bridge-text">Sluiskilbrug —</span></div><div class="live-status"><span class="pulse"></span>Live</div></div></header>
       <div class="children">
         <article class="child" data-child="rassell">
           <div class="child-top"><div class="identity"><h2>Rassell</h2><div class="screen-pill"><span class="pill-dot"></span><span class="screen-text">Screen time: —</span></div></div><div class="points"><strong>—</strong><span>points</span></div></div>
@@ -88,6 +94,7 @@
   </main>
   <script>
     const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
+    const bridgeUrl='https://www.isdebrugopen.nl/zeeland/terneuzen/brug-sluiskil.json';
     let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
     const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const taskTitle=t=>esc(typeof t==='string'?t:t.title);
@@ -95,7 +102,31 @@
     function renderChild(key,data){const root=document.querySelector(`[data-child="${key}"]`);if(!root||!data)return;root.querySelector('.points strong').textContent=data.points??0;const pill=root.querySelector('.screen-pill');const screenText=root.querySelector('.screen-text');const noScreen=data.screenTime==='No';pill.classList.toggle('no',noScreen);screenText.textContent=noScreen?'No screen time today':'Screen time today';const outstanding=data.outstandingTasks||[];root.querySelector('.outstanding-count').textContent=outstanding.length?`${outstanding.length} open`:'All done';renderList(root.querySelector('.outstanding'),outstanding,6,'All done ✓');const completed=data.completedTasks||[];root.querySelector('.completed-count').textContent=completed.length;renderList(root.querySelector('.completed'),completed,2,'None yet');const redemptions=data.redemptions||[];root.querySelector('.redemptions-count').textContent=redemptions.length;renderList(root.querySelector('.redemptions'),redemptions,2,'None');const yesterday=data.yesterdayIncompleteTasks||[];const missedPoints=Number(data.missedPoints??0);root.querySelector('.yesterday-count').textContent=missedPoints<0?`${missedPoints} pts`:(yesterday.length?`${yesterday.length} missed`:'0');renderList(root.querySelector('.yesterday'),yesterday,2,'None 🎉');}
     async function refreshData(){try{const file=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!file.ok)throw new Error(file.status);const data=await file.json();renderChild('rassell',data.children.rassell);renderChild('michelle',data.children.michelle);document.getElementById('date').textContent=new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${data.date}T12:00:00`));document.getElementById('updated').textContent=`Updated ${new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit'}).format(new Date(data.updatedAt))}`;}catch(e){document.getElementById('updated').textContent='Live data unavailable';}}
     async function refreshImage(){try{const r=await fetch(`${listUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const data=await r.json(),a=[...(data.resources||[])].sort((x,y)=>y.version-x.version)[0];if(!a)return;const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;const id=a.public_id.split('/').map(encodeURIComponent).join('/');standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto/v${a.version}/${id}.${a.format}?t=${Date.now()}`;}catch(e){console.error(e)}}
-    refreshImage();refreshData();setInterval(refreshImage,30000);setInterval(refreshData,15000);
+    const boolish=v=>v===true||v===1||String(v).toLowerCase()==='true'||String(v).toLowerCase()==='open'||String(v).toLowerCase()==='opened'||String(v).toLowerCase()==='geopend'||String(v).toLowerCase()==='ja';
+    const firstValue=(obj,keys)=>{for(const k of keys){if(obj&&obj[k]!==undefined&&obj[k]!==null)return obj[k]}return undefined};
+    function bridgeState(data){
+      const root=data?.bridge||data?.data||data||{};
+      const rawOpen=firstValue(root,['open','is_open','isOpen','opened','bridge_open','bridgeOpen']);
+      const rawStatus=String(firstValue(root,['status','state','bridge_status','bridgeStatus'])??'').toLowerCase();
+      const isOpen=rawOpen!==undefined?boolish(rawOpen):/(^|\b)(open|opened|geopend)(\b|$)/.test(rawStatus)&&!/closed|dicht|not open/.test(rawStatus);
+      const rawEta=firstValue(root,['minutes_to_open','minutesToOpen','eta_minutes','etaMinutes','expected_in_minutes','expectedInMinutes']);
+      let eta=Number(rawEta);
+      if(!Number.isFinite(eta)){
+        const s=String(firstValue(root,['next_opening','nextOpening','expected_opening','expectedOpening','prediction','expected'])??'');
+        const m=s.match(/(\d+)\s*(?:min|minuten|minutes?)/i); if(m)eta=Number(m[1]);
+      }
+      return {isOpen,eta:Number.isFinite(eta)?eta:null};
+    }
+    function renderBridge(state){
+      const el=document.getElementById('bridge-status'),txt=el.querySelector('.bridge-text');
+      el.classList.remove('open','soon','unknown');
+      if(!state){el.classList.add('unknown');txt.textContent='Sluiskilbrug —';return}
+      if(state.isOpen){el.classList.add('open');txt.textContent='Sluiskilbrug OPEN';return}
+      if(state.eta!==null&&state.eta<=20){el.classList.add('soon');txt.textContent=`Brug ±${Math.max(0,Math.round(state.eta))} min`;return}
+      txt.textContent='Sluiskilbrug dicht';
+    }
+    async function refreshBridge(){try{const r=await fetch(`${bridgeUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);renderBridge(bridgeState(await r.json()));}catch(e){renderBridge(null);console.error('Bridge status unavailable',e)}}
+    refreshImage();refreshData();refreshBridge();setInterval(refreshImage,30000);setInterval(refreshData,15000);setInterval(refreshBridge,60000);
   </script>
 </body>
 </html>
