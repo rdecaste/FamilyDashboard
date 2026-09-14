@@ -1,182 +1,145 @@
 <!doctype html>
-<html lang="en">
+<html lang="nl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta http-equiv="Cache-Control" content="no-store">
-  <title>Family Dashboard</title>
-  <style>
-    *{box-sizing:border-box}
-    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#060b14;color:#f7f8fb;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-    main{display:grid;grid-template-columns:minmax(720px,34%) minmax(0,1fr);width:100%;height:100%;background:radial-gradient(circle at top left,#0f1b33 0%,#09111f 45%,#060b14 100%)}
-    .visual{grid-column:2;grid-row:1;position:relative;min-width:0;min-height:0;overflow:hidden;background:#050505}
-    .visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;opacity:0;transition:opacity .8s ease}
-    .visual img.show{opacity:1}
-    .state{position:absolute;left:28px;bottom:24px;padding:10px 17px;border-radius:999px;background:#050810b8;backdrop-filter:blur(8px);font-size:18px;color:#ffffffd9}
-    .school-weather{position:absolute;top:24px;right:24px;width:min(460px,46%);padding:18px 20px;border-radius:22px;background:#07101ddd;backdrop-filter:blur(10px);border:1px solid #ffffff1a;box-shadow:0 12px 28px #0006;z-index:3}
-    .weather-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:10px}
-    .weather-title{font-size:14px;text-transform:uppercase;letter-spacing:.12em;color:#9fb0c8}
-    .weather-location{font-size:14px;color:#9fb0c8}
-    .weather-main{display:flex;align-items:center;gap:14px}
-    .weather-icon{font-size:48px;line-height:1}
-    .weather-temp{font-size:44px;line-height:1;font-weight:760;letter-spacing:-.04em}
-    .weather-condition{font-size:17px;color:#dbe6f6;margin-top:4px}
-    .weather-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:11px;font-size:15px;color:#b8c7da}
-    .wear-advice{margin-top:13px;padding-top:12px;border-top:1px solid #ffffff16;font-size:20px;font-weight:720;color:#f7f8fb}
-    .wear-advice small{display:block;margin-top:4px;color:#9fb0c8;font-size:13px;font-weight:500}
-    .live{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:22px;min-width:0;padding:28px 30px;background:linear-gradient(180deg,#0a1528 0%,#09111d 100%);border-right:1px solid #ffffff16;box-shadow:18px 0 40px #0008;z-index:2}
-    .live-head{display:flex;justify-content:space-between;align-items:center}
-    .live-head h1{font-size:44px;font-weight:720;margin:0;letter-spacing:-.02em}
-    .header-statuses{display:flex;align-items:center;gap:12px}
-    .live-status{display:flex;align-items:center;gap:12px;color:#64f0a5;font-size:22px;font-weight:600}
-    .pulse{width:13px;height:13px;border-radius:50%;background:#64f0a5;box-shadow:0 0 0 8px #64f0a522}
-    .bridge-status{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:999px;border:1px solid #64f0a544;background:#0f251b;color:#7af7b3;font-size:16px;font-weight:750;white-space:nowrap;transition:.25s ease}
-    .bridge-status .bridge-dot{width:10px;height:10px;border-radius:50%;background:currentColor;box-shadow:0 0 0 5px currentColor;opacity:.9}
-    .bridge-status.open{background:#2a1014;border-color:#ff7f8b55;color:#ff9098}
-    .bridge-status.soon{background:#2c2210;border-color:#f5c06b55;color:#f5c06b}
-    .bridge-status.unknown{background:#18202d;border-color:#9fb0c844;color:#9fb0c8}
-    .children{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:18px;flex:1;min-height:0}
-    .child{min-width:0;overflow:hidden;padding:22px 22px 18px;border-radius:24px;background:linear-gradient(180deg,#08111f 0%,#091423 100%);border:1px solid #ffffff14;box-shadow:inset 0 1px 0 #ffffff0d,0 12px 24px #00000030}
-    .child-top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}
-    .identity{min-width:0}
-    .child h2{font-size:36px;line-height:1;margin:0 0 10px;letter-spacing:-.02em}
-    .screen-pill{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;font-size:16px;font-weight:700;background:#0f251b;border:1px solid #64f0a544;color:#7af7b3}
-    .screen-pill.no{background:#2a1014;border-color:#ff7f8b44;color:#ff9098}
-    .screen-pill .pill-dot{width:10px;height:10px;border-radius:50%;background:currentColor;flex:0 0 auto}
-    .points{text-align:right;flex:0 0 auto}
-    .points strong{display:block;font-size:68px;line-height:.84;font-weight:760;font-variant-numeric:tabular-nums;letter-spacing:-.04em}
-    .points span{font-size:14px;color:#9fb0c8;text-transform:uppercase;letter-spacing:.12em}
-    .focus{margin-top:6px;padding:16px 16px 14px;border-radius:18px;background:linear-gradient(180deg,#0d1729 0%,#0b1525 100%);border:1px solid #ffffff10}
-    .focus-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:10px}
-    .focus-label{font-size:15px;color:#9fb0c8;text-transform:uppercase;letter-spacing:.1em}
-    .focus-count{font-size:18px;font-weight:700;color:#f7f8fb}
-    .tasks{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-    .tasks li{display:flex;align-items:flex-start;gap:10px;min-width:0;font-size:20px;line-height:1.16;color:#edf2ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .task-dot{width:15px;height:15px;border-radius:50%;border:2px solid #9fb0c877;flex:0 0 auto;margin-top:4px}
-    .empty{color:#7af7b3;font-size:18px}
-    .more{color:#9fb0c8;font-size:17px}
-    .summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
-    .summary-card{min-width:0;padding:12px 12px 10px;border-radius:16px;background:linear-gradient(180deg,#0b1628 0%,#0a1322 100%);border:1px solid #ffffff10}
-    .summary-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:8px}
-    .summary-title{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:#99aac0}
-    .summary-count{font-size:28px;line-height:1;font-weight:760;font-variant-numeric:tabular-nums}
-    .summary-card .tasks{gap:6px}
-    .summary-card .tasks li{font-size:16px;line-height:1.18;color:#d9e4f7}
-    .done-card .summary-count,.done-card .summary-title{color:#73efaa}
-    .done-card .task-dot{border-color:#73efaa;background:#73efaa;position:relative}
-    .done-card .task-dot::after{content:"✓";position:absolute;inset:-5px 0 0 1px;color:#07110b;font-size:15px;font-weight:800}
-    .reward-card .summary-count,.reward-card .summary-title{color:#8fc8ff}
-    .reward-card .task-dot{border-color:#8fc8ff}
-    .missed-card .summary-count,.missed-card .summary-title{color:#f5c06b}
-    .missed-card .task-dot{border-color:#f5c06b}
-    .footer{display:flex;justify-content:space-between;gap:18px;color:#9fb0c8;font-size:16px;white-space:nowrap}
-    @media(max-width:1200px){body{overflow:auto}main{height:auto;min-height:100%;grid-template-columns:1fr;grid-template-rows:minmax(55vh,70vh) auto}.visual{grid-column:1;grid-row:1}.live{grid-column:1;grid-row:2;padding:24px}}
-    @media(max-width:900px){.children{grid-template-columns:1fr;grid-template-rows:none}}
-    @media(max-width:760px){.summary-grid{grid-template-columns:1fr}.footer{flex-direction:column}.child-top{align-items:flex-end}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Family Dashboard</title>
+<style>
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#06101d;color:#f7fbff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{background:#06101d}
+main{position:relative;width:100vw;height:100vh;overflow:hidden;background:#07111e}
+.hero{position:absolute;inset:0;overflow:hidden;background:#07111e}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,10,19,.62) 0%,rgba(3,10,19,.06) 18%,rgba(3,10,19,.04) 52%,rgba(3,10,19,.55) 72%,rgba(3,10,19,.9) 100%);pointer-events:none}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .8s ease}
+.hero img.show{opacity:1}
+.topbar{position:absolute;left:2.2vw;right:2.2vw;top:2.2vh;height:8.2vh;display:grid;grid-template-columns:1.15fr .9fr 1.35fr auto;align-items:center;gap:1vw;padding:0 1.35vw;border:1px solid rgba(255,255,255,.13);border-radius:1.3vw;background:rgba(7,18,33,.78);backdrop-filter:blur(16px);box-shadow:0 12px 34px rgba(0,0,0,.28);z-index:5}
+.top-item{min-width:0;display:flex;align-items:center;gap:.75vw;font-size:1.16vw;font-weight:650;white-space:nowrap}
+.icon{font-size:1.55vw;line-height:1}
+.date-main{font-size:1.2vw;font-weight:760;letter-spacing:-.01em}
+.pill{padding:.72vh .8vw;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.05)}
+.bridge{color:#cfe8ff}.bridge.open{color:#ff9aa4;border-color:rgba(255,100,115,.4);background:rgba(80,15,25,.44)}.bridge.soon{color:#ffd583;border-color:rgba(245,192,107,.4);background:rgba(76,55,12,.4)}
+.weather{color:#eaf5ff}.weather strong{font-size:1.5vw;margin-right:.15vw}.weather-detail{color:#b9cee4;font-weight:560;overflow:hidden;text-overflow:ellipsis}
+.live{justify-self:end;color:#66f2b3;font-weight:760}.live-dot{width:.78vw;height:.78vw;border-radius:50%;background:#4cf0ad;box-shadow:0 0 0 .38vw rgba(76,240,173,.12)}
+.cards{position:absolute;left:2.2vw;right:2.2vw;bottom:2.5vh;display:grid;grid-template-columns:1fr 1fr;gap:1.25vw;z-index:5}
+.child{min-height:28.5vh;padding:1.25vw 1.45vw 1.2vw;border-radius:1.45vw;border:1px solid rgba(100,190,255,.34);background:linear-gradient(180deg,rgba(8,28,49,.86),rgba(6,20,36,.9));backdrop-filter:blur(17px);box-shadow:0 18px 48px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.08)}
+.child-head{display:flex;align-items:center;justify-content:space-between;gap:1vw;padding-bottom:1vh;border-bottom:1px solid rgba(180,220,255,.23)}
+.name{font-size:2.35vw;font-weight:800;letter-spacing:-.03em}
+.head-right{display:flex;align-items:center;gap:1vw}
+.points{text-align:center;min-width:5.3vw}.points strong{display:block;font-size:2.65vw;line-height:.86;font-weight:820;font-variant-numeric:tabular-nums}.points span{display:block;margin-top:.3vh;color:#b8cfe7;font-size:.72vw;text-transform:uppercase;letter-spacing:.1em}
+.screen{display:flex;align-items:center;gap:.45vw;padding:.75vh .8vw;border-radius:999px;border:1px solid rgba(57,235,169,.65);background:rgba(6,65,49,.5);color:#6cf3b8;font-size:1vw;font-weight:760}.screen.no{border-color:rgba(255,115,125,.65);background:rgba(88,18,29,.48);color:#ff9aa4}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.5vw;padding:1.1vh 0 .95vh}
+.stat{display:flex;align-items:center;gap:.55vw;min-width:0}.stat-icon{width:1.65vw;height:1.65vw;border-radius:50%;display:grid;place-items:center;background:rgba(91,190,255,.16);font-size:.9vw}.stat:nth-child(2) .stat-icon{background:rgba(50,235,171,.18)}.stat:nth-child(3) .stat-icon{background:rgba(255,202,75,.18)}.stat:nth-child(4) .stat-icon{background:rgba(255,181,75,.18)}
+.stat-value{font-size:1.5vw;line-height:1;font-weight:800}.stat-label{margin-top:.18vh;color:#b7cbe0;font-size:.72vw;white-space:nowrap}
+.tasks{border-top:1px solid rgba(180,220,255,.19);padding-top:.9vh;display:grid;gap:.52vh}
+.task{display:flex;align-items:center;gap:.55vw;font-size:.92vw;font-weight:620;color:#edf6ff;min-width:0}.task span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.check{width:1.25vw;height:1.25vw;border-radius:50%;display:grid;place-items:center;background:#29dfa0;color:#052218;font-size:.75vw;font-weight:900;flex:0 0 auto}
+.task.open .check{background:rgba(255,255,255,.08);border:1px solid rgba(190,220,245,.42);color:transparent}
+.more{color:#8fc7ff;font-size:.83vw;font-weight:650;margin-left:1.8vw}
+.empty{color:#71efb2;font-size:.9vw;font-weight:650}
+@media(max-width:1200px){.topbar{grid-template-columns:1fr 1fr}.weather{display:none}.cards{grid-template-columns:1fr;max-height:72vh;overflow:auto}.child{min-height:unset}.name{font-size:32px}.points strong{font-size:40px}.top-item{font-size:16px}.icon{font-size:22px}.task{font-size:14px}.stat-value{font-size:22px}.stat-label{font-size:11px}}
+</style>
 </head>
 <body>
-  <main>
-    <section class="visual" aria-label="Yesterday's final family image"><img id="image-a" alt="Yesterday's family dashboard visual"><img id="image-b" alt="" aria-hidden="true"><div id="school-weather" class="school-weather"><div class="weather-head"><span class="weather-title">Schoolweer</span><span class="weather-location">Sluiskil</span></div><div class="weather-main"><div class="weather-icon">⛅</div><div><div class="weather-temp">—°</div><div class="weather-condition">Weer laden…</div></div></div><div class="weather-meta"><span class="feels">Voelt als —°</span><span class="rain">Regen —%</span><span class="wind">Wind — km/u</span></div><div class="wear-advice">Even kijken…<small>Advies voor de schoolochtend</small></div></div><div class="state">Yesterday’s final state</div></section>
-    <section class="live" aria-live="polite">
-      <header class="live-head"><h1>Today</h1><div class="header-statuses"><div id="bridge-status" class="bridge-status unknown" title="Live status Sluiskilbrug"><span class="bridge-dot"></span><span class="bridge-text">Sluiskilbrug —</span></div><div class="live-status"><span class="pulse"></span>Live</div></div></header>
-      <div class="children">
-        <article class="child" data-child="rassell">
-          <div class="child-top"><div class="identity"><h2>Rassell</h2><div class="screen-pill"><span class="pill-dot"></span><span class="screen-text">Screen time: —</span></div></div><div class="points"><strong>—</strong><span>points</span></div></div>
-          <section class="focus"><div class="focus-head"><span class="focus-label">Outstanding today</span><span class="focus-count outstanding-count">—</span></div><ul class="tasks outstanding"></ul></section>
-          <div class="summary-grid">
-            <section class="summary-card done-card"><div class="summary-head"><span class="summary-title">Done</span><strong class="summary-count completed-count">0</strong></div><ul class="tasks completed"></ul></section>
-            <section class="summary-card reward-card"><div class="summary-head"><span class="summary-title">Rewards</span><strong class="summary-count redemptions-count">0</strong></div><ul class="tasks redemptions"></ul></section>
-            <section class="summary-card missed-card"><div class="summary-head"><span class="summary-title">Missed yesterday</span><strong class="summary-count yesterday-count">0</strong></div><ul class="tasks yesterday"></ul></section>
-          </div>
-        </article>
-        <article class="child" data-child="michelle">
-          <div class="child-top"><div class="identity"><h2>Michelle</h2><div class="screen-pill"><span class="pill-dot"></span><span class="screen-text">Screen time: —</span></div></div><div class="points"><strong>—</strong><span>points</span></div></div>
-          <section class="focus"><div class="focus-head"><span class="focus-label">Outstanding today</span><span class="focus-count outstanding-count">—</span></div><ul class="tasks outstanding"></ul></section>
-          <div class="summary-grid">
-            <section class="summary-card done-card"><div class="summary-head"><span class="summary-title">Done</span><strong class="summary-count completed-count">0</strong></div><ul class="tasks completed"></ul></section>
-            <section class="summary-card reward-card"><div class="summary-head"><span class="summary-title">Rewards</span><strong class="summary-count redemptions-count">0</strong></div><ul class="tasks redemptions"></ul></section>
-            <section class="summary-card missed-card"><div class="summary-head"><span class="summary-title">Missed yesterday</span><strong class="summary-count yesterday-count">0</strong></div><ul class="tasks yesterday"></ul></section>
-          </div>
-        </article>
+<main>
+  <section class="hero"><img id="image-a" alt="Family adventure visual"><img id="image-b" alt="" aria-hidden="true"></section>
+
+  <header class="topbar">
+    <div class="top-item"><span class="icon">📅</span><span id="date" class="date-main">—</span></div>
+    <div id="bridge" class="top-item pill bridge"><span class="icon">🌉</span><span class="bridge-text">Sluiskilbrug —</span></div>
+    <div class="top-item pill weather"><span id="weather-icon" class="icon">⛅</span><strong id="weather-temp">—°</strong><span id="weather-text" class="weather-detail">Schoolweer laden…</span></div>
+    <div class="top-item live"><span class="live-dot"></span><span>Live</span></div>
+  </header>
+
+  <section class="cards">
+    <article class="child" data-child="rassell">
+      <div class="child-head"><div class="name">Rassell</div><div class="head-right"><div class="points"><strong>—</strong><span>points</span></div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-value outstanding-count">0</div><div class="stat-label">Outstanding</div></div></div>
+        <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-value completed-count">0</div><div class="stat-label">Done</div></div></div>
+        <div class="stat"><div class="stat-icon">★</div><div><div class="stat-value redemptions-count">0</div><div class="stat-label">Rewards</div></div></div>
+        <div class="stat"><div class="stat-icon">!</div><div><div class="stat-value missed-count">0</div><div class="stat-label">Missed yesterday</div></div></div>
       </div>
-      <footer class="footer"><span id="date">—</span><span id="updated">Waiting for data</span></footer>
-    </section>
-  </main>
-  <script>
-    const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
-    const bridgeUrl='https://www.isdebrugopen.nl/zeeland/terneuzen/brug-sluiskil.json';
-    const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&forecast_days=1&timezone=Europe%2FAmsterdam';
-    let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
-    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    const taskTitle=t=>esc(typeof t==='string'?t:t.title);
-    function renderList(el,items,maxItems,emptyText){const visible=(items||[]).slice(0,maxItems);el.innerHTML=visible.length?visible.map(t=>`<li><span class="task-dot"></span>${taskTitle(t)}</li>`).join('')+((items||[]).length>maxItems?`<li class="more">+${items.length-maxItems} more</li>`:''):`<li class="empty">${emptyText}</li>`;}
-    function renderChild(key,data){const root=document.querySelector(`[data-child="${key}"]`);if(!root||!data)return;root.querySelector('.points strong').textContent=data.points??0;const pill=root.querySelector('.screen-pill');const screenText=root.querySelector('.screen-text');const noScreen=data.screenTime==='No';pill.classList.toggle('no',noScreen);screenText.textContent=noScreen?'No screen time today':'Screen time today';const outstanding=data.outstandingTasks||[];root.querySelector('.outstanding-count').textContent=outstanding.length?`${outstanding.length} open`:'All done';renderList(root.querySelector('.outstanding'),outstanding,6,'All done ✓');const completed=data.completedTasks||[];root.querySelector('.completed-count').textContent=completed.length;renderList(root.querySelector('.completed'),completed,2,'None yet');const redemptions=data.redemptions||[];root.querySelector('.redemptions-count').textContent=redemptions.length;renderList(root.querySelector('.redemptions'),redemptions,2,'None');const yesterday=data.yesterdayIncompleteTasks||[];const missedPoints=Number(data.missedPoints??0);root.querySelector('.yesterday-count').textContent=missedPoints<0?`${missedPoints} pts`:(yesterday.length?`${yesterday.length} missed`:'0');renderList(root.querySelector('.yesterday'),yesterday,2,'None 🎉');}
-    async function refreshData(){try{const file=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!file.ok)throw new Error(file.status);const data=await file.json();renderChild('rassell',data.children.rassell);renderChild('michelle',data.children.michelle);document.getElementById('date').textContent=new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${data.date}T12:00:00`));document.getElementById('updated').textContent=`Updated ${new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit'}).format(new Date(data.updatedAt))}`;}catch(e){document.getElementById('updated').textContent='Live data unavailable';}}
-    async function refreshImage(){try{const r=await fetch(`${listUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const data=await r.json(),a=[...(data.resources||[])].sort((x,y)=>y.version-x.version)[0];if(!a)return;const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;const id=a.public_id.split('/').map(encodeURIComponent).join('/');standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto/v${a.version}/${id}.${a.format}?t=${Date.now()}`;}catch(e){console.error(e)}}
-    const boolish=v=>v===true||v===1||String(v).toLowerCase()==='true'||String(v).toLowerCase()==='open'||String(v).toLowerCase()==='opened'||String(v).toLowerCase()==='geopend'||String(v).toLowerCase()==='ja';
-    const firstValue=(obj,keys)=>{for(const k of keys){if(obj&&obj[k]!==undefined&&obj[k]!==null)return obj[k]}return undefined};
-    function bridgeState(data){
-      const root=data?.bridge||data?.data||data||{};
-      const rawOpen=firstValue(root,['open','is_open','isOpen','opened','bridge_open','bridgeOpen']);
-      const rawStatus=String(firstValue(root,['status','state','bridge_status','bridgeStatus'])??'').toLowerCase();
-      const isOpen=rawOpen!==undefined?boolish(rawOpen):/(^|\b)(open|opened|geopend)(\b|$)/.test(rawStatus)&&!/closed|dicht|not open/.test(rawStatus);
-      const rawEta=firstValue(root,['minutes_to_open','minutesToOpen','eta_minutes','etaMinutes','expected_in_minutes','expectedInMinutes']);
-      let eta=Number(rawEta);
-      if(!Number.isFinite(eta)){
-        const s=String(firstValue(root,['next_opening','nextOpening','expected_opening','expectedOpening','prediction','expected'])??'');
-        const m=s.match(/(\d+)\s*(?:min|minuten|minutes?)/i); if(m)eta=Number(m[1]);
-      }
-      return {isOpen,eta:Number.isFinite(eta)?eta:null};
-    }
-    function renderBridge(state){
-      const el=document.getElementById('bridge-status'),txt=el.querySelector('.bridge-text');
-      el.classList.remove('open','soon','unknown');
-      if(!state){el.classList.add('unknown');txt.textContent='Sluiskilbrug —';return}
-      if(state.isOpen){el.classList.add('open');txt.textContent='Sluiskilbrug OPEN';return}
-      if(state.eta!==null&&state.eta<=20){el.classList.add('soon');txt.textContent=`Brug ±${Math.max(0,Math.round(state.eta))} min`;return}
-      txt.textContent='Sluiskilbrug dicht';
-    }
-    async function refreshBridge(){try{const r=await fetch(`${bridgeUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);renderBridge(bridgeState(await r.json()));}catch(e){renderBridge(null);console.error('Bridge status unavailable',e)}}
-    const weatherInfo=code=>{if(code===0)return['☀️','Helder'];if([1,2].includes(code))return['🌤️','Licht bewolkt'];if(code===3)return['☁️','Bewolkt'];if([45,48].includes(code))return['🌫️','Mist'];if([51,53,55,56,57].includes(code))return['🌦️','Motregen'];if([61,63,65,66,67,80,81,82].includes(code))return['🌧️','Regen'];if([71,73,75,77,85,86].includes(code))return['🌨️','Sneeuw'];if([95,96,99].includes(code))return['⛈️','Onweer'];return['🌥️','Wisselend']};
-    function morningWeather(data){
-      const h=data?.hourly;if(!h?.time?.length)return null;
-      const rows=h.time.map((t,i)=>({t:new Date(t),temp:Number(h.temperature_2m?.[i]),feel:Number(h.apparent_temperature?.[i]),rain:Number(h.precipitation_probability?.[i]),code:Number(h.weather_code?.[i]),wind:Number(h.wind_speed_10m?.[i])}));
-      const morning=rows.filter(x=>{const hr=x.t.getHours();return hr>=7&&hr<=10});
-      const set=morning.length?morning:rows.slice(0,4);
-      const avg=a=>a.filter(Number.isFinite).reduce((s,v)=>s+v,0)/Math.max(1,a.filter(Number.isFinite).length);
-      const coldestFeel=Math.min(...set.map(x=>x.feel).filter(Number.isFinite));
-      const maxRain=Math.max(...set.map(x=>x.rain).filter(Number.isFinite),0);
-      const maxWind=Math.max(...set.map(x=>x.wind).filter(Number.isFinite),0);
-      const severe=[...set].sort((a,b)=>(b.code||0)-(a.code||0))[0]||set[0];
-      return {temp:avg(set.map(x=>x.temp)),feel:coldestFeel,rain:maxRain,wind:maxWind,code:severe?.code??0};
-    }
-    function clothingAdvice(w){
-      const parts=[];
-      if(w.feel<5)parts.push('🧥 Warme jas');
-      else if(w.feel<11)parts.push('🧥 Jas + trui');
-      else if(w.feel<16)parts.push('🧥 Lichte jas');
-      else if(w.feel<20)parts.push('👕 Trui of vest');
-      else parts.push('👕 T-shirt is prima');
-      if(w.rain>=55)parts.push('🌧️ regenjas mee');
-      else if(w.rain>=30)parts.push('☂️ kans op regen');
-      if(w.wind>=35)parts.push('💨 winderig');
-      return parts.join(' · ');
-    }
-    function renderWeather(w){
-      const root=document.getElementById('school-weather');if(!root)return;
-      if(!w){root.querySelector('.weather-condition').textContent='Weer niet beschikbaar';return}
-      const [icon,label]=weatherInfo(w.code);
-      root.querySelector('.weather-icon').textContent=icon;
-      root.querySelector('.weather-temp').textContent=`${Math.round(w.temp)}°`;
-      root.querySelector('.weather-condition').textContent=label;
-      root.querySelector('.feels').textContent=`Voelt als ${Math.round(w.feel)}°`;
-      root.querySelector('.rain').textContent=`Regen ${Math.round(w.rain)}%`;
-      root.querySelector('.wind').textContent=`Wind ${Math.round(w.wind)} km/u`;
-      root.querySelector('.wear-advice').innerHTML=`${clothingAdvice(w)}<small>Advies voor 07:00–10:00</small>`;
-    }
-    async function refreshWeather(){try{const r=await fetch(`${weatherUrl}&t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);renderWeather(morningWeather(await r.json()));}catch(e){renderWeather(null);console.error('Weather unavailable',e)}}
-    refreshImage();refreshData();refreshBridge();refreshWeather();setInterval(refreshImage,30000);setInterval(refreshData,15000);setInterval(refreshBridge,60000);setInterval(refreshWeather,600000);
-  </script>
+      <div class="tasks"></div>
+    </article>
+
+    <article class="child" data-child="michelle">
+      <div class="child-head"><div class="name">Michelle</div><div class="head-right"><div class="points"><strong>—</strong><span>points</span></div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-value outstanding-count">0</div><div class="stat-label">Outstanding</div></div></div>
+        <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-value completed-count">0</div><div class="stat-label">Done</div></div></div>
+        <div class="stat"><div class="stat-icon">★</div><div><div class="stat-value redemptions-count">0</div><div class="stat-label">Rewards</div></div></div>
+        <div class="stat"><div class="stat-icon">!</div><div><div class="stat-value missed-count">0</div><div class="stat-label">Missed yesterday</div></div></div>
+      </div>
+      <div class="tasks"></div>
+    </article>
+  </section>
+</main>
+<script>
+const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
+const bridgeUrl='https://www.isdebrugopen.nl/zeeland/terneuzen/brug-sluiskil.json';
+const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&forecast_days=1&timezone=Europe%2FAmsterdam';
+let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const title=t=>esc(typeof t==='string'?t:t?.title||'');
+function taskRows(data){
+  const open=data.outstandingTasks||[],done=data.completedTasks||[];
+  const source=open.length?open:done, cls=open.length?'open':'done';
+  if(!source.length)return '<div class="empty">Alles klaar ✓</div>';
+  const visible=source.slice(0,2).map(t=>`<div class="task ${cls}"><span class="check">${open.length?'':'✓'}</span><span>${title(t)}</span></div>`).join('');
+  return visible+(source.length>2?`<div class="more">+${source.length-2} more</div>`:'');
+}
+function renderChild(key,data){
+  const root=document.querySelector(`[data-child="${key}"]`); if(!root||!data)return;
+  root.querySelector('.points strong').textContent=data.points??0;
+  const screen=root.querySelector('.screen'),no=data.screenTime==='No';
+  screen.classList.toggle('no',no);root.querySelector('.screen-text').textContent=`Screen time: ${no?'No':'Yes'}`;
+  root.querySelector('.outstanding-count').textContent=(data.outstandingTasks||[]).length;
+  root.querySelector('.completed-count').textContent=(data.completedTasks||[]).length;
+  root.querySelector('.redemptions-count').textContent=(data.redemptions||[]).length;
+  const missed=Number(data.missedPoints??0);root.querySelector('.missed-count').textContent=missed<0?Math.abs(missed/2):(data.yesterdayIncompleteTasks||[]).length;
+  root.querySelector('.tasks').innerHTML=taskRows(data);
+}
+async function refreshData(){
+  try{
+    const r=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
+    const d=await r.json();renderChild('rassell',d.children.rassell);renderChild('michelle',d.children.michelle);
+    document.getElementById('date').textContent=new Intl.DateTimeFormat('nl-NL',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${d.date}T12:00:00`));
+  }catch(e){console.error('Live data unavailable',e)}
+}
+async function refreshImage(){
+  try{
+    const r=await fetch(`${listUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
+    const d=await r.json(),a=[...(d.resources||[])].sort((x,y)=>y.version-x.version)[0];if(!a)return;
+    const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;
+    const id=a.public_id.split('/').map(encodeURIComponent).join('/');
+    standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
+    standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto,c_fill,g_auto,ar_16:9/v${a.version}/${id}.${a.format}?t=${Date.now()}`;
+  }catch(e){console.error('Image unavailable',e)}
+}
+const boolish=v=>v===true||v===1||['true','open','opened','geopend','ja'].includes(String(v).toLowerCase());
+const first=(o,ks)=>{for(const k of ks)if(o?.[k]!==undefined&&o[k]!==null)return o[k]};
+function bridgeState(d){
+  const x=d?.bridge||d?.data||d||{},raw=first(x,['open','is_open','isOpen','opened','bridge_open','bridgeOpen']),status=String(first(x,['status','state','bridge_status','bridgeStatus'])??'').toLowerCase();
+  const isOpen=raw!==undefined?boolish(raw):/(^|\b)(open|opened|geopend)(\b|$)/.test(status)&&!/closed|dicht|not open/.test(status);
+  let eta=Number(first(x,['minutes_to_open','minutesToOpen','eta_minutes','etaMinutes','expected_in_minutes','expectedInMinutes']));
+  return {isOpen,eta:Number.isFinite(eta)?eta:null};
+}
+function renderBridge(s){
+  const el=document.getElementById('bridge'),t=el.querySelector('.bridge-text');el.classList.remove('open','soon');
+  if(!s){t.textContent='Sluiskilbrug —';return} if(s.isOpen){el.classList.add('open');t.textContent='Sluiskilbrug OPEN';return}
+  if(s.eta!==null&&s.eta<=20){el.classList.add('soon');t.textContent=`Brug ±${Math.round(s.eta)} min`;return} t.textContent='Sluiskilbrug dicht';
+}
+async function refreshBridge(){try{const r=await fetch(`${bridgeUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);renderBridge(bridgeState(await r.json()))}catch(e){renderBridge(null)}}
+const weatherInfo=c=>c===0?['☀️','Helder']:[1,2].includes(c)?['🌤️','Licht bewolkt']:c===3?['☁️','Bewolkt']:[45,48].includes(c)?['🌫️','Mist']:[51,53,55,56,57].includes(c)?['🌦️','Motregen']:[61,63,65,66,67,80,81,82].includes(c)?['🌧️','Regen']:[71,73,75,77,85,86].includes(c)?['🌨️','Sneeuw']:[95,96,99].includes(c)?['⛈️','Onweer']:['🌥️','Wisselend'];
+function morningWeather(d){
+  const h=d?.hourly;if(!h?.time?.length)return null;const rows=h.time.map((t,i)=>({t:new Date(t),temp:+h.temperature_2m[i],feel:+h.apparent_temperature[i],rain:+h.precipitation_probability[i],code:+h.weather_code[i],wind:+h.wind_speed_10m[i]}));const s=rows.filter(x=>x.t.getHours()>=7&&x.t.getHours()<=10);const a=s.length?s:rows.slice(0,4),avg=k=>a.reduce((z,x)=>z+x[k],0)/a.length;return{temp:avg('temp'),feel:Math.min(...a.map(x=>x.feel)),rain:Math.max(...a.map(x=>x.rain)),wind:Math.max(...a.map(x=>x.wind)),code:a.sort((x,y)=>y.code-x.code)[0]?.code||0};
+}
+function advice(w){const p=[];if(w.feel<5)p.push('warme jas');else if(w.feel<11)p.push('jas + trui');else if(w.feel<16)p.push('lichte jas');else if(w.feel<20)p.push('trui of vest');else p.push('T-shirt');if(w.rain>=55)p.push('regenjas mee');else if(w.rain>=30)p.push('kans op regen');if(w.wind>=35)p.push('winderig');return p.join(' · ')}
+async function refreshWeather(){try{const r=await fetch(`${weatherUrl}&t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const w=morningWeather(await r.json());if(!w)return;const [i,l]=weatherInfo(w.code);document.getElementById('weather-icon').textContent=i;document.getElementById('weather-temp').textContent=`${Math.round(w.temp)}°`;document.getElementById('weather-text').textContent=`${l} · ${advice(w)}`}catch(e){document.getElementById('weather-text').textContent='Schoolweer niet beschikbaar'}}
+refreshImage();refreshData();refreshBridge();refreshWeather();
+setInterval(refreshImage,30000);setInterval(refreshData,15000);setInterval(refreshBridge,60000);setInterval(refreshWeather,600000);
+</script>
 </body>
 </html>
