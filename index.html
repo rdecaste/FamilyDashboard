@@ -30,10 +30,20 @@ body{background:#07111d}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45vh .8vw;margin-top:.7vh;padding:.7vh 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
 .stat{display:flex;align-items:center;justify-content:space-between;gap:.55vw;min-width:0}.stat-left{display:flex;align-items:center;gap:.42vw;min-width:0}.stat-icon{width:1.15vw;height:1.15vw;border-radius:50%;display:grid;place-items:center;background:rgba(91,190,255,.13);font-size:.62vw;flex:0 0 auto}.stat:nth-child(2) .stat-icon{background:rgba(50,235,171,.15)}.stat:nth-child(3) .stat-icon{background:rgba(255,202,75,.14)}.stat:nth-child(4) .stat-icon{background:rgba(255,181,75,.14)}
 .stat-value{font-size:.98vw;line-height:1;font-weight:820}.stat-label{color:rgba(235,245,255,.70);font-size:.66vw;white-space:nowrap}
-.tasks{padding-top:.65vh;display:grid;gap:.38vh}
-.task{display:flex;align-items:center;gap:.45vw;font-size:.76vw;font-weight:620;color:#edf6ff;min-width:0}.task span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tasks{padding-top:.65vh;display:grid;gap:.34vh}
+.task{display:flex;align-items:center;gap:.45vw;font-size:.74vw;font-weight:620;color:#edf6ff;min-width:0}.task span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.task.done span:last-child{text-decoration:line-through;text-decoration-thickness:1.5px;opacity:.62}
 .check{width:.95vw;height:.95vw;border-radius:50%;display:grid;place-items:center;background:#29dfa0;color:#052218;font-size:.58vw;font-weight:900;flex:0 0 auto}.task.open .check{background:rgba(255,255,255,.06);border:1px solid rgba(190,220,245,.40);color:transparent}
-.more{color:#9ed4ff;font-size:.67vw;font-weight:650;margin-left:1.4vw}.empty{color:#7ff0bc;font-size:.76vw;font-weight:650}
+.more{color:#9ed4ff;font-size:.65vw;font-weight:650;margin-left:1.4vw}.empty{color:#7ff0bc;font-size:.74vw;font-weight:650}
+.yesterday{margin-top:.7vh;padding-top:.62vh;border-top:1px solid rgba(255,255,255,.08)}
+.yesterday-title{font-size:.61vw;font-weight:790;letter-spacing:.09em;text-transform:uppercase;color:rgba(235,245,255,.56);margin-bottom:.35vh}
+.history-list{display:grid;gap:.3vh}
+.history-item{display:flex;align-items:center;gap:.42vw;font-size:.69vw;color:#dce9f6;min-width:0}
+.history-item span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-icon{width:.9vw;height:.9vw;border-radius:50%;display:grid;place-items:center;font-size:.53vw;flex:0 0 auto}
+.history-item.missed .history-icon{background:rgba(255,117,128,.16);color:#ff9ca5}
+.history-item.reward .history-icon{background:rgba(255,202,75,.14);color:#ffd66c}
+.history-empty{font-size:.67vw;color:rgba(235,245,255,.46)}
 .sidebar-footer{margin-top:auto;display:flex;align-items:center;justify-content:flex-start}
 .live{display:inline-flex;align-items:center;gap:.45vw;padding:.5vh .68vw;border-radius:999px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:#66f2b3;font-size:.74vw;font-weight:760}.live-dot{width:.58vw;height:.58vw;border-radius:50%;background:#4cf0ad;box-shadow:0 0 0 .26vw rgba(76,240,173,.10)}
 .hero{position:relative;overflow:hidden;background:#07111e}
@@ -70,6 +80,7 @@ body{background:#07111d}
         <div class="stat"><div class="stat-left"><div class="stat-icon">!</div><div class="stat-label">Missed yesterday</div></div><div class="stat-value missed-count">0</div></div>
       </div>
       <div class="tasks"></div>
+      <div class="yesterday"><div class="yesterday-title">Gisteren</div><div class="history-list"></div></div>
     </article>
 
     <article class="child" data-child="rassell">
@@ -84,6 +95,7 @@ body{background:#07111d}
         <div class="stat"><div class="stat-left"><div class="stat-icon">!</div><div class="stat-label">Missed yesterday</div></div><div class="stat-value missed-count">0</div></div>
       </div>
       <div class="tasks"></div>
+      <div class="yesterday"><div class="yesterday-title">Gisteren</div><div class="history-list"></div></div>
     </article>
 
     <div class="sidebar-footer"><div class="live"><span class="live-dot"></span><span>Live</span></div></div>
@@ -100,11 +112,20 @@ let active=document.getElementById('image-a'),standby=document.getElementById('i
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const title=t=>esc(typeof t==='string'?t:t?.title||'');
 function taskRows(data){
-  const open=data.outstandingTasks||[],done=data.completedTasks||[];
-  const source=open.length?open:done, cls=open.length?'open':'done';
+  const open=(data.outstandingTasks||[]).map(t=>({...t,_state:'open'}));
+  const done=(data.completedTasks||[]).map(t=>({...t,_state:'done'}));
+  const source=[...open,...done];
   if(!source.length)return '<div class="empty">Alles klaar ✓</div>';
-  const visible=source.slice(0,2).map(t=>`<div class="task ${cls}"><span class="check">${open.length?'':'✓'}</span><span>${title(t)}</span></div>`).join('');
-  return visible+(source.length>2?`<div class="more">+${source.length-2} more</div>`:'');
+  const visible=source.slice(0,4).map(t=>`<div class="task ${t._state}"><span class="check">${t._state==='done'?'✓':''}</span><span>${title(t)}</span></div>`).join('');
+  return visible+(source.length>4?`<div class="more">+${source.length-4} more</div>`:'');
+}
+function yesterdayRows(data){
+  const missed=(data.yesterdayIncompleteTasks||[]).map(t=>({type:'missed',title:t.title}));
+  const rewards=(data.yesterdayRedemptions||[]).map(t=>({type:'reward',title:t.title}));
+  const items=[...missed,...rewards];
+  if(!items.length)return '<div class="history-empty">Niets gemist of ingewisseld</div>';
+  const visible=items.slice(0,4).map(x=>`<div class="history-item ${x.type}"><span class="history-icon">${x.type==='missed'?'!':'★'}</span><span>${x.type==='missed'?'Gemist: ':'Beloning: '}${title(x.title)}</span></div>`).join('');
+  return visible+(items.length>4?`<div class="more">+${items.length-4} more</div>`:'');
 }
 function renderChild(key,data){
   const root=document.querySelector(`[data-child="${key}"]`); if(!root||!data)return;
@@ -116,6 +137,7 @@ function renderChild(key,data){
   root.querySelector('.redemptions-count').textContent=(data.redemptions||[]).length;
   const missed=Number(data.missedPoints??0);root.querySelector('.missed-count').textContent=missed<0?Math.abs(missed/2):(data.yesterdayIncompleteTasks||[]).length;
   root.querySelector('.tasks').innerHTML=taskRows(data);
+  root.querySelector('.history-list').innerHTML=yesterdayRows(data);
 }
 function renderImageState(d){
   const url=d?.image_url||'';
