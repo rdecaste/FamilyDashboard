@@ -48,7 +48,10 @@ body{background:#07111d}
 .history-item.missed .history-icon{background:rgba(255,117,128,.16);color:#ff9ca5}
 .history-item.reward .history-icon{background:rgba(255,202,75,.14);color:#ffd66c}
 .history-empty{font-size:.67vw;color:rgba(235,245,255,.46)}
-.sidebar-footer{margin-top:auto;display:flex;align-items:center;justify-content:flex-start}
+.sidebar-footer{margin-top:auto;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.65vw}
+.bridge{display:flex;align-items:center;gap:.58vw;min-width:0;padding:.62vh .72vw;border-radius:.72vw;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045)}
+.bridge-dot{width:.68vw;height:.68vw;border-radius:50%;flex:0 0 auto;background:#8293a6}.bridge.open .bridge-dot{background:#ff6673;box-shadow:0 0 0 .24vw rgba(255,102,115,.12)}.bridge.closed .bridge-dot{background:#4cf0ad;box-shadow:0 0 0 .24vw rgba(76,240,173,.10)}
+.bridge-copy{min-width:0}.bridge-title{font-size:.72vw;font-weight:820;letter-spacing:.045em;white-space:nowrap}.bridge-detail{margin-top:.1vh;color:#b9cee1;font-size:.62vw;font-weight:620;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .live{display:inline-flex;align-items:center;gap:.45vw;padding:.5vh .68vw;border-radius:999px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:#66f2b3;font-size:.74vw;font-weight:760}.live-dot{width:.58vw;height:.58vw;border-radius:50%;background:#4cf0ad;box-shadow:0 0 0 .26vw rgba(76,240,173,.10)}
 .hero{position:relative;overflow:hidden;background:#07111e}
 .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,17,29,.34) 0%,rgba(7,17,29,.08) 9%,rgba(7,17,29,0) 18%);z-index:2;pointer-events:none}
@@ -114,7 +117,13 @@ body{background:#07111d}
       <div class="yesterday"><div class="yesterday-title">Gisteren</div><div class="history-list"></div></div>
     </article>
 
-    <div class="sidebar-footer"><div class="live"><span class="live-dot"></span><span>Live</span></div></div>
+    <div class="sidebar-footer">
+      <div id="bridge" class="bridge">
+        <span class="bridge-dot"></span>
+        <div class="bridge-copy"><div id="bridge-title" class="bridge-title">SLUISKILBRUG LADEN…</div><div id="bridge-detail" class="bridge-detail">Status ophalen</div></div>
+      </div>
+      <div class="live"><span class="live-dot"></span><span>Live</span></div>
+    </div>
   </aside>
 
   <main class="hero">
@@ -124,7 +133,7 @@ body{background:#07111d}
 </div>
 <script>
 const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,sunshine_duration&forecast_days=1&timezone=Europe%2FAmsterdam';
-let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
+let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='',currentBridge=null;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const title=t=>esc(typeof t==='string'?t:t?.title||'');
 function taskRows(data){
@@ -162,10 +171,41 @@ function renderImageState(d){
   standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
   standby.src=url+(url.includes('?')?'&':'?')+'t='+Date.now();
 }
+const bridgeDate=value=>{
+  if(!value)return null;
+  const normalised=String(value).replace(/(\.\d{3})\d+/,'$1');
+  const date=new Date(normalised);
+  return Number.isNaN(date.getTime())?null:date;
+};
+const durationText=milliseconds=>{
+  const minutes=Math.max(0,Math.floor(milliseconds/60000));
+  if(minutes<60)return minutes+' min';
+  const hours=Math.floor(minutes/60),rest=minutes%60;
+  return hours+'u'+(rest?' '+rest+' min':'');
+};
+function renderBridge(bridge){
+  const root=document.getElementById('bridge'),heading=document.getElementById('bridge-title'),detail=document.getElementById('bridge-detail');
+  if(!root||!heading||!detail)return;
+  root.classList.remove('open','closed');
+  if(!bridge){heading.textContent='SLUISKILBRUG ONBEKEND';detail.textContent='Geen actuele informatie';return}
+  const now=Date.now();
+  if(bridge.isOpen){
+    root.classList.add('open');heading.textContent='SLUISKILBRUG OPEN';
+    const opened=bridgeDate(bridge.openedAt),closes=bridgeDate(bridge.expectedCloseAt);
+    const elapsed=opened?durationText(now-opened.getTime()):'onbekend';
+    const remaining=closes&&closes.getTime()>now?' · nog '+durationText(closes.getTime()-now):' · einde onbekend';
+    detail.textContent='open sinds '+elapsed+remaining;
+  }else{
+    root.classList.add('closed');heading.textContent='SLUISKILBRUG DICHT';
+    const next=bridgeDate(bridge.nextOpeningAt);
+    detail.textContent=next&&next.getTime()>now?'nog '+durationText(next.getTime()-now)+' dicht':'volgende opening onbekend';
+  }
+}
 function refreshClock(){
   document.getElementById('current-time').textContent=new Intl.DateTimeFormat('nl-NL',{
     hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Amsterdam'
   }).format(new Date());
+  renderBridge(currentBridge);
 }
 async function refreshData(){
   try{
@@ -174,6 +214,7 @@ async function refreshData(){
     renderChild('rassell',d.children.rassell);
     renderChild('michelle',d.children.michelle);
     renderImageState(d);
+    currentBridge=d.bridge||null;renderBridge(currentBridge);
     document.getElementById('date').textContent=new Intl.DateTimeFormat('nl-NL',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${d.date}T12:00:00`));
   }catch(e){console.error('Live data unavailable',e)}
 }
