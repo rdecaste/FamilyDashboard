@@ -14,10 +14,15 @@
 <a class="dashboard-link" href="./">Dashboard</a>
 </header>
 <section class="summary"><div><strong id="completedCount">0</strong><span>Completed today</span></div><div><strong id="updated">—</strong><span>Last update</span></div></section>
+<section id="bridge-card" class="bridge-card">
+<div class="bridge-state"><span class="bridge-dot"></span><div><p class="eyebrow">Verkeer</p><h2 id="bridge-title">SLUISKILBRUG</h2><p id="bridge-detail">Druk op controleren voor de actuele status</p><small id="bridge-checked"></small></div></div>
+<button id="bridge-refresh" class="bridge-refresh" type="button">↻ Brugstatus controleren</button>
+</section>
 <section class="child-section"><div class="child-head"><h2>Rassell</h2><button class="screen-off" type="button" data-child="Rassell">🚫 No screen time</button></div><div id="rassellTasks" class="tasks"></div></section>
 <section class="child-section"><div class="child-head"><h2>Michelle</h2><button class="screen-off" type="button" data-child="Michelle">🚫 No screen time</button></div><div id="michelleTasks" class="tasks"></div></section>
 <p id="message" class="message" aria-live="polite"></p>
 </main>
+<script src="bridge-status.js"></script>
 <script src="parent.js"></script>
 </body>
 </html>
