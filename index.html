@@ -16,6 +16,7 @@ body{background:#07111d}
 .date-wrap,.weather{border-radius:1.15vw;padding:1vw 1.05vw;min-height:12.5vh;display:flex;flex-direction:column;justify-content:center}
 .date-label,.weather-label{font-size:.68vw;font-weight:760;letter-spacing:.1em;text-transform:uppercase;color:rgba(235,245,255,.62)}
 .date-main{margin-top:.28vh;font-size:1.75vw;line-height:1.04;font-weight:820;letter-spacing:-.03em}
+.current-time{margin-top:.5vh;font-size:1.12vw;line-height:1;font-weight:760;color:#b9d7f2;letter-spacing:.02em}
 .weather-main{display:flex;align-items:center;gap:.55vw;margin-top:.25vh}
 .icon{font-size:1.42vw;line-height:1}
 .weather strong{font-size:1.62vw;line-height:1;font-weight:820}
@@ -63,6 +64,7 @@ body{background:#07111d}
       <div class="date-wrap">
         <div class="date-label">Vandaag</div>
         <div id="date" class="date-main">—</div>
+        <div id="current-time" class="current-time">—:—</div>
       </div>
       <div class="weather">
         <div class="weather-label">Schoolweer</div>
@@ -160,6 +162,11 @@ function renderImageState(d){
   standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
   standby.src=url+(url.includes('?')?'&':'?')+'t='+Date.now();
 }
+function refreshClock(){
+  document.getElementById('current-time').textContent=new Intl.DateTimeFormat('nl-NL',{
+    hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Amsterdam'
+  }).format(new Date());
+}
 async function refreshData(){
   try{
     const r=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
@@ -255,8 +262,8 @@ async function refreshWeather(){
     document.getElementById('weather-advice').textContent='—';
   }
 }
-refreshData();refreshWeather();
-setInterval(refreshData,15000);setInterval(refreshWeather,600000);
+refreshClock();refreshData();refreshWeather();
+setInterval(refreshClock,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);
 </script>
 </body>
 </html>
