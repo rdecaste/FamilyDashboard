@@ -14,12 +14,11 @@ main{position:relative;width:100vw;height:100vh;overflow:hidden;background:#0711
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,10,19,.30) 0%,rgba(3,10,19,.05) 18%,rgba(3,10,19,.02) 54%,rgba(3,10,19,.10) 76%,rgba(3,10,19,.20) 100%);pointer-events:none}
 .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;aspect-ratio:16/9;opacity:0;transition:opacity .8s ease}
 .hero img.show{opacity:1}
-.topbar{position:absolute;left:2.2vw;right:2.2vw;top:auto;bottom:2.2vh;height:8.2vh;display:grid;grid-template-columns:1.15fr .9fr 1.35fr auto;align-items:center;gap:1vw;padding:0 1.35vw;border:1px solid rgba(255,255,255,.14);border-radius:1.3vw;background:rgba(7,18,33,.22);backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);box-shadow:0 8px 24px rgba(0,0,0,.14);z-index:5}
+.topbar{position:absolute;left:2.2vw;right:2.2vw;top:auto;bottom:2.2vh;height:8.2vh;display:grid;grid-template-columns:1.1fr 1.55fr auto;align-items:center;gap:1vw;padding:0 1.35vw;border:1px solid rgba(255,255,255,.14);border-radius:1.3vw;background:rgba(7,18,33,.22);backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);box-shadow:0 8px 24px rgba(0,0,0,.14);z-index:5}
 .top-item{min-width:0;display:flex;align-items:center;gap:.75vw;font-size:1.16vw;font-weight:650;white-space:nowrap}
 .icon{font-size:1.55vw;line-height:1}
 .date-main{font-size:1.2vw;font-weight:760;letter-spacing:-.01em}
 .pill{padding:.72vh .8vw;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
-.bridge{color:#cfe8ff}.bridge.open{color:#ff9aa4;border-color:rgba(255,100,115,.4);background:rgba(80,15,25,.44)}.bridge.soon{color:#ffd583;border-color:rgba(245,192,107,.4);background:rgba(76,55,12,.4)}
 .weather{color:#eaf5ff}.weather strong{font-size:1.5vw;margin-right:.15vw}.weather-detail{color:#b9cee4;font-weight:560;overflow:hidden;text-overflow:ellipsis}
 .live{justify-self:end;color:#66f2b3;font-weight:760}.live-dot{width:.78vw;height:.78vw;border-radius:50%;background:#4cf0ad;box-shadow:0 0 0 .38vw rgba(76,240,173,.12)}
 .cards{position:absolute;left:1.8vw;right:1.8vw;bottom:12.2vh;display:grid;grid-template-columns:44% 44%;justify-content:space-between;align-items:end;gap:0;z-index:5;pointer-events:none}
@@ -38,7 +37,7 @@ main{position:relative;width:100vw;height:100vh;overflow:hidden;background:#0711
 .task.open .check{background:rgba(255,255,255,.08);border:1px solid rgba(190,220,245,.42);color:transparent}
 .more{color:#9ed4ff;font-size:.72vw;font-weight:650;margin-left:1.5vw}
 .empty{color:#7ff0bc;font-size:.78vw;font-weight:650}
-.name,.points strong,.points span,.stat-value,.stat-label,.task,.more,.empty,.top-item,.date-main,.bridge-text,.weather-detail,#weather-temp,.screen-text{text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.name,.points strong,.points span,.stat-value,.stat-label,.task,.more,.empty,.top-item,.date-main,.weather-detail,#weather-temp,.screen-text{text-shadow:0 1px 8px rgba(0,0,0,.55)}
 .child:first-child{justify-self:start}.child:last-child{justify-self:end}
 @media(max-width:1200px){.topbar{grid-template-columns:1fr 1fr}.weather{display:none}.cards{grid-template-columns:1fr;max-height:72vh;overflow:auto}.child{min-height:unset}.name{font-size:32px}.points strong{font-size:40px}.top-item{font-size:16px}.icon{font-size:22px}.task{font-size:14px}.stat-value{font-size:22px}.stat-label{font-size:11px}}
 </style>
@@ -49,7 +48,6 @@ main{position:relative;width:100vw;height:100vh;overflow:hidden;background:#0711
 
   <header class="topbar">
     <div class="top-item"><span class="icon">📅</span><span id="date" class="date-main">—</span></div>
-    <div id="bridge" class="top-item pill bridge"><span class="icon">🌉</span><span class="bridge-text">Sluiskilbrug —</span></div>
     <div class="top-item pill weather"><span id="weather-icon" class="icon">⛅</span><strong id="weather-temp">—°</strong><span id="weather-text" class="weather-detail">Schoolweer laden…</span></div>
     <div class="top-item live"><span class="live-dot"></span><span>Live</span></div>
   </header>
@@ -80,7 +78,6 @@ main{position:relative;width:100vw;height:100vh;overflow:hidden;background:#0711
 </main>
 <script>
 const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
-const bridgeUrl='https://www.isdebrugopen.nl/zeeland/terneuzen/brug-sluiskil.json';
 const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&forecast_days=1&timezone=Europe%2FAmsterdam';
 let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -120,96 +117,14 @@ async function refreshImage(){
     standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto,c_fill,g_center,w_2560,h_1440/v${a.version}/${id}.${a.format}?t=${Date.now()}`;
   }catch(e){console.error('Image unavailable',e)}
 }
-const boolish=v=>{
-  if(v===true||v===1)return true;
-  const s=String(v??'').trim().toLowerCase();
-  return ['true','1','yes','ja','open','opened','geopend','opening'].includes(s)
-    || /brug\s+staat\s+open/.test(s)
-    || /verkeer\s+(kan\s+)?niet\s+passeren/.test(s);
-};
-const falseish=v=>{
-  if(v===false||v===0)return true;
-  const s=String(v??'').trim().toLowerCase();
-  return ['false','0','no','nee','closed','close','dicht','gesloten'].includes(s)
-    || /brug\s+staat\s+dicht/.test(s)
-    || /verkeer\s+kan\s+passeren/.test(s);
-};
-const first=(o,ks)=>{for(const k of ks)if(o?.[k]!==undefined&&o[k]!==null)return o[k]};
-function bridgeState(d){
-  const roots=[d?.bridge,d?.data,d?.result,d].filter(x=>x&&typeof x==='object'&&!Array.isArray(x));
-  const openKeys=['open','is_open','isOpen','opened','is_opened','isOpened','bridge_open','bridgeOpen','is_bridge_open','opening','isOpening'];
-  const closedKeys=['closed','is_closed','isClosed','bridge_closed','bridgeClosed'];
-  const statusKeys=['status','state','bridge_status','bridgeStatus','current_status','currentStatus','traffic_status','trafficStatus'];
-  const etaKeys=['minutes_to_open','minutesToOpen','eta_minutes','etaMinutes','expected_in_minutes','expectedInMinutes'];
-
-  let isOpen=null,eta=null;
-
-  for(const root of roots){
-    for(const k of openKeys){
-      if(root[k]!==undefined&&root[k]!==null){
-        if(boolish(root[k])){isOpen=true;break}
-        if(falseish(root[k])){isOpen=false;break}
-      }
-    }
-    if(isOpen===null){
-      for(const k of closedKeys){
-        if(root[k]!==undefined&&root[k]!==null){
-          if(boolish(root[k])){isOpen=false;break}
-          if(falseish(root[k])){isOpen=true;break}
-        }
-      }
-    }
-    if(isOpen===null){
-      for(const k of statusKeys){
-        if(root[k]===undefined||root[k]===null)continue;
-        const s=String(root[k]).trim().toLowerCase();
-        if(/brug\s+staat\s+open|(^|\b)(open|opened|geopend|opening)(\b|$)|niet\s+passeren/.test(s) && !/closed|dicht|gesloten/.test(s)){isOpen=true;break}
-        if(/brug\s+staat\s+dicht|closed|dicht|gesloten|verkeer\s+kan\s+passeren/.test(s)){isOpen=false;break}
-      }
-    }
-    if(eta===null){
-      for(const k of etaKeys){
-        const n=Number(root[k]);
-        if(Number.isFinite(n)){eta=n;break}
-      }
-    }
-    if(isOpen!==null)break;
-  }
-
-  // Do not silently claim "closed" when the API shape is unknown.
-  return {isOpen,eta};
-}
-function renderBridge(s){
-  const el=document.getElementById('bridge'),t=el.querySelector('.bridge-text');el.classList.remove('open','soon');
-  if(!s||s.isOpen===null){t.textContent='Sluiskilbrug ?';return}
-  if(s.isOpen){el.classList.add('open');t.textContent='Sluiskilbrug OPEN';return}
-  if(s.eta!==null&&s.eta<=20){el.classList.add('soon');t.textContent=`Brug ±${Math.round(s.eta)} min`;return}
-  t.textContent='Sluiskilbrug dicht';
-}
-async function refreshBridge(){
-  try{
-    const sep=bridgeUrl.includes('?')?'&':'?';
-    const r=await fetch(`${bridgeUrl}${sep}_=${Date.now()}`,{
-      cache:'no-store',
-      credentials:'omit',
-      headers:{'Accept':'application/json','Cache-Control':'no-cache','Pragma':'no-cache'}
-    });
-    if(!r.ok)throw new Error(r.status);
-    const data=await r.json();
-    renderBridge(bridgeState(data));
-  }catch(e){
-    console.error('Bridge status unavailable',e);
-    renderBridge(null);
-  }
-}
 const weatherInfo=c=>c===0?['☀️','Helder']:[1,2].includes(c)?['🌤️','Licht bewolkt']:c===3?['☁️','Bewolkt']:[45,48].includes(c)?['🌫️','Mist']:[51,53,55,56,57].includes(c)?['🌦️','Motregen']:[61,63,65,66,67,80,81,82].includes(c)?['🌧️','Regen']:[71,73,75,77,85,86].includes(c)?['🌨️','Sneeuw']:[95,96,99].includes(c)?['⛈️','Onweer']:['🌥️','Wisselend'];
 function morningWeather(d){
   const h=d?.hourly;if(!h?.time?.length)return null;const rows=h.time.map((t,i)=>({t:new Date(t),temp:+h.temperature_2m[i],feel:+h.apparent_temperature[i],rain:+h.precipitation_probability[i],code:+h.weather_code[i],wind:+h.wind_speed_10m[i]}));const s=rows.filter(x=>x.t.getHours()>=7&&x.t.getHours()<=10);const a=s.length?s:rows.slice(0,4),avg=k=>a.reduce((z,x)=>z+x[k],0)/a.length;return{temp:avg('temp'),feel:Math.min(...a.map(x=>x.feel)),rain:Math.max(...a.map(x=>x.rain)),wind:Math.max(...a.map(x=>x.wind)),code:a.sort((x,y)=>y.code-x.code)[0]?.code||0};
 }
 function advice(w){const p=[];if(w.feel<5)p.push('warme jas');else if(w.feel<11)p.push('jas + trui');else if(w.feel<16)p.push('lichte jas');else if(w.feel<20)p.push('trui of vest');else p.push('T-shirt');if(w.rain>=55)p.push('regenjas mee');else if(w.rain>=30)p.push('kans op regen');if(w.wind>=35)p.push('winderig');return p.join(' · ')}
 async function refreshWeather(){try{const r=await fetch(`${weatherUrl}&t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const w=morningWeather(await r.json());if(!w)return;const [i,l]=weatherInfo(w.code);document.getElementById('weather-icon').textContent=i;document.getElementById('weather-temp').textContent=`${Math.round(w.temp)}°`;document.getElementById('weather-text').textContent=`${l} · ${advice(w)}`}catch(e){document.getElementById('weather-text').textContent='Schoolweer niet beschikbaar'}}
-refreshImage();refreshData();refreshBridge();refreshWeather();
-setInterval(refreshImage,30000);setInterval(refreshData,15000);setInterval(refreshBridge,20000);setInterval(refreshWeather,600000);
+refreshImage();refreshData();refreshWeather();
+setInterval(refreshImage,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);
 </script>
 </body>
 </html>
