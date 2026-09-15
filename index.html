@@ -7,75 +7,93 @@
 <title>Family Dashboard</title>
 <style>
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#06101d;color:#f7fbff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-body{background:#06101d}
-main{position:relative;width:100vw;height:100vh;overflow:hidden;background:#07111e}
-.hero{position:absolute;inset:0;overflow:hidden;background:#07111e}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,10,19,.30) 0%,rgba(3,10,19,.05) 18%,rgba(3,10,19,.02) 54%,rgba(3,10,19,.10) 76%,rgba(3,10,19,.20) 100%);pointer-events:none}
-.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;aspect-ratio:16/9;opacity:0;transition:opacity .8s ease}
-.hero img.show{opacity:1}
-.topbar{position:absolute;left:2.2vw;right:2.2vw;top:auto;bottom:2.2vh;height:8.2vh;display:grid;grid-template-columns:1.1fr 1.55fr auto;align-items:center;gap:1vw;padding:0 1.35vw;border:1px solid rgba(255,255,255,.14);border-radius:1.3vw;background:rgba(7,18,33,.22);backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);box-shadow:0 8px 24px rgba(0,0,0,.14);z-index:5}
-.top-item{min-width:0;display:flex;align-items:center;gap:.75vw;font-size:1.16vw;font-weight:650;white-space:nowrap}
-.icon{font-size:1.55vw;line-height:1}
-.date-main{font-size:1.2vw;font-weight:760;letter-spacing:-.01em}
-.pill{padding:.72vh .8vw;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
-.weather{color:#eaf5ff}.weather strong{font-size:1.5vw;margin-right:.15vw}.weather-detail{color:#b9cee4;font-weight:560;overflow:hidden;text-overflow:ellipsis}
-.live{justify-self:end;color:#66f2b3;font-weight:760}.live-dot{width:.78vw;height:.78vw;border-radius:50%;background:#4cf0ad;box-shadow:0 0 0 .38vw rgba(76,240,173,.12)}
-.cards{position:absolute;left:1.8vw;right:1.8vw;bottom:12.2vh;display:grid;grid-template-columns:44% 44%;justify-content:space-between;align-items:end;gap:0;z-index:5;pointer-events:none}
-.child{min-height:22.5vh;max-width:100%;padding:1vw 1.2vw .95vw;border-radius:1.25vw;border:1px solid rgba(190,230,255,.16);background:rgba(7,18,33,.28);backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%);box-shadow:0 10px 28px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.04)}
-.child-head{display:flex;align-items:center;justify-content:space-between;gap:.8vw;padding-bottom:.6vh;border-bottom:1px solid rgba(255,255,255,.10)}
-.name{font-size:1.95vw;font-weight:800;letter-spacing:-.03em}
-.head-right{display:flex;align-items:center;gap:1vw}
-.points{text-align:center;min-width:4.6vw}.points strong{display:block;font-size:2.2vw;line-height:.86;font-weight:820;font-variant-numeric:tabular-nums}.points span{display:block;margin-top:.2vh;color:rgba(235,245,255,.82);font-size:.62vw;text-transform:uppercase;letter-spacing:.1em}
-.screen{display:flex;align-items:center;gap:.35vw;padding:.5vh .65vw;border-radius:999px;border:1px solid rgba(57,235,169,.45);background:rgba(6,65,49,.20);color:#6cf3b8;font-size:.84vw;font-weight:760}.screen.no{border-color:rgba(255,115,125,.45);background:rgba(88,18,29,.18);color:#ff9aa4}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.35vw;padding:.75vh 0 .7vh}
-.stat{display:flex;align-items:center;gap:.45vw;min-width:0}.stat-icon{width:1.35vw;height:1.35vw;border-radius:50%;display:grid;place-items:center;background:rgba(91,190,255,.13);font-size:.72vw}.stat:nth-child(2) .stat-icon{background:rgba(50,235,171,.15)}.stat:nth-child(3) .stat-icon{background:rgba(255,202,75,.14)}.stat:nth-child(4) .stat-icon{background:rgba(255,181,75,.14)}
-.stat-value{font-size:1.2vw;line-height:1;font-weight:800}.stat-label{margin-top:.12vh;color:rgba(235,245,255,.82);font-size:.62vw;white-space:nowrap}
-.tasks{border-top:1px solid rgba(255,255,255,.10);padding-top:.55vh;display:grid;gap:.3vh}
-.task{display:flex;align-items:center;gap:.45vw;font-size:.78vw;font-weight:620;color:#edf6ff;min-width:0}.task span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.check{width:1.05vw;height:1.05vw;border-radius:50%;display:grid;place-items:center;background:#29dfa0;color:#052218;font-size:.66vw;font-weight:900;flex:0 0 auto}
-.task.open .check{background:rgba(255,255,255,.08);border:1px solid rgba(190,220,245,.42);color:transparent}
-.more{color:#9ed4ff;font-size:.72vw;font-weight:650;margin-left:1.5vw}
-.empty{color:#7ff0bc;font-size:.78vw;font-weight:650}
-.name,.points strong,.points span,.stat-value,.stat-label,.task,.more,.empty,.top-item,.date-main,.weather-detail,#weather-temp,.screen-text{text-shadow:0 1px 8px rgba(0,0,0,.55)}
-.child:first-child{justify-self:start}.child:last-child{justify-self:end}
-@media(max-width:1200px){.topbar{grid-template-columns:1fr 1fr}.weather{display:none}.cards{grid-template-columns:1fr;max-height:72vh;overflow:auto}.child{min-height:unset}.name{font-size:32px}.points strong{font-size:40px}.top-item{font-size:16px}.icon{font-size:22px}.task{font-size:14px}.stat-value{font-size:22px}.stat-label{font-size:11px}}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#07111d;color:#f7fbff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{background:#07111d}
+.app{width:100vw;height:100vh;display:grid;grid-template-columns:40% 60%;background:#07111d}
+.sidebar{position:relative;z-index:3;padding:2.3vh 1.7vw 2vh;display:flex;flex-direction:column;gap:1.45vh;background:linear-gradient(90deg,rgba(7,17,29,.98) 0%,rgba(7,17,29,.96) 82%,rgba(7,17,29,.82) 94%,rgba(7,17,29,.35) 100%)}
+.sidebar-top{display:grid;grid-template-columns:1.3fr 1fr;gap:.8vw}
+.date-wrap,.weather,.child{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.date-wrap,.weather{border-radius:1.15vw;padding:1vw 1.05vw;min-height:10vh;display:flex;flex-direction:column;justify-content:center}
+.date-label,.weather-label{font-size:.68vw;font-weight:760;letter-spacing:.1em;text-transform:uppercase;color:rgba(235,245,255,.62)}
+.date-main{margin-top:.28vh;font-size:1.75vw;line-height:1.04;font-weight:820;letter-spacing:-.03em}
+.weather-main{display:flex;align-items:center;gap:.55vw;margin-top:.25vh}
+.icon{font-size:1.42vw;line-height:1}
+.weather strong{font-size:1.62vw;line-height:1;font-weight:820}
+.weather-detail{margin-top:.32vh;color:#bfd3e8;font-size:.78vw;font-weight:560;line-height:1.25}
+.child{border-radius:1.2vw;padding:1vw 1.05vw .9vw}
+.child-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.8vw}
+.name{font-size:1.5vw;font-weight:840;letter-spacing:-.025em}
+.child-sub{margin-top:.1vh;font-size:.68vw;color:rgba(235,245,255,.58);text-transform:uppercase;letter-spacing:.08em}
+.head-right{display:flex;align-items:center;gap:.7vw}
+.points{text-align:right;min-width:3.6vw}.points strong{display:block;font-size:2vw;line-height:.9;font-weight:860;font-variant-numeric:tabular-nums}.points span{display:block;margin-top:.15vh;color:rgba(235,245,255,.65);font-size:.58vw;text-transform:uppercase;letter-spacing:.09em}
+.screen{display:flex;align-items:center;gap:.3vw;padding:.42vh .6vw;border-radius:999px;border:1px solid rgba(57,235,169,.4);background:rgba(6,65,49,.17);color:#72f1b9;font-size:.72vw;font-weight:760}.screen.no{border-color:rgba(255,115,125,.42);background:rgba(88,18,29,.18);color:#ff9da7}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45vh .8vw;margin-top:.7vh;padding:.7vh 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+.stat{display:flex;align-items:center;justify-content:space-between;gap:.55vw;min-width:0}.stat-left{display:flex;align-items:center;gap:.42vw;min-width:0}.stat-icon{width:1.15vw;height:1.15vw;border-radius:50%;display:grid;place-items:center;background:rgba(91,190,255,.13);font-size:.62vw;flex:0 0 auto}.stat:nth-child(2) .stat-icon{background:rgba(50,235,171,.15)}.stat:nth-child(3) .stat-icon{background:rgba(255,202,75,.14)}.stat:nth-child(4) .stat-icon{background:rgba(255,181,75,.14)}
+.stat-value{font-size:.98vw;line-height:1;font-weight:820}.stat-label{color:rgba(235,245,255,.70);font-size:.66vw;white-space:nowrap}
+.tasks{padding-top:.65vh;display:grid;gap:.38vh}
+.task{display:flex;align-items:center;gap:.45vw;font-size:.76vw;font-weight:620;color:#edf6ff;min-width:0}.task span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.check{width:.95vw;height:.95vw;border-radius:50%;display:grid;place-items:center;background:#29dfa0;color:#052218;font-size:.58vw;font-weight:900;flex:0 0 auto}.task.open .check{background:rgba(255,255,255,.06);border:1px solid rgba(190,220,245,.40);color:transparent}
+.more{color:#9ed4ff;font-size:.67vw;font-weight:650;margin-left:1.4vw}.empty{color:#7ff0bc;font-size:.76vw;font-weight:650}
+.sidebar-footer{margin-top:auto;display:flex;align-items:center;justify-content:flex-start}
+.live{display:inline-flex;align-items:center;gap:.45vw;padding:.5vh .68vw;border-radius:999px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:#66f2b3;font-size:.74vw;font-weight:760}.live-dot{width:.58vw;height:.58vw;border-radius:50%;background:#4cf0ad;box-shadow:0 0 0 .26vw rgba(76,240,173,.10)}
+.hero{position:relative;overflow:hidden;background:#07111e}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,17,29,.34) 0%,rgba(7,17,29,.08) 9%,rgba(7,17,29,0) 18%);z-index:2;pointer-events:none}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .75s ease}.hero img.show{opacity:1}
+.name,.points strong,.stat-value,.task,.date-main,.weather-detail,#weather-temp,.screen-text{text-shadow:0 1px 8px rgba(0,0,0,.45)}
+@media(max-width:1200px){.app{grid-template-columns:44% 56%}.sidebar{padding:18px}.date-main{font-size:25px}.name{font-size:25px}.points strong{font-size:34px}.screen,.task,.stat-label,.weather-detail{font-size:12px}.stat-value{font-size:17px}.icon{font-size:20px}}
 </style>
 </head>
 <body>
-<main>
-  <section class="hero"><img id="image-a" alt="Family adventure visual"><img id="image-b" alt="" aria-hidden="true"></section>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="date-wrap">
+        <div class="date-label">Vandaag</div>
+        <div id="date" class="date-main">—</div>
+      </div>
+      <div class="weather">
+        <div class="weather-label">Weer</div>
+        <div class="weather-main"><span id="weather-icon" class="icon">⛅</span><strong id="weather-temp">—°</strong></div>
+        <div id="weather-text" class="weather-detail">Schoolweer laden…</div>
+      </div>
+    </div>
 
-  <header class="topbar">
-    <div class="top-item"><span class="icon">📅</span><span id="date" class="date-main">—</span></div>
-    <div class="top-item pill weather"><span id="weather-icon" class="icon">⛅</span><strong id="weather-temp">—°</strong><span id="weather-text" class="weather-detail">Schoolweer laden…</span></div>
-    <div class="top-item live"><span class="live-dot"></span><span>Live</span></div>
-  </header>
-
-  <section class="cards">
     <article class="child" data-child="michelle">
-      <div class="child-head"><div class="name">Michelle</div><div class="head-right"><div class="points"><strong>—</strong><span>points</span></div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div></div>
+      <div class="child-head">
+        <div><div class="name">Michelle</div><div class="child-sub">Vandaag</div></div>
+        <div class="head-right"><div class="points"><strong>—</strong><span>points</span></div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div>
+      </div>
       <div class="stats">
-        <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-value outstanding-count">0</div><div class="stat-label">Outstanding</div></div></div>
-        <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-value completed-count">0</div><div class="stat-label">Done</div></div></div>
-        <div class="stat"><div class="stat-icon">★</div><div><div class="stat-value redemptions-count">0</div><div class="stat-label">Rewards</div></div></div>
-        <div class="stat"><div class="stat-icon">!</div><div><div class="stat-value missed-count">0</div><div class="stat-label">Missed yesterday</div></div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">○</div><div class="stat-label">Outstanding</div></div><div class="stat-value outstanding-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Done</div></div><div class="stat-value completed-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Rewards</div></div><div class="stat-value redemptions-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">!</div><div class="stat-label">Missed yesterday</div></div><div class="stat-value missed-count">0</div></div>
       </div>
       <div class="tasks"></div>
     </article>
 
     <article class="child" data-child="rassell">
-      <div class="child-head"><div class="name">Rassell</div><div class="head-right"><div class="points"><strong>—</strong><span>points</span></div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div></div>
+      <div class="child-head">
+        <div><div class="name">Rassell</div><div class="child-sub">Vandaag</div></div>
+        <div class="head-right"><div class="points"><strong>—</strong><span>points</span></div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div>
+      </div>
       <div class="stats">
-        <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-value outstanding-count">0</div><div class="stat-label">Outstanding</div></div></div>
-        <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-value completed-count">0</div><div class="stat-label">Done</div></div></div>
-        <div class="stat"><div class="stat-icon">★</div><div><div class="stat-value redemptions-count">0</div><div class="stat-label">Rewards</div></div></div>
-        <div class="stat"><div class="stat-icon">!</div><div><div class="stat-value missed-count">0</div><div class="stat-label">Missed yesterday</div></div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">○</div><div class="stat-label">Outstanding</div></div><div class="stat-value outstanding-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Done</div></div><div class="stat-value completed-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Rewards</div></div><div class="stat-value redemptions-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">!</div><div class="stat-label">Missed yesterday</div></div><div class="stat-value missed-count">0</div></div>
       </div>
       <div class="tasks"></div>
     </article>
-  </section>
-</main>
+
+    <div class="sidebar-footer"><div class="live"><span class="live-dot"></span><span>Live</span></div></div>
+  </aside>
+
+  <main class="hero">
+    <img id="image-a" alt="Family adventure visual">
+    <img id="image-b" alt="" aria-hidden="true">
+  </main>
+</div>
 <script>
 const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&forecast_days=1&timezone=Europe%2FAmsterdam';
 let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
