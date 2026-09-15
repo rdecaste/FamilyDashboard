@@ -77,7 +77,6 @@ main{position:relative;width:100vw;height:100vh;overflow:hidden;background:#0711
   </section>
 </main>
 <script>
-const cloud='a3xk0plk',tag='family-dashboard-live',listUrl=`https://res.cloudinary.com/${cloud}/image/list/${tag}.json`;
 const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&forecast_days=1&timezone=Europe%2FAmsterdam';
 let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -100,22 +99,22 @@ function renderChild(key,data){
   const missed=Number(data.missedPoints??0);root.querySelector('.missed-count').textContent=missed<0?Math.abs(missed/2):(data.yesterdayIncompleteTasks||[]).length;
   root.querySelector('.tasks').innerHTML=taskRows(data);
 }
+function renderImageState(d){
+  const url=d?.image_url||'';
+  const key=String(d?.image_public_id||d?.image_version||url);
+  if(!url||key===imageKey)return;
+  standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
+  standby.src=url+(url.includes('?')?'&':'?')+'t='+Date.now();
+}
 async function refreshData(){
   try{
     const r=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
-    const d=await r.json();renderChild('rassell',d.children.rassell);renderChild('michelle',d.children.michelle);
+    const d=await r.json();
+    renderChild('rassell',d.children.rassell);
+    renderChild('michelle',d.children.michelle);
+    renderImageState(d);
     document.getElementById('date').textContent=new Intl.DateTimeFormat('nl-NL',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${d.date}T12:00:00`));
   }catch(e){console.error('Live data unavailable',e)}
-}
-async function refreshImage(){
-  try{
-    const r=await fetch(`${listUrl}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
-    const d=await r.json(),a=[...(d.resources||[])].sort((x,y)=>y.version-x.version)[0];if(!a)return;
-    const key=`${a.public_id}:${a.version}`;if(key===imageKey)return;
-    const id=a.public_id.split('/').map(encodeURIComponent).join('/');
-    standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
-    standby.src=`https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto,c_fill,g_center,w_2560,h_1440/v${a.version}/${id}.${a.format}?t=${Date.now()}`;
-  }catch(e){console.error('Image unavailable',e)}
 }
 const weatherInfo=c=>c===0?['☀️','Helder']:[1,2].includes(c)?['🌤️','Licht bewolkt']:c===3?['☁️','Bewolkt']:[45,48].includes(c)?['🌫️','Mist']:[51,53,55,56,57].includes(c)?['🌦️','Motregen']:[61,63,65,66,67,80,81,82].includes(c)?['🌧️','Regen']:[71,73,75,77,85,86].includes(c)?['🌨️','Sneeuw']:[95,96,99].includes(c)?['⛈️','Onweer']:['🌥️','Wisselend'];
 function morningWeather(d){
@@ -123,8 +122,8 @@ function morningWeather(d){
 }
 function advice(w){const p=[];if(w.feel<5)p.push('warme jas');else if(w.feel<11)p.push('jas + trui');else if(w.feel<16)p.push('lichte jas');else if(w.feel<20)p.push('trui of vest');else p.push('T-shirt');if(w.rain>=55)p.push('regenjas mee');else if(w.rain>=30)p.push('kans op regen');if(w.wind>=35)p.push('winderig');return p.join(' · ')}
 async function refreshWeather(){try{const r=await fetch(`${weatherUrl}&t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const w=morningWeather(await r.json());if(!w)return;const [i,l]=weatherInfo(w.code);document.getElementById('weather-icon').textContent=i;document.getElementById('weather-temp').textContent=`${Math.round(w.temp)}°`;document.getElementById('weather-text').textContent=`${l} · ${advice(w)}`}catch(e){document.getElementById('weather-text').textContent='Schoolweer niet beschikbaar'}}
-refreshImage();refreshData();refreshWeather();
-setInterval(refreshImage,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);
+refreshData();refreshWeather();
+setInterval(refreshData,15000);setInterval(refreshWeather,600000);
 </script>
 </body>
 </html>
