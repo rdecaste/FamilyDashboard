@@ -13,13 +13,16 @@ body{background:#07111d}
 .sidebar{position:relative;z-index:3;padding:2.3vh 1.7vw 2vh;display:flex;flex-direction:column;gap:1.45vh;background:linear-gradient(90deg,rgba(7,17,29,.98) 0%,rgba(7,17,29,.96) 82%,rgba(7,17,29,.82) 94%,rgba(7,17,29,.35) 100%)}
 .sidebar-top{display:grid;grid-template-columns:1.3fr 1fr;gap:.8vw}
 .date-wrap,.weather,.child{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);box-shadow:0 8px 24px rgba(0,0,0,.16)}
-.date-wrap,.weather{border-radius:1.15vw;padding:1vw 1.05vw;min-height:10vh;display:flex;flex-direction:column;justify-content:center}
+.date-wrap,.weather{border-radius:1.15vw;padding:1vw 1.05vw;min-height:12.5vh;display:flex;flex-direction:column;justify-content:center}
 .date-label,.weather-label{font-size:.68vw;font-weight:760;letter-spacing:.1em;text-transform:uppercase;color:rgba(235,245,255,.62)}
 .date-main{margin-top:.28vh;font-size:1.75vw;line-height:1.04;font-weight:820;letter-spacing:-.03em}
 .weather-main{display:flex;align-items:center;gap:.55vw;margin-top:.25vh}
 .icon{font-size:1.42vw;line-height:1}
 .weather strong{font-size:1.62vw;line-height:1;font-weight:820}
-.weather-detail{margin-top:.32vh;color:#bfd3e8;font-size:.78vw;font-weight:560;line-height:1.25}
+.weather-range{margin-left:auto;font-size:.72vw;font-weight:700;color:#dbe9f6;white-space:nowrap}
+.weather-detail{margin-top:.3vh;color:#bfd3e8;font-size:.72vw;font-weight:560;line-height:1.22}
+.weather-meta{display:grid;grid-template-columns:1fr 1fr;gap:.24vh .65vw;margin-top:.5vh;padding-top:.5vh;border-top:1px solid rgba(255,255,255,.07);font-size:.65vw;color:rgba(235,245,255,.72)}
+.weather-advice{margin-top:.5vh;padding:.42vh .5vw;border-radius:.58vw;background:rgba(110,181,255,.08);border:1px solid rgba(130,195,255,.10);font-size:.68vw;font-weight:700;color:#e8f5ff;line-height:1.25}
 .child{border-radius:1.2vw;padding:1vw 1.05vw .9vw}
 .child-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.8vw}
 .name{font-size:1.5vw;font-weight:840;letter-spacing:-.025em}
@@ -62,9 +65,20 @@ body{background:#07111d}
         <div id="date" class="date-main">—</div>
       </div>
       <div class="weather">
-        <div class="weather-label">Weer</div>
-        <div class="weather-main"><span id="weather-icon" class="icon">⛅</span><strong id="weather-temp">—°</strong></div>
-        <div id="weather-text" class="weather-detail">Schoolweer laden…</div>
+        <div class="weather-label">Schoolweer</div>
+        <div class="weather-main">
+          <span id="weather-icon" class="icon">⛅</span>
+          <strong id="weather-temp">—°</strong>
+          <span id="weather-range" class="weather-range">— / —</span>
+        </div>
+        <div id="weather-text" class="weather-detail">Weer laden…</div>
+        <div class="weather-meta">
+          <span id="weather-rain">🌧 —</span>
+          <span id="weather-sun">☀️ —</span>
+          <span id="weather-sunrise">↑ —</span>
+          <span id="weather-sunset">↓ —</span>
+        </div>
+        <div id="weather-advice" class="weather-advice">Schooladvies laden…</div>
       </div>
     </div>
 
@@ -107,7 +121,7 @@ body{background:#07111d}
   </main>
 </div>
 <script>
-const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&forecast_days=1&timezone=Europe%2FAmsterdam';
+const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,sunshine_duration&forecast_days=1&timezone=Europe%2FAmsterdam';
 let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const title=t=>esc(typeof t==='string'?t:t?.title||'');
@@ -157,11 +171,90 @@ async function refreshData(){
   }catch(e){console.error('Live data unavailable',e)}
 }
 const weatherInfo=c=>c===0?['☀️','Helder']:[1,2].includes(c)?['🌤️','Licht bewolkt']:c===3?['☁️','Bewolkt']:[45,48].includes(c)?['🌫️','Mist']:[51,53,55,56,57].includes(c)?['🌦️','Motregen']:[61,63,65,66,67,80,81,82].includes(c)?['🌧️','Regen']:[71,73,75,77,85,86].includes(c)?['🌨️','Sneeuw']:[95,96,99].includes(c)?['⛈️','Onweer']:['🌥️','Wisselend'];
-function morningWeather(d){
-  const h=d?.hourly;if(!h?.time?.length)return null;const rows=h.time.map((t,i)=>({t:new Date(t),temp:+h.temperature_2m[i],feel:+h.apparent_temperature[i],rain:+h.precipitation_probability[i],code:+h.weather_code[i],wind:+h.wind_speed_10m[i]}));const s=rows.filter(x=>x.t.getHours()>=7&&x.t.getHours()<=10);const a=s.length?s:rows.slice(0,4),avg=k=>a.reduce((z,x)=>z+x[k],0)/a.length;return{temp:avg('temp'),feel:Math.min(...a.map(x=>x.feel)),rain:Math.max(...a.map(x=>x.rain)),wind:Math.max(...a.map(x=>x.wind)),code:a.sort((x,y)=>y.code-x.code)[0]?.code||0};
+
+const hhmm=value=>{
+  if(!value)return '—';
+  const d=new Date(value);
+  return Number.isNaN(d.getTime())?'—':d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+};
+
+function schoolWeather(d){
+  const h=d?.hourly,day=d?.daily;
+  if(!h?.time?.length||!day)return null;
+  const rows=h.time.map((t,i)=>({
+    t:new Date(t),
+    hour:new Date(t).getHours(),
+    temp:+h.temperature_2m[i],
+    feel:+h.apparent_temperature[i],
+    rain:+h.precipitation_probability[i],
+    code:+h.weather_code[i],
+    wind:+h.wind_speed_10m[i]
+  }));
+  const at8=rows.find(x=>x.hour===8)||rows[0];
+  const at14=rows.find(x=>x.hour===14);
+  const at15=rows.find(x=>x.hour===15);
+  const home=at14&&at15?{
+    temp:(at14.temp+at15.temp)/2,
+    feel:(at14.feel+at15.feel)/2,
+    rain:Math.max(at14.rain,at15.rain),
+    wind:Math.max(at14.wind,at15.wind),
+    code:Math.max(at14.code,at15.code)
+  }:(at14||at15||at8);
+  const commute=[at8,home].filter(Boolean);
+  const commuteRain=Math.max(...commute.map(x=>x.rain||0));
+  const commuteFeel=Math.min(...commute.map(x=>x.feel));
+  const commuteWind=Math.max(...commute.map(x=>x.wind||0));
+  return{
+    at8,home,
+    min:+day.temperature_2m_min?.[0],
+    max:+day.temperature_2m_max?.[0],
+    rainMax:+day.precipitation_probability_max?.[0],
+    sunshineHours:(+day.sunshine_duration?.[0]||0)/3600,
+    sunrise:day.sunrise?.[0],
+    sunset:day.sunset?.[0],
+    code:+day.weather_code?.[0],
+    commuteRain,commuteFeel,commuteWind
+  };
 }
-function advice(w){const p=[];if(w.feel<5)p.push('warme jas');else if(w.feel<11)p.push('jas + trui');else if(w.feel<16)p.push('lichte jas');else if(w.feel<20)p.push('trui of vest');else p.push('T-shirt');if(w.rain>=55)p.push('regenjas mee');else if(w.rain>=30)p.push('kans op regen');if(w.wind>=35)p.push('winderig');return p.join(' · ')}
-async function refreshWeather(){try{const r=await fetch(`${weatherUrl}&t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const w=morningWeather(await r.json());if(!w)return;const [i,l]=weatherInfo(w.code);document.getElementById('weather-icon').textContent=i;document.getElementById('weather-temp').textContent=`${Math.round(w.temp)}°`;document.getElementById('weather-text').textContent=`${l} · ${advice(w)}`}catch(e){document.getElementById('weather-text').textContent='Schoolweer niet beschikbaar'}}
+
+function schoolAdvice(w){
+  const clothing=[];
+  if(w.commuteFeel<5)clothing.push('warme jas');
+  else if(w.commuteFeel<10)clothing.push('jas + trui');
+  else if(w.commuteFeel<14)clothing.push('lichte jas');
+  else if(w.commuteFeel<18)clothing.push('trui of vest');
+  else clothing.push('T-shirt is ok');
+
+  if(w.commuteRain>=50)clothing.push('regenjas mee');
+  else if(w.commuteRain>=30)clothing.push('lichte regenjas slim');
+  else clothing.push('geen regenjas nodig');
+
+  if(w.commuteWind>=35)clothing.push('winderig');
+  return clothing.join(' · ');
+}
+
+async function refreshWeather(){
+  try{
+    const r=await fetch(`${weatherUrl}&t=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok)throw new Error(r.status);
+    const w=schoolWeather(await r.json());
+    if(!w)return;
+    const [i,label]=weatherInfo(w.code);
+
+    document.getElementById('weather-icon').textContent=i;
+    document.getElementById('weather-temp').textContent=`${Math.round(w.at8.temp)}°`;
+    document.getElementById('weather-range').textContent=`${Math.round(w.min)}° / ${Math.round(w.max)}°`;
+    document.getElementById('weather-text').textContent=`${label} · 08:00 ${Math.round(w.at8.temp)}° · 14:30 ~${Math.round(w.home.temp)}°`;
+    document.getElementById('weather-rain').textContent=`🌧 ${Math.round(w.commuteRain)}% commute`;
+    document.getElementById('weather-sun').textContent=`☀️ ${w.sunshineHours.toFixed(1)}u zon`;
+    document.getElementById('weather-sunrise').textContent=`↑ ${hhmm(w.sunrise)}`;
+    document.getElementById('weather-sunset').textContent=`↓ ${hhmm(w.sunset)}`;
+    document.getElementById('weather-advice').textContent=schoolAdvice(w);
+  }catch(e){
+    document.getElementById('weather-text').textContent='Schoolweer niet beschikbaar';
+    document.getElementById('weather-advice').textContent='—';
+  }
+}
 refreshData();refreshWeather();
 setInterval(refreshData,15000);setInterval(refreshWeather,600000);
 </script>
