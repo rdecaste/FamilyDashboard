@@ -14,6 +14,10 @@
 <div class="points"><strong id="points">—</strong><span>points</span></div>
 </header>
 <div class="screen-banner" id="screen"><span class="dot"></span><div><span class="screen-label">Screen time today</span><strong class="screen-value">—</strong></div></div>
+<section id="bridge-card" class="bridge-card">
+<div class="bridge-state"><span class="bridge-dot"></span><div><p class="eyebrow">Verkeer</p><h2 id="bridge-title">SLUISKILBRUG</h2><p id="bridge-detail">Druk op controleren voor de actuele status</p><small id="bridge-checked"></small></div></div>
+<button id="bridge-refresh" class="bridge-refresh" type="button">↻ Brugstatus controleren</button>
+</section>
 <section class="weekly-summary" aria-labelledby="weekly-title">
 <div class="weekly-heading"><div><p class="eyebrow">Jouw week</p><h2 id="weekly-title">Weekoverzicht voor Rassell</h2></div><span>Elke zondag vernieuwd</span></div>
 <div class="weekly-poster"><img id="weekly-image" alt="Wekelijks overzicht met feedback voor Rassell"><div id="weekly-placeholder">Je eerste weekoverzicht wordt gemaakt…</div></div>
@@ -31,6 +35,7 @@
 <p class="message" id="message" aria-live="polite"></p>
 </main>
 <script>const CHILD='Rassell';</script>
+<script src="bridge-status.js"></script>
 <script src="child-app.js"></script>
 </body>
 </html>
