@@ -55,15 +55,44 @@ body{background:#07111d}
 .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .75s ease}.hero img.show{opacity:1}
 .name,.points strong,.stat-value,.task,.date-main,.weather-detail,#weather-temp,.screen-text{text-shadow:0 1px 8px rgba(0,0,0,.45)}
 @media(max-width:1200px){.app{grid-template-columns:44% 56%}.sidebar{padding:18px}.date-main{font-size:25px}.name{font-size:25px}.points strong{font-size:34px}.screen,.task,.stat-label,.weather-detail{font-size:12px}.stat-value{font-size:17px}.icon{font-size:20px}}
+
+/* Three shared surfaces: general today, Michelle, Rassell. */
+.sidebar{overflow-y:auto;min-height:0}
+.sidebar-top,.child{flex-shrink:0;border:1px solid rgba(255,255,255,.10);background:#141e2b;border-radius:18px;padding:clamp(16px,1.1vw,24px);box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.sidebar-top{display:block}
+.date-wrap,.weather{border:0;box-shadow:none;background:none;border-radius:0;padding:0;min-height:0}
+.date-wrap{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:16px}
+.date-main{font-size:clamp(18px,1.5vw,30px);line-height:1.15}
+.current-time{font-size:clamp(28px,2.1vw,42px);margin:0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.weather{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.10)}
+.weather-label,.date-label,.child-sub,.yesterday-title{font-size:clamp(10px,.65vw,13px);letter-spacing:.1em}
+.weather-main{margin-top:6px}.weather strong{font-size:clamp(25px,1.8vw,36px)}
+.weather-range,.weather-detail,.weather-meta,.weather-advice{font-size:clamp(11px,.72vw,15px);line-height:1.4}
+.weather-meta{display:flex;flex-wrap:wrap;gap:6px 18px;border:0;padding-top:0;margin-top:6px}
+.weather-advice{padding:0;margin-top:8px;background:none;border:0;color:#8ce3be}
+.name{font-size:clamp(23px,1.6vw,32px)}
+.points strong{font-size:clamp(28px,2vw,40px)}.points span{font-size:clamp(10px,.6vw,12px)}
+.today{margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.10)}
+.today-head,.yesterday-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.screen{font-size:clamp(11px,.7vw,14px);border:0;background:none;padding:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px 20px;border:0;padding:0;margin:12px 0}
+.stat{gap:7px}.stat-icon{display:none}.stat-label{font-size:clamp(11px,.7vw,14px)}.stat-value{font-size:clamp(13px,.85vw,17px)}
+.tasks{gap:6px;padding-top:0}.task{font-size:clamp(12px,.8vw,16px);gap:9px}.task span:last-child{white-space:normal;overflow-wrap:anywhere}
+.check{width:16px;height:16px;font-size:11px}
+.yesterday{margin-top:14px;padding-top:12px}.yesterday-title{margin:0}.yesterday-count,.history-empty,.history-item,.more,.empty{font-size:clamp(11px,.7vw,14px)}
+.yesterday-count{color:#aab7c9}.history-list{margin-top:8px;gap:5px}.history-icon{width:15px;height:15px;font-size:10px}
+.history-item span:last-child{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:700px){html,body{height:auto;min-height:100%;overflow:auto}.app{width:100%;height:auto;min-height:100vh;display:flex;flex-direction:column}.sidebar{padding:14px;gap:14px;background:#07111d;overflow:visible}.hero{height:65vh}.sidebar-footer{margin-top:0}.live{font-size:12px;padding:6px 10px}.live-dot{width:8px;height:8px}.icon{font-size:24px}}
+
 </style>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
-    <div class="sidebar-top">
+    <section class="sidebar-top" aria-label="Vandaag algemeen">
       <div class="date-wrap">
-        <div class="date-label">Vandaag</div>
-        <div id="date" class="date-main">—</div>
+        <div><div class="date-label">Vandaag</div>
+        <div id="date" class="date-main">—</div></div>
         <div id="current-time" class="current-time">—:—</div>
       </div>
       <div class="weather">
@@ -82,36 +111,36 @@ body{background:#07111d}
         </div>
         <div id="weather-advice" class="weather-advice">Schooladvies laden…</div>
       </div>
-    </div>
+    </section>
 
     <article class="child" data-child="michelle">
       <div class="child-head">
-        <div><div class="name">Michelle</div><div class="child-sub">Vandaag</div></div>
-        <div class="head-right"><div class="points"><strong>—</strong><span>points</span></div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div>
+        <div class="name">Michelle</div>
+        <div class="head-right"><div class="points"><strong>—</strong><span>punten</span></div></div>
       </div>
+      <section class="today" aria-label="Vandaag"><div class="today-head"><div class="child-sub">Vandaag</div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div>
       <div class="stats">
-        <div class="stat"><div class="stat-left"><div class="stat-icon">○</div><div class="stat-label">Outstanding</div></div><div class="stat-value outstanding-count">0</div></div>
-        <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Done</div></div><div class="stat-value completed-count">0</div></div>
-        <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Rewards</div></div><div class="stat-value redemptions-count">0</div></div>
-        <div class="stat"><div class="stat-left"><div class="stat-icon">!</div><div class="stat-label">Missed yesterday</div></div><div class="stat-value missed-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">○</div><div class="stat-label">Open</div></div><div class="stat-value outstanding-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Klaar</div></div><div class="stat-value completed-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Beloningen</div></div><div class="stat-value redemptions-count">0</div></div>
       </div>
-      <div class="tasks"></div>
-      <div class="yesterday"><div class="yesterday-title">Gisteren</div><div class="history-list"></div></div>
+      <div class="tasks"></div></section>
+      <div class="yesterday"><div class="yesterday-head"><div class="yesterday-title">Gisteren</div><div class="yesterday-count"><span class="missed-count">0</span> gemist</div></div><div class="history-list"></div></div>
     </article>
 
     <article class="child" data-child="rassell">
       <div class="child-head">
-        <div><div class="name">Rassell</div><div class="child-sub">Vandaag</div></div>
-        <div class="head-right"><div class="points"><strong>—</strong><span>points</span></div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div>
+        <div class="name">Rassell</div>
+        <div class="head-right"><div class="points"><strong>—</strong><span>punten</span></div></div>
       </div>
+      <section class="today" aria-label="Vandaag"><div class="today-head"><div class="child-sub">Vandaag</div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div>
       <div class="stats">
-        <div class="stat"><div class="stat-left"><div class="stat-icon">○</div><div class="stat-label">Outstanding</div></div><div class="stat-value outstanding-count">0</div></div>
-        <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Done</div></div><div class="stat-value completed-count">0</div></div>
-        <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Rewards</div></div><div class="stat-value redemptions-count">0</div></div>
-        <div class="stat"><div class="stat-left"><div class="stat-icon">!</div><div class="stat-label">Missed yesterday</div></div><div class="stat-value missed-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">○</div><div class="stat-label">Open</div></div><div class="stat-value outstanding-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Klaar</div></div><div class="stat-value completed-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Beloningen</div></div><div class="stat-value redemptions-count">0</div></div>
       </div>
-      <div class="tasks"></div>
-      <div class="yesterday"><div class="yesterday-title">Gisteren</div><div class="history-list"></div></div>
+      <div class="tasks"></div></section>
+      <div class="yesterday"><div class="yesterday-head"><div class="yesterday-title">Gisteren</div><div class="yesterday-count"><span class="missed-count">0</span> gemist</div></div><div class="history-list"></div></div>
     </article>
 
     <div class="sidebar-footer">
@@ -135,7 +164,7 @@ function taskRows(data){
   const source=[...open,...done];
   if(!source.length)return '<div class="empty">Alles klaar ✓</div>';
   const visible=source.slice(0,4).map(t=>`<div class="task ${t._state}"><span class="check">${t._state==='done'?'✓':''}</span><span>${title(t)}</span></div>`).join('');
-  return visible+(source.length>4?`<div class="more">+${source.length-4} more</div>`:'');
+  return visible+(source.length>4?`<div class="more">+${source.length-4} meer</div>`:'');
 }
 function yesterdayRows(data){
   const missed=(data.yesterdayIncompleteTasks||[]).map(t=>({type:'missed',title:t.title}));
@@ -143,13 +172,13 @@ function yesterdayRows(data){
   const items=[...missed,...rewards];
   if(!items.length)return '<div class="history-empty">Niets gemist of ingewisseld</div>';
   const visible=items.slice(0,4).map(x=>`<div class="history-item ${x.type}"><span class="history-icon">${x.type==='missed'?'!':'★'}</span><span>${x.type==='missed'?'Gemist: ':'Beloning: '}${title(x.title)}</span></div>`).join('');
-  return visible+(items.length>4?`<div class="more">+${items.length-4} more</div>`:'');
+  return visible+(items.length>4?`<div class="more">+${items.length-4} meer</div>`:'');
 }
 function renderChild(key,data){
   const root=document.querySelector(`[data-child="${key}"]`); if(!root||!data)return;
   root.querySelector('.points strong').textContent=data.points??0;
   const screen=root.querySelector('.screen'),no=data.screenTime==='No';
-  screen.classList.toggle('no',no);root.querySelector('.screen-text').textContent=`Screen time: ${no?'No':'Yes'}`;
+  screen.classList.toggle('no',no);root.querySelector('.screen-text').textContent=`Schermtijd ${no?'niet toegestaan':'toegestaan'}`;
   root.querySelector('.outstanding-count').textContent=(data.outstandingTasks||[]).length;
   root.querySelector('.completed-count').textContent=(data.completedTasks||[]).length;
   root.querySelector('.redemptions-count').textContent=(data.redemptions||[]).length;
