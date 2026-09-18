@@ -111,11 +111,33 @@ body{background:#07111d}
 .live{font-size:15px;padding:6px 10px}.live-dot{width:8px;height:8px}
 @media(max-width:700px){.date-wrap>div:first-child{min-width:150px}.sidebar{padding:12px}.hero{height:65vh}}
 
+
+/* Compact the three cards; fit the complete panel to the display height. */
+.sidebar{overflow:hidden;padding:10px;display:block}
+.sidebar-content{display:flex;flex-direction:column;gap:9px}
+.sidebar-top,.child{padding:12px;border-radius:15px}
+.date-wrap{gap:4px 10px}.date-wrap>div:first-child{min-width:135px;flex:1 1 135px}
+.date-main{font-size:clamp(21px,1.5vw,32px)}.current-time{font-size:clamp(28px,2vw,42px)}
+.weather{margin-top:8px;padding-top:8px}.weather-main{margin-top:3px}
+.weather-meta{margin-top:3px;gap:2px 10px}.weather-advice{margin-top:4px}
+.name{font-size:clamp(26px,1.8vw,36px)}.points strong{font-size:clamp(32px,2.2vw,46px)}
+.today{margin-top:8px;padding-top:8px}.today-head{gap:4px 8px}
+.screen{font-size:clamp(13px,.9vw,19px)}
+.stats{margin:7px 0;gap:5px 12px}
+.tasks{grid-auto-rows:minmax(1.3em,auto);gap:3px;min-height:calc(5.2em + 9px);line-height:1.3}
+.task{min-height:1.3em;gap:7px}
+.yesterday{margin-top:8px;padding-top:8px}.history-list{margin-top:5px;gap:3px}
+.history-item,.history-empty,.yesterday-count{font-size:clamp(13px,.9vw,19px);line-height:1.25}
+.today-rewards{border-top:1px solid rgba(255,255,255,.08);padding-top:6px;margin-top:6px;display:grid;gap:4px;color:#ffd66c;font-size:clamp(15px,1vw,21px);line-height:1.3}
+.today-rewards[hidden]{display:none}.reward-item{display:flex;gap:7px;align-items:baseline}.reward-item span:last-child{overflow-wrap:anywhere}
+.sidebar-footer{margin-top:0}.live{font-size:12px;padding:3px 7px}
+@media(max-width:700px){.sidebar{overflow:visible}.sidebar-content{zoom:1!important}}
+
 </style>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar">
+  <aside class="sidebar"><div class="sidebar-content">
     <section class="sidebar-top" aria-label="Vandaag algemeen">
       <div class="date-wrap">
         <div><div class="date-label">Vandaag</div>
@@ -151,7 +173,7 @@ body{background:#07111d}
         <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Klaar</div></div><div class="stat-value completed-count">0</div></div>
         <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Beloningen</div></div><div class="stat-value redemptions-count">0</div></div>
       </div>
-      <div class="tasks"></div></section>
+      <div class="tasks"></div><div class="today-rewards" aria-label="Vandaag ingewisseld" hidden></div></section>
       <div class="yesterday"><div class="yesterday-head"><div class="yesterday-title">Gisteren</div><div class="yesterday-count"><span class="missed-count">0</span> gemist</div></div><div class="history-list"></div></div>
     </article>
 
@@ -166,14 +188,14 @@ body{background:#07111d}
         <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Klaar</div></div><div class="stat-value completed-count">0</div></div>
         <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Beloningen</div></div><div class="stat-value redemptions-count">0</div></div>
       </div>
-      <div class="tasks"></div></section>
+      <div class="tasks"></div><div class="today-rewards" aria-label="Vandaag ingewisseld" hidden></div></section>
       <div class="yesterday"><div class="yesterday-head"><div class="yesterday-title">Gisteren</div><div class="yesterday-count"><span class="missed-count">0</span> gemist</div></div><div class="history-list"></div></div>
     </article>
 
     <div class="sidebar-footer">
       <div class="live"><span class="live-dot"></span><span>Live</span></div>
     </div>
-  </aside>
+  </div></aside>
 
   <main class="hero">
     <img id="image-a" alt="Family adventure visual">
@@ -193,6 +215,23 @@ function taskRows(data){
   const visible=source.slice(0,4).map(t=>`<div class="task ${t._state}"><span class="check">${t._state==='done'?'✓':''}</span><span>${title(t)}</span></div>`).join('');
   return visible+(source.length>4?`<div class="more">+${source.length-4} meer</div>`:'');
 }
+function rewardRows(data){
+  return (data.redemptions||[]).map(reward=>`<div class="reward-item"><span aria-hidden="true">★</span><span>Beloning: ${title(reward)}${Number.isFinite(Number(reward.points))&&reward.points!=null?' · '+esc(reward.points)+' punten':''}</span></div>`).join('');
+}
+function fitSidebar(){
+  const panel=document.querySelector('.sidebar'),content=document.querySelector('.sidebar-content');
+  content.style.zoom='1';
+  if(matchMedia('(max-width:700px)').matches)return;
+  const style=getComputedStyle(panel);
+  const available=panel.clientHeight-parseFloat(style.paddingTop)-parseFloat(style.paddingBottom);
+  const needed=content.getBoundingClientRect().height;
+  if(needed>available)content.style.zoom=String(Math.max(.1,available/needed));
+}
+let fitFrame;
+function scheduleFit(){cancelAnimationFrame(fitFrame);fitFrame=requestAnimationFrame(fitSidebar);}
+addEventListener('resize',scheduleFit);
+new ResizeObserver(scheduleFit).observe(document.querySelector('.sidebar'));
+if(document.fonts)document.fonts.ready.then(scheduleFit);
 function yesterdayRows(data){
   const missed=(data.yesterdayIncompleteTasks||[]).map(t=>({type:'missed',title:t.title}));
   const rewards=(data.yesterdayRedemptions||[]).map(t=>({type:'reward',title:t.title}));
@@ -212,6 +251,9 @@ function renderChild(key,data){
   const missed=Number(data.missedPoints??0);root.querySelector('.missed-count').textContent=missed<0?Math.abs(missed/2):(data.yesterdayIncompleteTasks||[]).length;
   root.querySelector('.tasks').innerHTML=taskRows(data);
   root.querySelector('.history-list').innerHTML=yesterdayRows(data);
+  const rewards=root.querySelector('.today-rewards');
+  rewards.innerHTML=rewardRows(data);rewards.hidden=!(data.redemptions||[]).length;
+  scheduleFit();
 }
 function renderImageState(d){
   const url=d?.image_url||'';
@@ -315,6 +357,7 @@ async function refreshWeather(){
     document.getElementById('weather-sunrise').textContent=`↑ ${hhmm(w.sunrise)}`;
     document.getElementById('weather-sunset').textContent=`↓ ${hhmm(w.sunset)}`;
     document.getElementById('weather-advice').textContent=schoolAdvice(w);
+    scheduleFit();
   }catch(e){
     document.getElementById('weather-text').textContent='Schoolweer niet beschikbaar';
     document.getElementById('weather-advice').textContent='—';
