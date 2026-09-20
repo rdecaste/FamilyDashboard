@@ -257,7 +257,7 @@ function renderChild(key,data){
 }
 function renderImageState(d){
   const url=d?.image_url||'';
-  const key=String(d?.image_public_id||d?.image_version||url);
+  const key=String(d?.image_version||d?.image_url||d?.image_public_id||url);
   if(!url||key===imageKey)return;
   standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
   standby.src=url+(url.includes('?')?'&':'?')+'t='+Date.now();
