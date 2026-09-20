@@ -9,7 +9,7 @@
 *{box-sizing:border-box}
 html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#07111d;color:#f7fbff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
 body{background:#07111d}
-.app{width:100vw;height:100vh;display:grid;grid-template-columns:minmax(0,30fr) minmax(0,70fr);background:#07111d}
+.app{width:100vw;height:100vh;display:grid;grid-template-columns:minmax(0,27fr) minmax(0,73fr);background:#07111d}
 .sidebar{position:relative;z-index:3;padding:2.3vh 1.7vw 2vh;display:flex;flex-direction:column;gap:1.45vh;background:linear-gradient(90deg,rgba(7,17,29,.98) 0%,rgba(7,17,29,.96) 82%,rgba(7,17,29,.82) 94%,rgba(7,17,29,.35) 100%)}
 .sidebar-top{display:grid;grid-template-columns:1.3fr 1fr;gap:.8vw}
 .date-wrap,.weather,.child{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);box-shadow:0 8px 24px rgba(0,0,0,.16)}
@@ -54,7 +54,7 @@ body{background:#07111d}
 .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,17,29,.34) 0%,rgba(7,17,29,.08) 9%,rgba(7,17,29,0) 18%);z-index:2;pointer-events:none}
 .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .75s ease}.hero img.show{opacity:1}
 .name,.points strong,.stat-value,.task,.date-main,.weather-detail,#weather-temp,.screen-text{text-shadow:0 1px 8px rgba(0,0,0,.45)}
-@media(max-width:1200px){.app{grid-template-columns:minmax(0,30fr) minmax(0,70fr)}.sidebar{padding:18px}.date-main{font-size:25px}.name{font-size:25px}.points strong{font-size:34px}.screen,.task,.stat-label,.weather-detail{font-size:12px}.stat-value{font-size:17px}.icon{font-size:20px}}
+@media(max-width:1200px){.app{grid-template-columns:minmax(0,27fr) minmax(0,73fr)}.sidebar{padding:18px}.date-main{font-size:25px}.name{font-size:25px}.points strong{font-size:34px}.screen,.task,.stat-label,.weather-detail{font-size:12px}.stat-value{font-size:17px}.icon{font-size:20px}}
 
 /* Three shared surfaces: general today, Michelle, Rassell. */
 .sidebar{overflow-y:auto;min-height:0}
