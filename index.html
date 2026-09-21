@@ -157,6 +157,17 @@ body{background:#07111d}
 .status-strip .weather-advice{grid-column:1/-1;margin:2px 0 0;padding:0;font-size:clamp(15px,.8vw,20px)}
 .status-strip .sidebar-footer{flex:0 0 auto;margin:0}
 .status-strip .live{font-size:clamp(15px,.8vw,20px);padding:8px 13px}
+.status-strip{display:block}
+.status-main{display:flex;align-items:center;gap:clamp(16px,1.2vw,32px);min-width:0}
+.family-agenda{display:flex;align-items:center;gap:18px;min-height:48px;margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.12);min-width:0}
+.agenda-label{flex:0 0 auto;color:#aebcd0;font-size:clamp(14px,.75vw,19px);font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.agenda-events{display:flex;align-items:center;gap:clamp(18px,1.8vw,46px);min-width:0;overflow:hidden}
+.agenda-event{display:flex;align-items:baseline;gap:10px;min-width:0;font-size:clamp(17px,.95vw,24px);white-space:nowrap}
+.agenda-time{flex:0 0 auto;color:#9fe5c4;font-weight:820;font-variant-numeric:tabular-nums}
+.agenda-title{overflow:hidden;text-overflow:ellipsis;font-weight:680}
+.agenda-note{color:#aebcd0;font-size:clamp(15px,.8vw,20px)}
+.agenda-connect{border:1px solid rgba(159,229,196,.4);border-radius:8px;padding:5px 9px;background:#18332e;color:#b9f2d7;font:inherit;cursor:pointer}
+.agenda-connect[hidden]{display:none}
 @media(max-width:1200px){.app{grid-template-columns:minmax(0,65fr) minmax(0,35fr)}.status-strip .sidebar-top{gap:14px}.status-strip .weather{grid-template-columns:1fr}.status-strip .weather-label,.status-strip .weather-main,.status-strip .weather-detail,.status-strip .weather-meta,.status-strip .weather-advice{grid-column:1;grid-row:auto}.status-strip .weather-meta{display:none}}
 @media(max-width:700px){html,body{height:auto;overflow:auto}.app{height:auto;min-height:100vh;display:flex;flex-direction:column}.hero{order:1;height:54vh;flex:none}.sidebar{order:2;overflow:visible}.sidebar-content{height:auto}.status-strip{order:3;display:block}.status-strip .sidebar-top{display:block}.status-strip .weather{margin-top:12px;padding:12px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.12)}.status-strip .sidebar-footer{margin-top:10px}}
 
@@ -203,6 +214,7 @@ body{background:#07111d}
   </div></aside>
 
   <footer class="status-strip">
+    <div class="status-main">
     <section class="sidebar-top" aria-label="Vandaag algemeen">
       <div class="date-wrap">
         <div><div class="date-label">Vandaag</div>
@@ -230,6 +242,12 @@ body{background:#07111d}
     <div class="sidebar-footer">
       <div class="live"><span class="live-dot"></span><span>Live</span></div>
     </div>
+    </div>
+    <section class="family-agenda" aria-label="Gezinsagenda">
+      <div class="agenda-label">Gezinsagenda</div>
+      <div id="agenda-events" class="agenda-events"><span class="agenda-note">Agenda verbinden op dit scherm</span></div>
+      <button id="agenda-connect" class="agenda-connect" type="button">Verbinden</button>
+    </section>
   </footer>
 </div>
 <script>
@@ -237,6 +255,43 @@ const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longi
 let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const title=t=>esc(typeof t==='string'?t:t?.title||'');
+const agendaStoreKey='familyDashboardAgendaEndpoint';
+const agendaEvents=document.getElementById('agenda-events');
+const agendaConnect=document.getElementById('agenda-connect');
+function agendaEndpoint(){try{return localStorage.getItem(agendaStoreKey)||''}catch{return ''}}
+function agendaMessage(message){agendaEvents.replaceChildren(Object.assign(document.createElement('span'),{className:'agenda-note',textContent:message}))}
+function renderAgenda(events){
+  agendaEvents.replaceChildren();
+  if(!events.length){agendaMessage('Geen komende activiteiten');return}
+  const today=new Intl.DateTimeFormat('nl-NL',{timeZone:'Europe/Amsterdam',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  for(const event of events.slice(0,2)){
+    const start=new Date(event.start);
+    if(!Number.isFinite(start.getTime()))continue;
+    const day=new Intl.DateTimeFormat('nl-NL',{timeZone:'Europe/Amsterdam',year:'numeric',month:'2-digit',day:'2-digit'}).format(start);
+    const time=event.allDay?'Hele dag':new Intl.DateTimeFormat('nl-NL',{timeZone:'Europe/Amsterdam',hour:'2-digit',minute:'2-digit'}).format(start);
+    const row=document.createElement('div');row.className='agenda-event';
+    const when=document.createElement('span');when.className='agenda-time';when.textContent=(day===today?'':day+' · ')+time;
+    const name=document.createElement('span');name.className='agenda-title';name.textContent=String(event.title||'Activiteit').slice(0,90);
+    row.append(when,name);agendaEvents.append(row);
+  }
+  if(!agendaEvents.childElementCount)agendaMessage('Geen komende activiteiten');
+}
+async function refreshAgenda(){
+  const endpoint=agendaEndpoint();agendaConnect.hidden=!!endpoint;
+  if(!endpoint)return;
+  try{
+    const response=await fetch(endpoint,{cache:'no-store',referrerPolicy:'no-referrer'});
+    if(!response.ok)throw new Error(String(response.status));
+    const data=await response.json();
+    if(!Array.isArray(data.events))throw new Error('Invalid agenda');
+    renderAgenda(data.events);
+  }catch{agendaMessage('Agenda tijdelijk niet beschikbaar')}
+}
+agendaConnect.addEventListener('click',()=>{
+  const value=prompt('Plak de privé Make-webhook voor de gezinsagenda:');
+  if(!value)return;
+  try{const url=new URL(value.trim());if(url.protocol!=='https:'||url.hostname!=='hook.eu2.make.com')throw new Error('Invalid URL');localStorage.setItem(agendaStoreKey,url.href);refreshAgenda()}catch{agendaMessage('Ongeldige agenda-link')}
+});
 function taskRows(data){
   const open=(data.outstandingTasks||[]).map(t=>({...t,_state:'open'}));
   const done=(data.completedTasks||[]).map(t=>({...t,_state:'done'}));
@@ -393,8 +448,8 @@ async function refreshWeather(){
     document.getElementById('weather-advice').textContent='—';
   }
 }
-refreshClock();refreshData();refreshWeather();
-setInterval(refreshClock,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);
+refreshClock();refreshData();refreshWeather();refreshAgenda();
+setInterval(refreshClock,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);setInterval(refreshAgenda,300000);
 </script>
 </body>
 </html>
