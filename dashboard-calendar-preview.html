@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Family Dashboard</title>
+<style>
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#07111d;color:#f7fbff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{background:#07111d}
+.app{width:100vw;height:100vh;display:grid;grid-template-columns:minmax(0,27fr) minmax(0,73fr);background:#07111d}
+.sidebar{position:relative;z-index:3;padding:2.3vh 1.7vw 2vh;display:flex;flex-direction:column;gap:1.45vh;background:linear-gradient(90deg,rgba(7,17,29,.98) 0%,rgba(7,17,29,.96) 82%,rgba(7,17,29,.82) 94%,rgba(7,17,29,.35) 100%)}
+.sidebar-top{display:grid;grid-template-columns:1.3fr 1fr;gap:.8vw}
+.date-wrap,.weather,.child{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.date-wrap,.weather{border-radius:1.15vw;padding:1vw 1.05vw;min-height:12.5vh;display:flex;flex-direction:column;justify-content:center}
+.date-label,.weather-label{font-size:.68vw;font-weight:760;letter-spacing:.1em;text-transform:uppercase;color:rgba(235,245,255,.62)}
+.date-main{margin-top:.28vh;font-size:1.75vw;line-height:1.04;font-weight:820;letter-spacing:-.03em}
+.current-time{margin-top:.5vh;font-size:1.12vw;line-height:1;font-weight:760;color:#b9d7f2;letter-spacing:.02em}
+.weather-main{display:flex;align-items:center;gap:.55vw;margin-top:.25vh}
+.icon{font-size:1.42vw;line-height:1}
+.weather strong{font-size:1.62vw;line-height:1;font-weight:820}
+.weather-range{margin-left:auto;font-size:.72vw;font-weight:700;color:#dbe9f6;white-space:nowrap}
+.weather-detail{margin-top:.3vh;color:#bfd3e8;font-size:.72vw;font-weight:560;line-height:1.22}
+.weather-meta{display:grid;grid-template-columns:1fr 1fr;gap:.24vh .65vw;margin-top:.5vh;padding-top:.5vh;border-top:1px solid rgba(255,255,255,.07);font-size:.65vw;color:rgba(235,245,255,.72)}
+.weather-advice{margin-top:.5vh;padding:.42vh .5vw;border-radius:.58vw;background:rgba(110,181,255,.08);border:1px solid rgba(130,195,255,.10);font-size:.68vw;font-weight:700;color:#e8f5ff;line-height:1.25}
+.child{border-radius:1.2vw;padding:1vw 1.05vw .9vw}
+.child-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.8vw}
+.name{font-size:1.5vw;font-weight:840;letter-spacing:-.025em}
+.child-sub{margin-top:.1vh;font-size:.68vw;color:rgba(235,245,255,.58);text-transform:uppercase;letter-spacing:.08em}
+.head-right{display:flex;align-items:center;gap:.7vw}
+.points{text-align:right;min-width:3.6vw}.points strong{display:block;font-size:2vw;line-height:.9;font-weight:860;font-variant-numeric:tabular-nums}.points span{display:block;margin-top:.15vh;color:rgba(235,245,255,.65);font-size:.58vw;text-transform:uppercase;letter-spacing:.09em}
+.screen{display:flex;align-items:center;gap:.3vw;padding:.42vh .6vw;border-radius:999px;border:1px solid rgba(57,235,169,.4);background:rgba(6,65,49,.17);color:#72f1b9;font-size:.72vw;font-weight:760}.screen.no{border-color:rgba(255,115,125,.42);background:rgba(88,18,29,.18);color:#ff9da7}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45vh .8vw;margin-top:.7vh;padding:.7vh 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+.stat{display:flex;align-items:center;justify-content:space-between;gap:.55vw;min-width:0}.stat-left{display:flex;align-items:center;gap:.42vw;min-width:0}.stat-icon{width:1.15vw;height:1.15vw;border-radius:50%;display:grid;place-items:center;background:rgba(91,190,255,.13);font-size:.62vw;flex:0 0 auto}.stat:nth-child(2) .stat-icon{background:rgba(50,235,171,.15)}.stat:nth-child(3) .stat-icon{background:rgba(255,202,75,.14)}.stat:nth-child(4) .stat-icon{background:rgba(255,181,75,.14)}
+.stat-value{font-size:.98vw;line-height:1;font-weight:820}.stat-label{color:rgba(235,245,255,.70);font-size:.66vw;white-space:nowrap}
+.tasks{padding-top:.65vh;display:grid;gap:.34vh}
+.task{display:flex;align-items:center;gap:.45vw;font-size:.74vw;font-weight:620;color:#edf6ff;min-width:0}.task span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.task.done span:last-child{text-decoration:line-through;text-decoration-thickness:1.5px;opacity:.62}
+.check{width:.95vw;height:.95vw;border-radius:50%;display:grid;place-items:center;background:#29dfa0;color:#052218;font-size:.58vw;font-weight:900;flex:0 0 auto}.task.open .check{background:rgba(255,255,255,.06);border:1px solid rgba(190,220,245,.40);color:transparent}
+.more{color:#9ed4ff;font-size:.65vw;font-weight:650;margin-left:1.4vw}.empty{color:#7ff0bc;font-size:.74vw;font-weight:650}
+.yesterday{margin-top:.7vh;padding-top:.62vh;border-top:1px solid rgba(255,255,255,.08)}
+.yesterday-title{font-size:.61vw;font-weight:790;letter-spacing:.09em;text-transform:uppercase;color:rgba(235,245,255,.56);margin-bottom:.35vh}
+.history-list{display:grid;gap:.3vh}
+.history-item{display:flex;align-items:center;gap:.42vw;font-size:.69vw;color:#dce9f6;min-width:0}
+.history-item span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-icon{width:.9vw;height:.9vw;border-radius:50%;display:grid;place-items:center;font-size:.53vw;flex:0 0 auto}
+.history-item.missed .history-icon{background:rgba(255,117,128,.16);color:#ff9ca5}
+.history-item.reward .history-icon{background:rgba(255,202,75,.14);color:#ffd66c}
+.history-empty{font-size:.67vw;color:rgba(235,245,255,.46)}
+.sidebar-footer{margin-top:auto;display:flex;justify-content:flex-end;align-items:center}
+.live{display:inline-flex;align-items:center;gap:.45vw;padding:.5vh .68vw;border-radius:999px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:#66f2b3;font-size:.74vw;font-weight:760}.live-dot{width:.58vw;height:.58vw;border-radius:50%;background:#4cf0ad;box-shadow:0 0 0 .26vw rgba(76,240,173,.10)}
+.hero{position:relative;overflow:hidden;background:#07111e}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,17,29,.34) 0%,rgba(7,17,29,.08) 9%,rgba(7,17,29,0) 18%);z-index:2;pointer-events:none}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .75s ease}.hero img.show{opacity:1}
+.name,.points strong,.stat-value,.task,.date-main,.weather-detail,#weather-temp,.screen-text{text-shadow:0 1px 8px rgba(0,0,0,.45)}
+@media(max-width:1200px){.app{grid-template-columns:minmax(0,27fr) minmax(0,73fr)}.sidebar{padding:18px}.date-main{font-size:25px}.name{font-size:25px}.points strong{font-size:34px}.screen,.task,.stat-label,.weather-detail{font-size:12px}.stat-value{font-size:17px}.icon{font-size:20px}}
+
+/* Three shared surfaces: general today, Michelle, Rassell. */
+.sidebar{overflow-y:auto;min-height:0}
+.sidebar-top,.child{flex-shrink:0;border:1px solid rgba(255,255,255,.10);background:#141e2b;border-radius:18px;padding:clamp(16px,1.1vw,24px);box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.sidebar-top{display:block}
+.date-wrap,.weather{border:0;box-shadow:none;background:none;border-radius:0;padding:0;min-height:0}
+.date-wrap{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:16px}
+.date-main{font-size:clamp(18px,1.5vw,30px);line-height:1.15}
+.current-time{font-size:clamp(28px,2.1vw,42px);margin:0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.weather{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.10)}
+.weather-label,.date-label,.child-sub,.yesterday-title{font-size:clamp(10px,.65vw,13px);letter-spacing:.1em}
+.weather-main{margin-top:6px}.weather strong{font-size:clamp(25px,1.8vw,36px)}
+.weather-range,.weather-detail,.weather-meta,.weather-advice{font-size:clamp(11px,.72vw,15px);line-height:1.4}
+.weather-meta{display:flex;flex-wrap:wrap;gap:6px 18px;border:0;padding-top:0;margin-top:6px}
+.weather-advice{padding:0;margin-top:8px;background:none;border:0;color:#8ce3be}
+.name{font-size:clamp(23px,1.6vw,32px)}
+.points strong{font-size:clamp(28px,2vw,40px)}.points span{font-size:clamp(10px,.6vw,12px)}
+.today{margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.10)}
+.today-head,.yesterday-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.screen{font-size:clamp(11px,.7vw,14px);border:0;background:none;padding:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px 20px;border:0;padding:0;margin:12px 0}
+.stat{gap:7px}.stat-icon{display:none}.stat-label{font-size:clamp(11px,.7vw,14px)}.stat-value{font-size:clamp(13px,.85vw,17px)}
+.tasks{gap:6px;padding-top:0}.task{font-size:clamp(12px,.8vw,16px);gap:9px}.task span:last-child{white-space:normal;overflow-wrap:anywhere}
+.check{width:16px;height:16px;font-size:11px}
+.yesterday{margin-top:14px;padding-top:12px}.yesterday-title{margin:0}.yesterday-count,.history-empty,.history-item,.more,.empty{font-size:clamp(11px,.7vw,14px)}
+.yesterday-count{color:#aab7c9}.history-list{margin-top:8px;gap:5px}.history-icon{width:15px;height:15px;font-size:10px}
+.history-item span:last-child{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:700px){html,body{height:auto;min-height:100%;overflow:auto}.app{width:100%;height:auto;min-height:100vh;display:flex;flex-direction:column}.sidebar{padding:14px;gap:14px;background:#07111d;overflow:visible}.hero{height:65vh}.sidebar-footer{margin-top:0}.live{font-size:12px;padding:6px 10px}.live-dot{width:8px;height:8px}.icon{font-size:24px}}
+
+
+/* Larger, readable type with four reserved chore rows per child. */
+.sidebar{padding:clamp(12px,1vw,22px);gap:12px;min-width:0}
+.sidebar-top,.child{padding:clamp(14px,1vw,22px);min-width:0}
+.date-wrap{flex-wrap:wrap;gap:8px 14px}
+.date-wrap>div:first-child{flex:1;min-width:180px}
+.date-main{font-size:clamp(24px,1.65vw,36px)}
+.current-time{font-size:clamp(34px,2.4vw,48px)}
+.name{font-size:clamp(28px,1.9vw,40px)}
+.points strong{font-size:clamp(36px,2.5vw,50px)}
+.points span,.date-label,.weather-label,.child-sub,.yesterday-title{font-size:clamp(12px,.85vw,18px)}
+.weather strong{font-size:clamp(30px,2.2vw,44px)}
+.icon{font-size:28px}
+.weather-range,.weather-detail,.weather-meta,.weather-advice,.screen,.stat-label,.yesterday-count,.history-empty,.history-item,.more,.empty{font-size:clamp(15px,1vw,21px);line-height:1.35}
+.weather{margin-top:12px;padding-top:10px}
+.weather-meta{gap:4px 12px}
+.today{margin-top:10px;padding-top:10px}
+.stats{gap:6px 14px;margin:10px 0}
+.stat-value{font-size:clamp(18px,1.2vw,25px)}
+.tasks{font-size:clamp(18px,1.2vw,25px);line-height:1.35;grid-auto-rows:minmax(1.45em,auto);align-content:start;gap:6px;min-height:calc(5.8em + 18px)}
+.task{font-size:inherit;line-height:inherit;min-height:1.45em;align-items:center}
+.check{width:20px;height:20px;font-size:13px}
+.yesterday{margin-top:10px;padding-top:10px}
+.history-icon{width:18px;height:18px;font-size:12px}
+.live{font-size:15px;padding:6px 10px}.live-dot{width:8px;height:8px}
+@media(max-width:700px){.date-wrap>div:first-child{min-width:150px}.sidebar{padding:12px}.hero{height:65vh}}
+
+
+/* Compact the three cards; fit the complete panel to the display height. */
+.sidebar{overflow:hidden;padding:10px;display:block}
+.sidebar-content{display:flex;flex-direction:column;gap:9px}
+.sidebar-top,.child{padding:12px;border-radius:15px}
+.date-wrap{gap:4px 10px}.date-wrap>div:first-child{min-width:135px;flex:1 1 135px}
+.date-main{font-size:clamp(21px,1.5vw,32px)}.current-time{font-size:clamp(28px,2vw,42px)}
+.weather{margin-top:8px;padding-top:8px}.weather-main{margin-top:3px}
+.weather-meta{margin-top:3px;gap:2px 10px}.weather-advice{margin-top:4px}
+.name{font-size:clamp(26px,1.8vw,36px)}.points strong{font-size:clamp(32px,2.2vw,46px)}
+.today{margin-top:8px;padding-top:8px}.today-head{gap:4px 8px}
+.screen{font-size:clamp(13px,.9vw,19px)}
+.stats{margin:7px 0;gap:5px 12px}
+.tasks{grid-auto-rows:minmax(1.3em,auto);gap:3px;min-height:calc(5.2em + 9px);line-height:1.3}
+.task{min-height:1.3em;gap:7px}
+.yesterday{margin-top:8px;padding-top:8px}.history-list{margin-top:5px;gap:3px}
+.history-item,.history-empty,.yesterday-count{font-size:clamp(13px,.9vw,19px);line-height:1.25}
+.today-rewards{border-top:1px solid rgba(255,255,255,.08);padding-top:6px;margin-top:6px;display:grid;gap:4px;color:#ffd66c;font-size:clamp(15px,1vw,21px);line-height:1.3}
+.today-rewards[hidden]{display:none}.reward-item{display:flex;gap:7px;align-items:baseline}.reward-item span:last-child{overflow-wrap:anywhere}
+.sidebar-footer{margin-top:0}.live{font-size:12px;padding:3px 7px}
+@media(max-width:700px){.sidebar{overflow:visible}.sidebar-content{zoom:1!important}}
+
+/* QHD kiosk layout: cinematic scene, child rail, shared status. */
+.app{width:100%;height:100vh;height:100dvh;grid-template-columns:minmax(0,72fr) minmax(0,28fr);grid-template-rows:minmax(0,1fr) auto;overflow:hidden}
+.hero{grid-column:1;grid-row:1;min-width:0;min-height:0}
+.hero::before{background:linear-gradient(90deg,rgba(7,17,29,.10),transparent 12%,transparent 88%,rgba(7,17,29,.18))}
+.hero img{width:100%;height:100%;object-fit:cover;object-position:center center}
+.sidebar{grid-column:2;grid-row:1;min-width:0;min-height:0;padding:clamp(12px,.8vw,20px);background:#07111d;overflow:hidden}
+.sidebar-content{min-height:100%;height:auto;display:flex;flex-direction:column;justify-content:space-evenly;gap:clamp(10px,.65vh,16px)}
+.child{flex:0 1 auto;padding:clamp(14px,.85vw,22px);border-radius:18px}
+.name{font-size:clamp(30px,1.6vw,42px)}.points strong{font-size:clamp(36px,2vw,52px)}
+.task{font-size:clamp(17px,.86vw,23px)}
+.status-strip{grid-column:1/-1;grid-row:2;min-width:0;min-height:0;display:flex;align-items:center;gap:clamp(16px,1.2vw,32px);padding:clamp(10px,.7vw,18px) clamp(18px,1.2vw,30px);background:#0b1725;border-top:1px solid rgba(255,255,255,.12)}
+.status-strip .sidebar-top{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);align-items:center;gap:clamp(20px,2vw,50px);padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+.status-strip .date-wrap{display:flex;align-items:center;gap:clamp(14px,1vw,28px);flex-wrap:nowrap;white-space:nowrap}
+.status-strip .date-wrap>div:first-child{min-width:0;flex:0 1 auto}
+.status-strip .date-main{font-size:clamp(25px,1.45vw,38px)}
+.status-strip .current-time{font-size:clamp(32px,1.9vw,48px)}
+.status-strip .weather{margin:0;padding:0 0 0 clamp(18px,1.4vw,36px);border:0;border-left:1px solid rgba(255,255,255,.12);min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px clamp(14px,1vw,26px);align-items:center}
+.status-strip .weather-label{grid-column:1;grid-row:1}
+.status-strip .weather-main{grid-column:1;grid-row:2;margin:0;white-space:nowrap}
+.status-strip .weather-detail{grid-column:2;grid-row:1;min-width:0}
+.status-strip .weather-meta{grid-column:2;grid-row:2;margin:0;padding:0;border:0;display:flex;gap:clamp(8px,.7vw,18px);flex-wrap:wrap}
+.status-strip .weather-advice{grid-column:1/-1;margin:2px 0 0;padding:0;font-size:clamp(15px,.8vw,20px)}
+.status-strip .sidebar-footer{flex:0 0 auto;margin:0}
+.status-strip .live{font-size:clamp(15px,.8vw,20px);padding:8px 13px}
+@media(max-width:1200px){.app{grid-template-columns:minmax(0,65fr) minmax(0,35fr)}.status-strip .sidebar-top{gap:14px}.status-strip .weather{grid-template-columns:1fr}.status-strip .weather-label,.status-strip .weather-main,.status-strip .weather-detail,.status-strip .weather-meta,.status-strip .weather-advice{grid-column:1;grid-row:auto}.status-strip .weather-meta{display:none}}
+@media(max-width:700px){html,body{height:auto;overflow:auto}.app{height:auto;min-height:100vh;display:flex;flex-direction:column}.hero{order:1;height:54vh;flex:none}.sidebar{order:2;overflow:visible}.sidebar-content{height:auto}.status-strip{order:3;display:block}.status-strip .sidebar-top{display:block}.status-strip .weather{margin-top:12px;padding:12px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.12)}.status-strip .sidebar-footer{margin-top:10px}}
+
+
+/* Private Family agenda: Google renders events only for a signed-in account with access. */
+.status-strip{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;row-gap:clamp(7px,.5vw,13px)}
+.status-strip .sidebar-top{grid-column:1;grid-row:1}
+.status-strip .sidebar-footer{grid-column:2;grid-row:1}
+.family-agenda{grid-column:1/-1;grid-row:2;min-width:0;display:grid;grid-template-columns:clamp(170px,11vw,270px) minmax(0,1fr);gap:clamp(12px,1vw,24px);align-items:center;padding-top:clamp(7px,.5vw,13px);border-top:1px solid rgba(255,255,255,.12)}
+.family-agenda-title{font-size:clamp(17px,.9vw,23px);font-weight:800;color:#fff;white-space:nowrap}
+.family-agenda-hint{margin-top:5px;font-size:clamp(12px,.68vw,17px);color:#9bb4ca}
+.agenda-frame{height:clamp(138px,9.8vw,176px);min-width:0;overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#101d2c}
+.agenda-frame iframe{display:block;width:80%;height:440px;border:0;transform:scale(1.25);transform-origin:top left;filter:invert(1) hue-rotate(180deg)}
+@media(max-width:1200px){.family-agenda{grid-template-columns:150px minmax(0,1fr)}.agenda-frame iframe{width:100%;transform:none}}
+@media(max-width:700px){.status-strip{display:block}.family-agenda{display:block;margin-top:12px}.family-agenda-hint{display:none}.agenda-frame{margin-top:8px;height:160px}.agenda-frame iframe{height:400px;width:100%;transform:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="hero">
+    <img id="image-a" alt="Family adventure visual">
+    <img id="image-b" alt="" aria-hidden="true">
+  </main>
+
+  <aside class="sidebar"><div class="sidebar-content">
+    <article class="child" data-child="michelle">
+      <div class="child-head">
+        <div class="name">Michelle</div>
+        <div class="head-right"><div class="points"><strong>—</strong><span>punten</span></div></div>
+      </div>
+      <section class="today" aria-label="Vandaag"><div class="today-head"><div class="child-sub">Vandaag</div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-left"><div class="stat-icon">○</div><div class="stat-label">Open</div></div><div class="stat-value outstanding-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Klaar</div></div><div class="stat-value completed-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Beloningen</div></div><div class="stat-value redemptions-count">0</div></div>
+      </div>
+      <div class="tasks"></div><div class="today-rewards" aria-label="Vandaag ingewisseld" hidden></div></section>
+      <div class="yesterday"><div class="yesterday-head"><div class="yesterday-title">Gisteren</div><div class="yesterday-count"><span class="missed-count">0</span> gemist</div></div><div class="history-list"></div></div>
+    </article>
+
+    <article class="child" data-child="rassell">
+      <div class="child-head">
+        <div class="name">Rassell</div>
+        <div class="head-right"><div class="points"><strong>—</strong><span>punten</span></div></div>
+      </div>
+      <section class="today" aria-label="Vandaag"><div class="today-head"><div class="child-sub">Vandaag</div><div class="screen"><span>▣</span><span class="screen-text">Screen time: —</span></div></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-left"><div class="stat-icon">○</div><div class="stat-label">Open</div></div><div class="stat-value outstanding-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">✓</div><div class="stat-label">Klaar</div></div><div class="stat-value completed-count">0</div></div>
+        <div class="stat"><div class="stat-left"><div class="stat-icon">★</div><div class="stat-label">Beloningen</div></div><div class="stat-value redemptions-count">0</div></div>
+      </div>
+      <div class="tasks"></div><div class="today-rewards" aria-label="Vandaag ingewisseld" hidden></div></section>
+      <div class="yesterday"><div class="yesterday-head"><div class="yesterday-title">Gisteren</div><div class="yesterday-count"><span class="missed-count">0</span> gemist</div></div><div class="history-list"></div></div>
+    </article>
+
+  </div></aside>
+
+  <footer class="status-strip">
+    <section class="sidebar-top" aria-label="Vandaag algemeen">
+      <div class="date-wrap">
+        <div><div class="date-label">Vandaag</div>
+        <div id="date" class="date-main">—</div></div>
+        <div id="current-time" class="current-time">—:—</div>
+      </div>
+      <div class="weather">
+        <div class="weather-label">Schoolweer</div>
+        <div class="weather-main">
+          <span id="weather-icon" class="icon">⛅</span>
+          <strong id="weather-temp">—°</strong>
+          <span id="weather-range" class="weather-range">— / —</span>
+        </div>
+        <div id="weather-text" class="weather-detail">Weer laden…</div>
+        <div class="weather-meta">
+          <span id="weather-rain">🌧 —</span>
+          <span id="weather-sun">☀️ —</span>
+          <span id="weather-sunrise">↑ —</span>
+          <span id="weather-sunset">↓ —</span>
+        </div>
+        <div id="weather-advice" class="weather-advice">Schooladvies laden…</div>
+      </div>
+    </section>
+
+
+    <section class="family-agenda" aria-label="Familieagenda">
+      <div><div class="family-agenda-title">Familieagenda</div><div class="family-agenda-hint">Privé · komende afspraken</div></div>
+      <div class="agenda-frame"><iframe title="Privé Familieagenda" src="https://calendar.google.com/calendar/embed?src=f4b2374f53964a637f122dbb00601944a19761e273af401f1b09471f4b80ef66%40group.calendar.google.com&amp;ctz=Europe%2FAmsterdam&amp;mode=AGENDA&amp;showTitle=0&amp;showNav=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+    </section>
+    <div class="sidebar-footer">
+      <div class="live"><span class="live-dot"></span><span>Live</span></div>
+    </div>
+  </footer>
+</div>
+<script>
+const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,sunshine_duration&forecast_days=1&timezone=Europe%2FAmsterdam';
+let active=document.getElementById('image-a'),standby=document.getElementById('image-b'),imageKey='';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const title=t=>esc(typeof t==='string'?t:t?.title||'');
+function taskRows(data){
+  const open=(data.outstandingTasks||[]).map(t=>({...t,_state:'open'}));
+  const done=(data.completedTasks||[]).map(t=>({...t,_state:'done'}));
+  const source=[...open,...done];
+  if(!source.length)return '<div class="empty">Alles klaar ✓</div>';
+  const visible=source.slice(0,4).map(t=>`<div class="task ${t._state}"><span class="check">${t._state==='done'?'✓':''}</span><span>${title(t)}</span></div>`).join('');
+  return visible+(source.length>4?`<div class="more">+${source.length-4} meer</div>`:'');
+}
+function rewardRows(data){
+  return (data.redemptions||[]).map(reward=>`<div class="reward-item"><span aria-hidden="true">★</span><span>Beloning: ${title(reward)}${Number.isFinite(Number(reward.points))&&reward.points!=null?' · '+esc(reward.points)+' punten':''}</span></div>`).join('');
+}
+function fitSidebar(){
+  const panel=document.querySelector('.sidebar'),content=document.querySelector('.sidebar-content');
+  content.style.zoom='1';
+  if(matchMedia('(max-width:700px)').matches)return;
+  const style=getComputedStyle(panel);
+  const available=panel.clientHeight-parseFloat(style.paddingTop)-parseFloat(style.paddingBottom);
+  const needed=content.getBoundingClientRect().height;
+  if(needed>available)content.style.zoom=String(Math.max(.1,available/needed));
+}
+let fitFrame;
+function scheduleFit(){cancelAnimationFrame(fitFrame);fitFrame=requestAnimationFrame(fitSidebar);}
+addEventListener('resize',scheduleFit);
+new ResizeObserver(scheduleFit).observe(document.querySelector('.sidebar'));
+if(document.fonts)document.fonts.ready.then(scheduleFit);
+function yesterdayRows(data){
+  const missed=(data.yesterdayIncompleteTasks||[]).map(t=>({type:'missed',title:t.title}));
+  const rewards=(data.yesterdayRedemptions||[]).map(t=>({type:'reward',title:t.title}));
+  const items=[...missed,...rewards];
+  if(!items.length)return '<div class="history-empty">Niets gemist of ingewisseld</div>';
+  const visible=items.slice(0,4).map(x=>`<div class="history-item ${x.type}"><span class="history-icon">${x.type==='missed'?'!':'★'}</span><span>${x.type==='missed'?'Gemist: ':'Beloning: '}${title(x.title)}</span></div>`).join('');
+  return visible+(items.length>4?`<div class="more">+${items.length-4} meer</div>`:'');
+}
+function renderChild(key,data){
+  const root=document.querySelector(`[data-child="${key}"]`); if(!root||!data)return;
+  root.querySelector('.points strong').textContent=data.points??0;
+  const screen=root.querySelector('.screen'),no=data.screenTime==='No';
+  screen.classList.toggle('no',no);root.querySelector('.screen-text').textContent=`Schermtijd ${no?'niet toegestaan':'toegestaan'}`;
+  root.querySelector('.outstanding-count').textContent=(data.outstandingTasks||[]).length;
+  root.querySelector('.completed-count').textContent=(data.completedTasks||[]).length;
+  root.querySelector('.redemptions-count').textContent=(data.redemptions||[]).length;
+  const missed=Number(data.missedPoints??0);root.querySelector('.missed-count').textContent=missed<0?Math.abs(missed/2):(data.yesterdayIncompleteTasks||[]).length;
+  root.querySelector('.tasks').innerHTML=taskRows(data);
+  root.querySelector('.history-list').innerHTML=yesterdayRows(data);
+  const rewards=root.querySelector('.today-rewards');
+  rewards.innerHTML=rewardRows(data);rewards.hidden=!(data.redemptions||[]).length;
+  scheduleFit();
+}
+function renderImageState(d){
+  const url=d?.image_url||'';
+  const key=String(d?.image_version||d?.image_url||d?.image_public_id||url);
+  if(!url||key===imageKey)return;
+  standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
+  standby.src=url+(url.includes('?')?'&':'?')+'t='+Date.now();
+}
+function refreshClock(){
+  document.getElementById('current-time').textContent=new Intl.DateTimeFormat('nl-NL',{
+    hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Amsterdam'
+  }).format(new Date());
+}
+async function refreshData(){
+  try{
+    const r=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
+    const d=await r.json();
+    renderChild('rassell',d.children.rassell);
+    renderChild('michelle',d.children.michelle);
+    renderImageState(d);
+    document.getElementById('date').textContent=new Intl.DateTimeFormat('nl-NL',{weekday:'long',day:'numeric',month:'long'}).format(new Date(`${d.date}T12:00:00`));
+  }catch(e){console.error('Live data unavailable',e)}
+}
+const weatherInfo=c=>c===0?['☀️','Helder']:[1,2].includes(c)?['🌤️','Licht bewolkt']:c===3?['☁️','Bewolkt']:[45,48].includes(c)?['🌫️','Mist']:[51,53,55,56,57].includes(c)?['🌦️','Motregen']:[61,63,65,66,67,80,81,82].includes(c)?['🌧️','Regen']:[71,73,75,77,85,86].includes(c)?['🌨️','Sneeuw']:[95,96,99].includes(c)?['⛈️','Onweer']:['🌥️','Wisselend'];
+
+const hhmm=value=>{
+  if(!value)return '—';
+  const d=new Date(value);
+  return Number.isNaN(d.getTime())?'—':d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+};
+
+function schoolWeather(d){
+  const h=d?.hourly,day=d?.daily;
+  if(!h?.time?.length||!day)return null;
+  const rows=h.time.map((t,i)=>({
+    t:new Date(t),
+    hour:new Date(t).getHours(),
+    temp:+h.temperature_2m[i],
+    feel:+h.apparent_temperature[i],
+    rain:+h.precipitation_probability[i],
+    code:+h.weather_code[i],
+    wind:+h.wind_speed_10m[i]
+  }));
+  const at8=rows.find(x=>x.hour===8)||rows[0];
+  const at14=rows.find(x=>x.hour===14);
+  const at15=rows.find(x=>x.hour===15);
+  const home=at14&&at15?{
+    temp:(at14.temp+at15.temp)/2,
+    feel:(at14.feel+at15.feel)/2,
+    rain:Math.max(at14.rain,at15.rain),
+    wind:Math.max(at14.wind,at15.wind),
+    code:Math.max(at14.code,at15.code)
+  }:(at14||at15||at8);
+  const commute=[at8,home].filter(Boolean);
+  const commuteRain=Math.max(...commute.map(x=>x.rain||0));
+  const commuteFeel=Math.min(...commute.map(x=>x.feel));
+  const commuteWind=Math.max(...commute.map(x=>x.wind||0));
+  return{
+    at8,home,
+    min:+day.temperature_2m_min?.[0],
+    max:+day.temperature_2m_max?.[0],
+    rainMax:+day.precipitation_probability_max?.[0],
+    sunshineHours:(+day.sunshine_duration?.[0]||0)/3600,
+    sunrise:day.sunrise?.[0],
+    sunset:day.sunset?.[0],
+    code:+day.weather_code?.[0],
+    commuteRain,commuteFeel,commuteWind
+  };
+}
+
+function schoolAdvice(w){
+  const clothing=[];
+  if(w.commuteFeel<5)clothing.push('warme jas');
+  else if(w.commuteFeel<10)clothing.push('jas + trui');
+  else if(w.commuteFeel<14)clothing.push('lichte jas');
+  else if(w.commuteFeel<18)clothing.push('trui of vest');
+  else clothing.push('T-shirt is ok');
+
+  if(w.commuteRain>=50)clothing.push('regenjas mee');
+  else if(w.commuteRain>=30)clothing.push('lichte regenjas slim');
+  else clothing.push('geen regenjas nodig');
+
+  if(w.commuteWind>=35)clothing.push('winderig');
+  return clothing.join(' · ');
+}
+
+async function refreshWeather(){
+  try{
+    const r=await fetch(`${weatherUrl}&t=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok)throw new Error(r.status);
+    const w=schoolWeather(await r.json());
+    if(!w)return;
+    const [i,label]=weatherInfo(w.code);
+
+    document.getElementById('weather-icon').textContent=i;
+    document.getElementById('weather-temp').textContent=`${Math.round(w.at8.temp)}°`;
+    document.getElementById('weather-range').textContent=`${Math.round(w.min)}° / ${Math.round(w.max)}°`;
+    document.getElementById('weather-text').textContent=`${label} · 08:00 ${Math.round(w.at8.temp)}° · 14:30 ~${Math.round(w.home.temp)}°`;
+    document.getElementById('weather-rain').textContent=`🌧 ${Math.round(w.commuteRain)}% commute`;
+    document.getElementById('weather-sun').textContent=`☀️ ${w.sunshineHours.toFixed(1)}u zon`;
+    document.getElementById('weather-sunrise').textContent=`↑ ${hhmm(w.sunrise)}`;
+    document.getElementById('weather-sunset').textContent=`↓ ${hhmm(w.sunset)}`;
+    document.getElementById('weather-advice').textContent=schoolAdvice(w);
+    scheduleFit();
+  }catch(e){
+    document.getElementById('weather-text').textContent='Schoolweer niet beschikbaar';
+    document.getElementById('weather-advice').textContent='—';
+  }
+}
+refreshClock();refreshData();refreshWeather();
+setInterval(refreshClock,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);
+</script>
+</body>
+</html>
