@@ -256,15 +256,21 @@ let active=document.getElementById('image-a'),standby=document.getElementById('i
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const title=t=>esc(typeof t==='string'?t:t?.title||'');
 const agendaStoreKey='familyDashboardAgendaEndpoint';
+const agendaCacheKey='familyDashboardAgendaDaily';
 const agendaEvents=document.getElementById('agenda-events');
 const agendaConnect=document.getElementById('agenda-connect');
+let agendaFetching=false;
 function agendaEndpoint(){try{return localStorage.getItem(agendaStoreKey)||''}catch{return ''}}
+function agendaDay(){return new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Amsterdam',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
+function agendaCache(){try{return JSON.parse(localStorage.getItem(agendaCacheKey)||'null')}catch{return null}}
+function saveAgendaCache(value){try{localStorage.setItem(agendaCacheKey,JSON.stringify(value));return true}catch{return false}}
 function agendaMessage(message){agendaEvents.replaceChildren(Object.assign(document.createElement('span'),{className:'agenda-note',textContent:message}))}
 function renderAgenda(events){
   agendaEvents.replaceChildren();
-  if(!events.length){agendaMessage('Geen komende activiteiten');return}
+  const upcoming=events.filter(event=>Date.parse(event.end||event.start)>Date.now());
+  if(!upcoming.length){agendaMessage('Geen komende activiteiten');return}
   const today=new Intl.DateTimeFormat('nl-NL',{timeZone:'Europe/Amsterdam',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-  for(const event of events.slice(0,4)){
+  for(const event of upcoming.slice(0,4)){
     const start=new Date(event.start);
     if(!Number.isFinite(start.getTime()))continue;
     const day=new Intl.DateTimeFormat('nl-NL',{timeZone:'Europe/Amsterdam',year:'numeric',month:'2-digit',day:'2-digit'}).format(start);
@@ -279,19 +285,31 @@ function renderAgenda(events){
 async function refreshAgenda(){
   const endpoint=agendaEndpoint();agendaConnect.hidden=!!endpoint;
   if(!endpoint)return;
+  const day=agendaDay(),cached=agendaCache();
+  if(cached?.day===day){
+    if(cached.status==='done'&&Array.isArray(cached.events))renderAgenda(cached.events);
+    else agendaMessage(cached.status==='error'?'Agenda vandaag niet beschikbaar':'Agenda laden…');
+    return;
+  }
+  if(agendaFetching)return;
+  if(!saveAgendaCache({day,status:'pending'})){agendaMessage('Privé opslag niet beschikbaar');return}
+  agendaFetching=true;
   try{
     const response=await fetch(endpoint,{cache:'no-store',referrerPolicy:'no-referrer'});
     if(!response.ok)throw new Error(String(response.status));
     const data=await response.json();
     if(!Array.isArray(data.events))throw new Error('Invalid agenda');
+    saveAgendaCache({day,status:'done',events:data.events});
     renderAgenda(data.events);
-  }catch{agendaMessage('Agenda tijdelijk niet beschikbaar')}
+  }catch{saveAgendaCache({day,status:'error'});agendaMessage('Agenda vandaag niet beschikbaar')}
+  finally{agendaFetching=false}
 }
 agendaConnect.addEventListener('click',()=>{
   const value=prompt('Plak de privé Make-webhook voor de gezinsagenda:');
   if(!value)return;
-  try{const url=new URL(value.trim());if(url.protocol!=='https:'||url.hostname!=='hook.eu2.make.com')throw new Error('Invalid URL');localStorage.setItem(agendaStoreKey,url.href);refreshAgenda()}catch{agendaMessage('Ongeldige agenda-link')}
+  try{const url=new URL(value.trim());if(url.protocol!=='https:'||url.hostname!=='hook.eu2.make.com')throw new Error('Invalid URL');localStorage.setItem(agendaStoreKey,url.href);localStorage.removeItem(agendaCacheKey);refreshAgenda()}catch{agendaMessage('Ongeldige agenda-link')}
 });
+window.addEventListener('storage',event=>{if(event.key===agendaCacheKey)refreshAgenda()});
 function taskRows(data){
   const open=(data.outstandingTasks||[]).map(t=>({...t,_state:'open'}));
   const done=(data.completedTasks||[]).map(t=>({...t,_state:'done'}));
@@ -449,7 +467,7 @@ async function refreshWeather(){
   }
 }
 refreshClock();refreshData();refreshWeather();refreshAgenda();
-setInterval(refreshClock,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);setInterval(refreshAgenda,300000);
+setInterval(refreshClock,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);setInterval(refreshAgenda,60000);
 </script>
 </body>
 </html>
