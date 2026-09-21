@@ -133,35 +133,44 @@ body{background:#07111d}
 .sidebar-footer{margin-top:0}.live{font-size:12px;padding:3px 7px}
 @media(max-width:700px){.sidebar{overflow:visible}.sidebar-content{zoom:1!important}}
 
+/* QHD kiosk layout: cinematic scene, child rail, shared status. */
+.app{width:100%;height:100vh;height:100dvh;grid-template-columns:minmax(0,72fr) minmax(0,28fr);grid-template-rows:minmax(0,1fr) auto;overflow:hidden}
+.hero{grid-column:1;grid-row:1;min-width:0;min-height:0}
+.hero::before{background:linear-gradient(90deg,rgba(7,17,29,.10),transparent 12%,transparent 88%,rgba(7,17,29,.18))}
+.hero img{width:100%;height:100%;object-fit:cover;object-position:center center}
+.hero img.letterbox{object-fit:contain;background:#07111e}
+.sidebar{grid-column:2;grid-row:1;min-width:0;min-height:0;padding:clamp(12px,.8vw,20px);background:#07111d;overflow:hidden}
+.sidebar-content{min-height:100%;height:auto;display:flex;flex-direction:column;justify-content:space-evenly;gap:clamp(10px,.65vh,16px)}
+.child{flex:0 1 auto;padding:clamp(14px,.85vw,22px);border-radius:18px}
+.name{font-size:clamp(30px,1.6vw,42px)}.points strong{font-size:clamp(36px,2vw,52px)}
+.task{font-size:clamp(17px,.86vw,23px)}
+.status-strip{grid-column:1/-1;grid-row:2;min-width:0;min-height:0;display:flex;align-items:center;gap:clamp(16px,1.2vw,32px);padding:clamp(10px,.7vw,18px) clamp(18px,1.2vw,30px);background:#0b1725;border-top:1px solid rgba(255,255,255,.12)}
+.status-strip .sidebar-top{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);align-items:center;gap:clamp(20px,2vw,50px);padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+.status-strip .date-wrap{display:flex;align-items:center;gap:clamp(14px,1vw,28px);flex-wrap:nowrap;white-space:nowrap}
+.status-strip .date-wrap>div:first-child{min-width:0;flex:0 1 auto}
+.status-strip .date-main{font-size:clamp(25px,1.45vw,38px)}
+.status-strip .current-time{font-size:clamp(32px,1.9vw,48px)}
+.status-strip .weather{margin:0;padding:0 0 0 clamp(18px,1.4vw,36px);border:0;border-left:1px solid rgba(255,255,255,.12);min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px clamp(14px,1vw,26px);align-items:center}
+.status-strip .weather-label{grid-column:1;grid-row:1}
+.status-strip .weather-main{grid-column:1;grid-row:2;margin:0;white-space:nowrap}
+.status-strip .weather-detail{grid-column:2;grid-row:1;min-width:0}
+.status-strip .weather-meta{grid-column:2;grid-row:2;margin:0;padding:0;border:0;display:flex;gap:clamp(8px,.7vw,18px);flex-wrap:wrap}
+.status-strip .weather-advice{grid-column:1/-1;margin:2px 0 0;padding:0;font-size:clamp(15px,.8vw,20px)}
+.status-strip .sidebar-footer{flex:0 0 auto;margin:0}
+.status-strip .live{font-size:clamp(15px,.8vw,20px);padding:8px 13px}
+@media(max-width:1200px){.app{grid-template-columns:minmax(0,65fr) minmax(0,35fr)}.status-strip .sidebar-top{gap:14px}.status-strip .weather{grid-template-columns:1fr}.status-strip .weather-label,.status-strip .weather-main,.status-strip .weather-detail,.status-strip .weather-meta,.status-strip .weather-advice{grid-column:1;grid-row:auto}.status-strip .weather-meta{display:none}}
+@media(max-width:700px){html,body{height:auto;overflow:auto}.app{height:auto;min-height:100vh;display:flex;flex-direction:column}.hero{order:1;height:54vh;flex:none}.sidebar{order:2;overflow:visible}.sidebar-content{height:auto}.status-strip{order:3;display:block}.status-strip .sidebar-top{display:block}.status-strip .weather{margin-top:12px;padding:12px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.12)}.status-strip .sidebar-footer{margin-top:10px}}
+
 </style>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar"><div class="sidebar-content">
-    <section class="sidebar-top" aria-label="Vandaag algemeen">
-      <div class="date-wrap">
-        <div><div class="date-label">Vandaag</div>
-        <div id="date" class="date-main">—</div></div>
-        <div id="current-time" class="current-time">—:—</div>
-      </div>
-      <div class="weather">
-        <div class="weather-label">Schoolweer</div>
-        <div class="weather-main">
-          <span id="weather-icon" class="icon">⛅</span>
-          <strong id="weather-temp">—°</strong>
-          <span id="weather-range" class="weather-range">— / —</span>
-        </div>
-        <div id="weather-text" class="weather-detail">Weer laden…</div>
-        <div class="weather-meta">
-          <span id="weather-rain">🌧 —</span>
-          <span id="weather-sun">☀️ —</span>
-          <span id="weather-sunrise">↑ —</span>
-          <span id="weather-sunset">↓ —</span>
-        </div>
-        <div id="weather-advice" class="weather-advice">Schooladvies laden…</div>
-      </div>
-    </section>
+  <main class="hero">
+    <img id="image-a" alt="Family adventure visual">
+    <img id="image-b" alt="" aria-hidden="true">
+  </main>
 
+  <aside class="sidebar"><div class="sidebar-content">
     <article class="child" data-child="michelle">
       <div class="child-head">
         <div class="name">Michelle</div>
@@ -192,15 +201,37 @@ body{background:#07111d}
       <div class="yesterday"><div class="yesterday-head"><div class="yesterday-title">Gisteren</div><div class="yesterday-count"><span class="missed-count">0</span> gemist</div></div><div class="history-list"></div></div>
     </article>
 
+  </div></aside>
+
+  <footer class="status-strip">
+    <section class="sidebar-top" aria-label="Vandaag algemeen">
+      <div class="date-wrap">
+        <div><div class="date-label">Vandaag</div>
+        <div id="date" class="date-main">—</div></div>
+        <div id="current-time" class="current-time">—:—</div>
+      </div>
+      <div class="weather">
+        <div class="weather-label">Schoolweer</div>
+        <div class="weather-main">
+          <span id="weather-icon" class="icon">⛅</span>
+          <strong id="weather-temp">—°</strong>
+          <span id="weather-range" class="weather-range">— / —</span>
+        </div>
+        <div id="weather-text" class="weather-detail">Weer laden…</div>
+        <div class="weather-meta">
+          <span id="weather-rain">🌧 —</span>
+          <span id="weather-sun">☀️ —</span>
+          <span id="weather-sunrise">↑ —</span>
+          <span id="weather-sunset">↓ —</span>
+        </div>
+        <div id="weather-advice" class="weather-advice">Schooladvies laden…</div>
+      </div>
+    </section>
+
     <div class="sidebar-footer">
       <div class="live"><span class="live-dot"></span><span>Live</span></div>
     </div>
-  </div></aside>
-
-  <main class="hero">
-    <img id="image-a" alt="Family adventure visual">
-    <img id="image-b" alt="" aria-hidden="true">
-  </main>
+  </footer>
 </div>
 <script>
 const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=51.27833&longitude=3.83611&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,sunshine_duration&forecast_days=1&timezone=Europe%2FAmsterdam';
@@ -259,7 +290,7 @@ function renderImageState(d){
   const url=d?.image_url||'';
   const key=String(d?.image_version||d?.image_url||d?.image_public_id||url);
   if(!url||key===imageKey)return;
-  standby.onload=()=>{standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
+  standby.onload=()=>{const sourceRatio=standby.naturalWidth/standby.naturalHeight;const panelRatio=standby.parentElement.clientWidth/standby.parentElement.clientHeight;standby.classList.toggle('letterbox',Math.abs(sourceRatio-panelRatio)/panelRatio>.18);standby.classList.add('show');active.classList.remove('show');[active,standby]=[standby,active];imageKey=key};
   standby.src=url+(url.includes('?')?'&':'?')+'t='+Date.now();
 }
 function refreshClock(){
