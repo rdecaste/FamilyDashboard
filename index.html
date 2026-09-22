@@ -171,6 +171,11 @@ body{background:#07111d}
 @media(max-width:1200px){.app{grid-template-columns:minmax(0,65fr) minmax(0,35fr)}.status-strip .sidebar-top{gap:14px}.status-strip .weather{grid-template-columns:1fr}.status-strip .weather-label,.status-strip .weather-main,.status-strip .weather-detail,.status-strip .weather-meta,.status-strip .weather-advice{grid-column:1;grid-row:auto}.status-strip .weather-meta{display:none}.agenda-events{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){html,body{height:auto;overflow:auto}.app{height:auto;min-height:100vh;display:flex;flex-direction:column}.hero{order:1;height:54vh;flex:none}.sidebar{order:2;overflow:visible}.sidebar-content{height:auto}.status-strip{order:3;display:block}.status-strip .sidebar-top{display:block}.status-strip .weather{margin-top:12px;padding:12px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.12)}.status-strip .sidebar-footer{margin-top:10px}.agenda-events{grid-template-columns:1fr}.family-agenda{align-items:flex-start}}
 
+/* Celebrate a child card that has finished every task today. */
+.child.all-done{box-shadow:0 8px 24px rgba(0,0,0,.16),0 0 0 1px rgba(76,240,173,.35),0 0 26px rgba(76,240,173,.28)}
+.all-done-msg{display:flex;align-items:center;gap:.45em}
+.all-done-icon{font-size:1.2em;line-height:1}
+
 </style>
 </head>
 <body>
@@ -314,7 +319,8 @@ function taskRows(data){
   const open=(data.outstandingTasks||[]).map(t=>({...t,_state:'open'}));
   const done=(data.completedTasks||[]).map(t=>({...t,_state:'done'}));
   const source=[...open,...done];
-  if(!source.length)return '<div class="empty">Alles klaar ✓</div>';
+  if(!source.length)return '<div class="empty">Geen taken vandaag</div>';
+  if(!open.length)return '<div class="empty all-done-msg"><span class="all-done-icon">🎉</span>Alles gedaan vandaag!</div>';
   const visible=source.slice(0,4).map(t=>`<div class="task ${t._state}"><span class="check">${t._state==='done'?'✓':''}</span><span>${title(t)}</span></div>`).join('');
   return visible+(source.length>4?`<div class="more">+${source.length-4} meer</div>`:'');
 }
@@ -352,6 +358,8 @@ function renderChild(key,data){
   root.querySelector('.completed-count').textContent=(data.completedTasks||[]).length;
   root.querySelector('.redemptions-count').textContent=(data.redemptions||[]).length;
   const missed=Number(data.missedPoints??0);root.querySelector('.missed-count').textContent=missed<0?Math.abs(missed/2):(data.yesterdayIncompleteTasks||[]).length;
+  const allDone=!(data.outstandingTasks||[]).length&&!!(data.completedTasks||[]).length;
+  root.classList.toggle('all-done',allDone);
   root.querySelector('.tasks').innerHTML=taskRows(data);
   root.querySelector('.history-list').innerHTML=yesterdayRows(data);
   const rewards=root.querySelector('.today-rewards');
