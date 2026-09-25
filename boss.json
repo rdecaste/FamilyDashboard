@@ -1,0 +1,70 @@
+{
+ "version": 1,
+ "updatedAt": "2026-09-25T19:29:07.802Z",
+ "today": "2026-09-25",
+ "weekStart": "2026-09-21",
+ "weekEnd": "2026-09-27",
+ "theme": "woestijn",
+ "world": "Woestijnplaneet",
+ "name": "Scorrax, de Zandtiran",
+ "location": "Rotsenpoort",
+ "maxHp": 600,
+ "hp": 40,
+ "damagePerPoint": 10,
+ "totalDamage": 560,
+ "contributions": {
+  "michelle": {
+   "hits": 8,
+   "damage": 240
+  },
+  "rassell": {
+   "hits": 10,
+   "damage": 320
+  },
+  "samen": {
+   "hits": 0,
+   "damage": 0
+  }
+ },
+ "recent": [
+  {
+   "child": "michelle",
+   "task": "Tanden Poetsen Avond",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-25"
+  },
+  {
+   "child": "michelle",
+   "task": "Tanden Poetsen Ochtend",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-25"
+  },
+  {
+   "child": "rassell",
+   "task": "Tanden Poetsen Ochtend",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-25"
+  },
+  {
+   "child": "michelle",
+   "task": "Tanden Poetsen Ochtend",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-24"
+  },
+  {
+   "child": "rassell",
+   "task": "Kamer opruimen",
+   "points": 5,
+   "damage": 50,
+   "day": "2026-09-24"
+  }
+ ],
+ "defeatedAt": null,
+ "chestOpenedAt": null,
+ "reward": "Filmavond — jullie kiezen samen de film én de snacks.",
+ "look": "a colossal armored desert scorpion-crab as big as a building, rust-bronze plated shell, a jagged bone-white crown, huge raised pincers, glowing amber slit eyes, sand pouring off its back"
+}
