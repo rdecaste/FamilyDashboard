@@ -1,37 +1,45 @@
 // Weekly family boss: reads boss.json (written by Make "Family Boss — Publish boss.json")
-// and draws the boss HUD, victory banner and treasure chest on the adventure visual.
-// If boss.json is missing or from an older week, nothing is shown.
+// and draws the boss card at the top of the child rail, above Michelle and Rassell.
+// If boss.json is missing or from an older week, the card is hidden.
 (()=>{
   const BOSS_URL='boss.json';
   const BOSS_WEBHOOK='https://hook.eu2.make.com/43q89kow1dc6avoq4co5hmao7ykxsev0';
   const ACCENT={woestijn:'#ffc15a',diepzee:'#7fe3ff',ijsrijk:'#b8e6ff',bos:'#9fe58a',vulkaan:'#ff9a4a',wolken:'#c9b8ff'};
   const NAME={michelle:'Michelle',rassell:'Rassell',samen:'Samen'};
-  const hero=document.querySelector('.hero');
-  if(!hero)return;
+  const rail=document.querySelector('.sidebar-content'),hero=document.querySelector('.hero');
+  if(!rail||!hero)return;
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const nl=n=>Number(n||0).toLocaleString('nl-NL');
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fit=()=>{if(typeof window.scheduleFit==='function')window.scheduleFit()};
 
-  hero.insertAdjacentHTML('beforeend',`
-<section class="fb-hud" id="fb-hud" aria-label="Weekbaas" hidden>
-  <div class="fb-kicker"><span class="fb-dot"></span><span id="fb-week">Weekbaas</span><span class="fb-world" id="fb-world"></span></div>
-  <div class="fb-name" id="fb-name"></div>
-  <div class="fb-hp-row">
-    <div class="fb-bar" id="fb-bar" role="progressbar" aria-label="Levenspunten van de baas" aria-valuemin="0"><div class="fb-ghost" id="fb-ghost"></div><div class="fb-fill" id="fb-fill"></div><div class="fb-ticks"></div></div>
-    <div class="fb-num"><strong id="fb-hp"></strong> / <span id="fb-max"></span> HP</div>
-  </div>
-  <div class="fb-team" id="fb-team"></div>
-  <div class="fb-foot">Elke afgeronde taak = schade · je eigen punten blijven van jou</div>
-</section>
-<section class="fb-victory" id="fb-victory" aria-live="polite" hidden>
-  <div class="fb-vkicker" id="fb-vkicker"></div>
-  <div class="fb-vtitle">Baas verslagen!</div>
-  <div class="fb-vsub" id="fb-vsub"></div>
-  <div class="fb-vmeta" id="fb-vmeta"></div>
-  <div class="fb-reward" id="fb-reward" hidden><div class="fb-rlabel">Gedeelde schat</div><div id="fb-reward-text"></div><div class="fb-rnote">Een gezamenlijke beloning — los van jullie eigen punten.</div></div>
-</section>
-<button class="fb-chest" id="fb-chest" type="button" hidden></button>
-<div class="fb-toast" id="fb-toast" role="status"></div>`);
+  rail.insertAdjacentHTML('afterbegin',`
+<article class="child fb-card" id="fb-card" aria-label="Weekbaas" hidden>
+  <section class="fb-hud" id="fb-hud" aria-live="polite">
+    <div class="fb-kicker"><span class="fb-dot"></span><span id="fb-week">Weekbaas</span><span class="fb-world" id="fb-world"></span></div>
+    <div class="fb-name" id="fb-name"></div>
+    <div class="fb-hp-row">
+      <div class="fb-bar" id="fb-bar" role="progressbar" aria-label="Levenspunten van de baas" aria-valuemin="0"><div class="fb-ghost" id="fb-ghost"></div><div class="fb-fill" id="fb-fill"></div><div class="fb-ticks"></div></div>
+      <div class="fb-num"><strong id="fb-hp"></strong> / <span id="fb-max"></span> HP</div>
+    </div>
+    <div class="fb-team" id="fb-team"></div>
+    <div class="fb-foot">Elke afgeronde taak = schade · je eigen punten blijven van jou</div>
+  </section>
+  <section class="fb-victory" id="fb-victory" aria-live="polite" hidden>
+    <div class="fb-kicker" id="fb-vkicker"></div>
+    <div class="fb-vtitle">Baas verslagen!</div>
+    <div class="fb-vsub" id="fb-vsub"></div>
+    <div class="fb-vmeta" id="fb-vmeta"></div>
+    <div class="fb-loot">
+      <button class="fb-chest" id="fb-chest" type="button"></button>
+      <div class="fb-loot-text">
+        <button class="fb-chest-hint" id="fb-chest-hint" type="button">Open de schatkist</button>
+        <div class="fb-reward" id="fb-reward" hidden><div class="fb-rlabel">Gedeelde schat</div><div id="fb-reward-text"></div><div class="fb-rnote">Een gezamenlijke beloning — los van jullie eigen punten.</div></div>
+      </div>
+    </div>
+  </section>
+</article>`);
+  hero.insertAdjacentHTML('beforeend','<div class="fb-toast" id="fb-toast" role="status"></div>');
   const $=id=>document.getElementById(id);
 
   const amsDay=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Amsterdam',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
@@ -42,7 +50,7 @@
 
   let last=null,toastTimer;
   function toast(html){const t=$('fb-toast');t.innerHTML=html;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),5000)}
-  function pop(damage,who){if(reduced)return;const p=document.createElement('div');p.className='fb-pop';p.innerHTML=`−${nl(damage)}<small>${esc(who)}</small>`;hero.appendChild(p);setTimeout(()=>p.remove(),1700)}
+  function pop(damage,who){if(reduced)return;const p=document.createElement('div');p.className='fb-pop';p.innerHTML=`−${nl(damage)}<small>${esc(who)}</small>`;$('fb-card').appendChild(p);setTimeout(()=>p.remove(),1700)}
   function confetti(n=90){
     if(reduced)return;const cols=['#ffd66c','#ff8a47','#3fd8c2','#9fe5c4','#ff5c7a','#7fb8ff','#fff'];
     for(let i=0;i<n;i++){const c=document.createElement('span');c.className='fb-confetti';c.style.left=Math.random()*100+'%';c.style.background=cols[i%cols.length];c.style.setProperty('--dx',(Math.random()*200-100)+'px');c.style.setProperty('--rot',(Math.random()*900-450)+'deg');c.style.animationDuration=(2.2+Math.random()*1.8)+'s';c.style.animationDelay=(Math.random()*.6)+'s';hero.appendChild(c);setTimeout(()=>c.remove(),4800)}
@@ -57,10 +65,12 @@
 
   function render(b){
     const current=b&&b.version===1&&b.weekStart===mondayOf(amsDay(new Date()));
-    $('fb-hud').hidden=true;$('fb-victory').hidden=true;$('fb-chest').hidden=true;
-    if(!current){last=null;return}
+    const card=$('fb-card');
+    if(!current){if(!card.hidden){card.hidden=true;fit()}last=null;return}
     document.documentElement.style.setProperty('--fb-accent',ACCENT[b.theme]||'#ffd66c');
     const c=b.contributions||{},won=!!b.defeatedAt;
+    card.classList.toggle('won',won);
+    $('fb-hud').hidden=won;$('fb-victory').hidden=!won;
     if(!won){
       const pct=Math.max(0,Math.min(100,b.hp/b.maxHp*100));
       $('fb-week').textContent=`Weekbaas · week ${isoWeek(b.weekStart)}`;
@@ -72,25 +82,26 @@
       const perTask=(b.damagePerPoint||10)*3,left=Math.ceil(b.hp/perTask);
       const chip=(k,col)=>{const n=(c[k]||{}).hits||0;return `<span class="fb-chip"><i style="background:${col}"></i>${NAME[k]} · ${n} treffer${n===1?'':'s'}</span>`};
       $('fb-team').innerHTML=`<span class="fb-total">Samen <b>${nl(b.totalDamage)}</b> schade · nog ± ${left} ta${left===1?'ak':'ken'}</span>`+chip('michelle','#3fd8c2')+chip('rassell','#ffb14a')+(((c.samen||{}).hits||0)?chip('samen','#c9b8ff'):'');
-      $('fb-hud').hidden=false;
     }else{
       const hits=((c.michelle||{}).hits||0)+((c.rassell||{}).hits||0)+((c.samen||{}).hits||0);
       const next=noon(b.weekStart);next.setUTCDate(next.getUTCDate()+7);
-      $('fb-vkicker').textContent=`Week ${isoWeek(b.weekStart)} · ${b.world||''}`;
+      $('fb-vkicker').innerHTML=`<span class="fb-dot"></span><span>Week ${isoWeek(b.weekStart)}</span><span class="fb-world">${esc(b.world||'')}</span>`;
       $('fb-vsub').innerHTML=`<b>Michelle</b> en <b>Rassell</b> hebben ${esc(b.name)} samen verslagen!`;
-      $('fb-vmeta').textContent=`${hits} taken samen · verslagen op ${fmtDay(b.defeatedAt,{weekday:'long',day:'numeric',month:'long'})} · nieuwe baas op ${fmtDay(next.toISOString().slice(0,10),{weekday:'long',day:'numeric',month:'long'})}`;
-      const open=!!b.chestOpenedAt;
-      $('fb-reward').hidden=!open;$('fb-reward-text').textContent=b.reward||'Overleg samen wat jullie gedeelde beloning wordt.';
-      const chest=$('fb-chest');chest.classList.toggle('open',open);chest.disabled=false;
+      $('fb-vmeta').textContent=`${hits} taken samen · nieuwe baas op ${fmtDay(next.toISOString().slice(0,10),{weekday:'long',day:'numeric',month:'long'})}`;
+      const open=!!b.chestOpenedAt,chest=$('fb-chest');
+      chest.classList.toggle('open',open);chest.disabled=false;
       chest.setAttribute('aria-label',open?'Schatkist is open':'Open de schatkist');
-      chest.innerHTML=chestSVG(open)+`<span class="fb-chest-label">${open?'Schat gevonden!':'Open de schatkist'}</span>`;
-      $('fb-victory').hidden=false;chest.hidden=false;
+      chest.innerHTML=chestSVG(open);
+      $('fb-chest-hint').hidden=open;$('fb-chest-hint').disabled=false;$('fb-chest-hint').textContent='Open de schatkist';
+      $('fb-reward').hidden=!open;$('fb-reward-text').textContent=b.reward||'Overleg samen wat jullie gedeelde beloning wordt.';
     }
+    const wasHidden=card.hidden;card.hidden=false;
     // Live effects only when this screen saw the change happen (not on first load).
     if(last&&last.weekStart===b.weekStart){
       if(b.hp<last.hp){const r=(b.recent||[])[0];pop(last.hp-b.hp,r?NAME[r.child]:'Samen');if(r)toast(`<b>${esc(NAME[r.child])}</b>: ${esc(r.task)} → ${nl(r.damage)} schade`)}
       if(won&&!last.defeatedAt)confetti();
     }
+    if(wasHidden||!last||!!last.defeatedAt!==won||!!last.chestOpenedAt!==!!b.chestOpenedAt)fit();
     last=b;
   }
 
@@ -98,20 +109,21 @@
     try{const r=await fetch(`${BOSS_URL}?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);render(await r.json())}
     catch(e){render(null)}
   }
-  $('fb-chest').addEventListener('click',async()=>{
-    const chest=$('fb-chest');if(chest.classList.contains('open')||chest.disabled)return;
-    if(BOSS_WEBHOOK.includes('__')){toast('De schatkist is nog niet gekoppeld.');return}
-    chest.disabled=true;chest.querySelector('.fb-chest-label').textContent='Openen…';
+  async function openChest(){
+    const chest=$('fb-chest'),hint=$('fb-chest-hint');if(chest.classList.contains('open')||chest.disabled)return;
+    chest.disabled=true;hint.disabled=true;hint.textContent='Openen…';
     try{
       const r=await fetch(BOSS_WEBHOOK,{method:'POST',body:new URLSearchParams({action:'open-chest'})});
       if(!r.ok)throw new Error(r.status);
       // Make answers "Accepted" when it queues the call; the file catches up shortly after.
       const data=await r.json().catch(()=>null);
       if(!data){setTimeout(refresh,6000);setTimeout(refresh,15000);return}
-      if(data&&data.boss){render(data.boss);if(data.code==='chest_opened')confetti(60)}
-      if(data&&data.code==='not_defeated')toast('De baas is nog niet verslagen.');
-    }catch(e){chest.disabled=false;chest.querySelector('.fb-chest-label').textContent='Open de schatkist';toast('Openen lukte niet — probeer het zo nog eens.')}
-  });
+      if(data.boss){render(data.boss);if(data.code==='chest_opened')confetti(60)}
+      if(data.code==='not_defeated')toast('De baas is nog niet verslagen.');
+    }catch(e){chest.disabled=false;hint.disabled=false;hint.textContent='Open de schatkist';toast('Openen lukte niet — probeer het zo nog eens.')}
+  }
+  $('fb-chest').addEventListener('click',openChest);
+  $('fb-chest-hint').addEventListener('click',openChest);
   window.FamilyBoss={render,refresh};
   refresh();setInterval(refresh,15000);
 })();
