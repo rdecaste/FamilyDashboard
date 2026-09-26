@@ -32,23 +32,27 @@
   function render(c){
     catalog=c;
     const proposals=c.proposals||[];
+    // Identical proposals (same child, kind and title) show once; the extra copies are rejected with it.
+    const pkey=p=>`${p.child}|${p.type}|${String(p.title).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}`;
+    const groups=new Map();for(const p of proposals){const k=pkey(p);if(groups.has(k))groups.get(k).extra.push(p.id);else groups.set(k,{...p,extra:[]});}
+    const unique=[...groups.values()];
     const ov=$('ov-proposals');
-    if(ov){ov.querySelector('.proposal-val').textContent=proposals.length;ov.querySelector('.proposal-label').textContent=proposals.length?'wachten op jou':'niets te beoordelen';ov.classList.toggle('waiting',proposals.length>0);}
-    document.querySelectorAll('[data-badge]').forEach(b=>{const n=proposals.filter(p=>p.child===b.dataset.badge).length;b.textContent=n;b.hidden=!n;});
+    if(ov){ov.querySelector('.proposal-val').textContent=unique.length;ov.querySelector('.proposal-label').textContent=unique.length?'wachten op jou':'niets te beoordelen';ov.classList.toggle('waiting',proposals.length>0);}
+    document.querySelectorAll('[data-badge]').forEach(b=>{const n=unique.filter(p=>p.child===b.dataset.badge).length;b.textContent=n;b.hidden=!n;});
     if(ov)ov.dataset.go=(proposals.find(p=>p.child==='Michelle')&&!proposals.find(p=>p.child==='Rassell'))?'michelle':'rassell';
     document.querySelectorAll('.proposals-block[data-person]').forEach(b=>{b.hidden=!proposals.some(p=>p.child===b.dataset.person);});
-    fill('proposals',proposals,'child',p=>p.type==='reward'?`
-      <form class="manage-card" data-id="${esc(p.id)}" data-kind="reward-proposal">
-        <div class="card-head"><strong>🎁 ${esc(p.title)}</strong><small>Beloning · voorstel van ${esc(p.child)}</small></div>
+    const tag=p=>p.extra.length?` <span class="dup-tag">${p.extra.length+1}× voorgesteld</span>`:'';
+    const wrap=(p,icon,kind,form)=>`<details class="manage-row-edit proposal"><summary><div><strong>${icon} ${esc(p.title)}${tag(p)}</strong><small>${kind}${p.suggestedCost?` · ${p.suggestedCost} punten?`:''}</small></div><span class="edit-link">Bekijken</span></summary>${form}</details>`;
+    fill('proposals',unique,'child',p=>p.type==='reward'?wrap(p,'🎁','Beloning',`
+      <form class="manage-card" data-id="${esc(p.id)}" data-extra="${esc(p.extra.join(','))}" data-kind="reward-proposal">
         <div class="card-fields">
           <label>Naam<input name="title" value="${esc(p.title)}" maxlength="60"></label>
           <label class="small">Punten<input name="cost" type="number" min="1" max="500" value="${p.suggestedCost||''}" required></label>
           <label class="small">Emoji<input name="emoji" maxlength="4" placeholder="🎁"></label>
         </div>
         <div class="card-actions"><button class="ok" data-act="approve-reward">Goedkeuren</button><button class="no" data-act="reject">Afwijzen</button></div>
-      </form>`:`
-      <form class="manage-card" data-id="${esc(p.id)}" data-kind="task-proposal">
-        <div class="card-head"><strong>🧹 ${esc(p.title)}</strong><small>Taakje · voorstel van ${esc(p.child)}</small></div>
+      </form>`):wrap(p,'🧹','Taakje',`
+      <form class="manage-card" data-id="${esc(p.id)}" data-extra="${esc(p.extra.join(','))}" data-kind="task-proposal">
         <div class="card-fields">
           <label>Naam<input name="title" value="${esc(p.title)}" maxlength="60"></label>
           <label>Voor${whoSelect(p.child)}</label>
@@ -57,7 +61,7 @@
         </div>
         <div class="repeat" hidden>${dayBoxes([])}</div>
         <div class="card-actions"><button class="ok" data-act="approve-task">Goedkeuren</button><button class="no" data-act="reject">Afwijzen</button></div>
-      </form>`,'Geen voorstellen');
+      </form>`),'Geen voorstellen');
 
     // Open chores, today's first.
     const planned=(c.planned||[]).filter(t=>!t.completed).sort((x,y)=>String(x.day).localeCompare(String(y.day)));
@@ -137,6 +141,12 @@
       render(data);
       msg.textContent=data.message||'';msg.className=data.ok?'message success':'message error';
       if(data.ok&&typeof load==='function')setTimeout(load,1500);
+      const extra=data.ok&&['approve-task','approve-reward','reject'].includes(params.action)?String(params.extra||'').split(',').filter(Boolean):[];
+      for(let i=0;i<extra.length;i++){
+        msg.textContent=`Dubbels opruimen… (${i+1} van ${extra.length})`;msg.className='message';
+        try{const x=await fetch(MANAGE_WEBHOOK,{method:'POST',body:new URLSearchParams({action:'reject',id:extra[i]})});if(x.ok)render(await x.json());}catch(e){}
+      }
+      if(extra.length){msg.textContent=`${data.message||'Klaar.'} Dubbels opgeruimd.`;msg.className='message success';}
     }catch(err){
       if(button)button.textContent=label;
       msg.textContent='Dat lukte niet. Probeer het zo nog eens.';msg.className='message error';
@@ -158,6 +168,7 @@
     if(act==='remove-task')return send({action:act,id:button.dataset.id},button);
     const f=form?fields(form):{};
     if(form&&form.dataset.id)f.id=form.dataset.id;
+    if(form&&form.dataset.extra)f.extra=form.dataset.extra;
     send({action:act,...f},button);
   });
 

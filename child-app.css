@@ -8,3 +8,6 @@
 .my-ideas h3{margin:18px 0 10px;font-size:16px;color:#aab3c4;font-weight:600}
 .idea{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;margin-bottom:8px;border:1px dashed #ffffff2a;border-radius:14px}.idea small{color:#aab3c4;white-space:nowrap}
 @media(max-width:560px){.idea-form label.idea-cost{flex:1 1 100%}.idea-form button{width:100%}}
+.ideas-fold>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;background:#111722;border:1px solid #ffffff12;border-radius:18px;cursor:pointer;list-style:none}.ideas-fold>summary::-webkit-details-marker{display:none}
+.ideas-fold>summary h2{margin:0}.ideas-fold>summary::after{content:'▾';color:#aab3c4;font-size:18px;transition:transform .2s}.ideas-fold:not([open])>summary::after{transform:rotate(-90deg)}
+.ideas-fold[open]>summary{margin-bottom:14px}.ideas-count{color:#f6c453;font-size:15px;font-weight:600}
