@@ -1,6 +1,11 @@
 /* Weekly family boss — card at the top of the child rail (.sidebar-content). Reads boss.json. */
 .fb-card{position:relative;color:#f7fbff;border-color:color-mix(in srgb,var(--fb-accent,#ffd66c) 38%,transparent)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--fb-accent,#ffd66c) 9%,#141e2b),#141e2b 70%)!important}
-.fb-card[hidden],.fb-hud[hidden],.fb-victory[hidden],.fb-reward[hidden],.fb-chest-hint[hidden]{display:none!important}
+.fb-card::after{content:'';display:block;clear:both}
+.fb-portrait{position:relative;float:right;width:clamp(86px,5.6vw,150px);aspect-ratio:1;margin:0 0 clamp(6px,.4vw,10px) clamp(10px,.7vw,16px);border-radius:14px;overflow:hidden;border:2px solid color-mix(in srgb,var(--fb-accent,#ffd66c) 60%,transparent);box-shadow:0 6px 18px rgba(0,0,0,.4),0 0 18px color-mix(in srgb,var(--fb-accent,#ffd66c) 25%,transparent)}
+.fb-portrait img{display:block;width:100%;height:100%;object-fit:cover}
+.fb-card.won .fb-portrait img{filter:saturate(.45) brightness(.7)}
+.fb-card.won .fb-portrait::after{content:'💤';position:absolute;right:6px;bottom:4px;font-size:clamp(18px,1.2vw,30px)}
+.fb-card[hidden],.fb-portrait[hidden],.fb-hud[hidden],.fb-victory[hidden],.fb-reward[hidden],.fb-chest-hint[hidden]{display:none!important}
 .fb-kicker{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;font-size:clamp(12px,.62vw,16px);font-weight:790;letter-spacing:.1em;text-transform:uppercase;color:rgba(235,245,255,.62)}
 .fb-kicker .fb-dot{width:.5em;height:.5em;border-radius:50%;background:var(--fb-accent,#ffd66c)}
 .fb-kicker .fb-world{color:var(--fb-accent,#ffd66c)}
