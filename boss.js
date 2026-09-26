@@ -4,6 +4,9 @@
 (()=>{
   const BOSS_URL='boss.json';
   const BOSS_WEBHOOK='https://hook.eu2.make.com/43q89kow1dc6avoq4co5hmao7ykxsev0';
+  // Weekly portrait uploaded by Make "Family Boss — Generate Weekly Portrait" as Family Dashboard/boss-<weekStart>.
+  const PORTRAIT=week=>`https://res.cloudinary.com/a3xk0plk/image/upload/f_auto,q_auto,c_fill,g_auto,w_320,h_320/Family%20Dashboard/boss-${week}.png`;
+  const PORTRAIT_RETRY=10*60*1000;
   const ACCENT={woestijn:'#ffc15a',diepzee:'#7fe3ff',ijsrijk:'#b8e6ff',bos:'#9fe58a',vulkaan:'#ff9a4a',wolken:'#c9b8ff'};
   const NAME={michelle:'Michelle',rassell:'Rassell',samen:'Samen'};
   const rail=document.querySelector('.sidebar-content'),hero=document.querySelector('.hero');
@@ -15,6 +18,7 @@
 
   rail.insertAdjacentHTML('afterbegin',`
 <article class="child fb-card" id="fb-card" aria-label="Weekbaas" hidden>
+  <div class="fb-portrait" id="fb-portrait" hidden><img id="fb-portrait-img" alt=""></div>
   <section class="fb-hud" id="fb-hud" aria-live="polite">
     <div class="fb-kicker"><span class="fb-dot"></span><span id="fb-week">Weekbaas</span><span class="fb-world" id="fb-world"></span></div>
     <div class="fb-name" id="fb-name"></div>
@@ -49,6 +53,15 @@
   const isoWeek=ds=>{const t=noon(ds);t.setUTCDate(t.getUTCDate()+3-((t.getUTCDay()+6)%7));const y0=new Date(Date.UTC(t.getUTCFullYear(),0,4));return 1+Math.round(((t-y0)/864e5-3+((y0.getUTCDay()+6)%7))/7)};
 
   let last=null,toastTimer;
+  // The portrait may not exist yet (e.g. Monday before 06:30): hide it and try again later.
+  const portrait={week:null,failedAt:0};
+  $('fb-portrait-img').addEventListener('load',()=>{$('fb-portrait').hidden=false;portrait.failedAt=0;fit()});
+  $('fb-portrait-img').addEventListener('error',()=>{$('fb-portrait').hidden=true;portrait.failedAt=Date.now();fit()});
+  function showPortrait(b){
+    const img=$('fb-portrait-img');img.alt=b.name||'';
+    if(portrait.week!==b.weekStart){portrait.week=b.weekStart;portrait.failedAt=0;$('fb-portrait').hidden=true;img.src=PORTRAIT(b.weekStart);return}
+    if(portrait.failedAt&&Date.now()-portrait.failedAt>PORTRAIT_RETRY){portrait.failedAt=0;img.src=`${PORTRAIT(b.weekStart)}?t=${Date.now()}`}
+  }
   function toast(html){const t=$('fb-toast');t.innerHTML=html;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),5000)}
   function pop(damage,who){if(reduced)return;const p=document.createElement('div');p.className='fb-pop';p.innerHTML=`−${nl(damage)}<small>${esc(who)}</small>`;$('fb-card').appendChild(p);setTimeout(()=>p.remove(),1700)}
   function confetti(n=90){
@@ -70,6 +83,7 @@
     document.documentElement.style.setProperty('--fb-accent',ACCENT[b.theme]||'#ffd66c');
     const c=b.contributions||{},won=!!b.defeatedAt;
     card.classList.toggle('won',won);
+    showPortrait(b);
     $('fb-hud').hidden=won;$('fb-victory').hidden=!won;
     if(!won){
       const pct=Math.max(0,Math.min(100,b.hp/b.maxHp*100));
