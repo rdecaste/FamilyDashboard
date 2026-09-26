@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-09-26T06:37:31.245Z",
+ "updatedAt": "2026-09-26T06:53:52.993Z",
  "today": "2026-09-26",
  "weekStart": "2026-09-21",
  "weekEnd": "2026-09-27",
@@ -9,17 +9,17 @@
  "name": "Scorrax, de Zandtiran",
  "location": "De Glazen Vlakte",
  "maxHp": 600,
- "hp": 10,
+ "hp": 0,
  "damagePerPoint": 10,
- "totalDamage": 590,
+ "totalDamage": 620,
  "contributions": {
   "michelle": {
    "hits": 9,
    "damage": 270
   },
   "rassell": {
-   "hits": 10,
-   "damage": 320
+   "hits": 11,
+   "damage": 350
   },
   "samen": {
    "hits": 0,
@@ -27,6 +27,13 @@
   }
  },
  "recent": [
+  {
+   "child": "rassell",
+   "task": "Tanden Poetsen Ochtend",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-26"
+  },
   {
    "child": "michelle",
    "task": "Tanden Poetsen Ochtend",
@@ -54,16 +61,9 @@
    "points": 3,
    "damage": 30,
    "day": "2026-09-25"
-  },
-  {
-   "child": "michelle",
-   "task": "Tanden Poetsen Ochtend",
-   "points": 3,
-   "damage": 30,
-   "day": "2026-09-24"
   }
  ],
- "defeatedAt": null,
+ "defeatedAt": "2026-09-26T06:53:52.993Z",
  "chestOpenedAt": null,
  "reward": "Filmavond — jullie kiezen samen de film én de snacks.",
  "look": "a colossal armored desert scorpion-crab as big as a building, rust-bronze plated shell, a jagged bone-white crown, huge raised pincers, glowing amber slit eyes, sand pouring off its back",
@@ -82,7 +82,7 @@
    "title": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
-   "done": false
+   "done": true
   },
   {
    "id": "3e624147-f877-8141-a0df-f38d550ecd69",
