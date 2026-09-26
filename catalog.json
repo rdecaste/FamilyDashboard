@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-09-26T17:05:27.464Z",
+ "updatedAt": "2026-09-26T17:05:43.193Z",
  "today": "2026-09-26",
  "tomorrow": "2026-09-27",
  "rewards": [
@@ -42,6 +42,14 @@
    "title": "Aleen naar huis",
    "suggestedCost": null,
    "createdAt": "2026-08-26T05:59:00.000Z"
+  },
+  {
+   "id": "3e724147-f877-81b8-9f8e-c73aa99a1751",
+   "type": "task",
+   "child": "Michelle",
+   "title": "Taafel deken",
+   "suggestedCost": null,
+   "createdAt": "2026-09-26T17:05:00.000Z"
   },
   {
    "id": "3e724147-f877-8155-93c8-ed082ecc4acc",
