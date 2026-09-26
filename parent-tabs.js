@@ -7,7 +7,7 @@
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}};
   const save=patch=>{try{localStorage.setItem(KEY,JSON.stringify({...read(),...patch}));}catch(e){}};
   // Old links pointed at sections; map them to the tab that holds them.
-  const HASH={vandaag:'vandaag',brug:'vandaag',voorstellen:'voorstellen',taakjes:'taakjes',vast:'taakjes',beloningen:'beloningen',baasschat:'beloningen'};
+  const HASH={rassell:'rassell',michelle:'michelle',beide:'beide',beloningen:'beide',baasschat:'beide',brug:'beide'};
 
   function show(name,remember=true){
     if(!names.includes(name))name=names[0];
@@ -29,5 +29,5 @@
     d.addEventListener('toggle',()=>{const f=read().folds||{};f[d.dataset.fold]=d.open;save({folds:f});});
   });
 
-  show(HASH[location.hash.slice(1)]||read().tab||'vandaag',false);
+  show(HASH[location.hash.slice(1)]||read().tab||'rassell',false);
 })();
