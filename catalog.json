@@ -1,0 +1,300 @@
+{
+ "version": 1,
+ "updatedAt": "2026-09-26T07:54:17.094Z",
+ "today": "2026-09-26",
+ "tomorrow": "2026-09-27",
+ "rewards": [
+  {
+   "id": "3e724147-f877-812b-bf7a-fef859059c13",
+   "key": "dessert",
+   "title": "Dessert",
+   "cost": 6,
+   "emoji": "🍨"
+  },
+  {
+   "id": "3e724147-f877-8160-8774-ece4230a260b",
+   "key": "screen",
+   "title": "30 min extra screen time",
+   "cost": 12,
+   "emoji": "📺"
+  },
+  {
+   "id": "3e724147-f877-8144-8496-dea3cb5bc1c3",
+   "key": "cash",
+   "title": "€5 cash",
+   "cost": 42,
+   "emoji": "💶"
+  }
+ ],
+ "proposals": [
+  {
+   "id": "3c824147-f877-80f6-8923-ca7ff83f3ab3",
+   "type": "task",
+   "child": "Michelle",
+   "title": "Aleen naar school",
+   "suggestedCost": null,
+   "createdAt": "2026-08-26T05:55:00.000Z"
+  },
+  {
+   "id": "3c824147-f877-807d-ab72-ddcadf037a4b",
+   "type": "task",
+   "child": "Michelle",
+   "title": "Aleen naar huis",
+   "suggestedCost": null,
+   "createdAt": "2026-08-26T05:59:00.000Z"
+  },
+  {
+   "id": "3cc24147-f877-802b-a9bb-cfa08b5894ad",
+   "type": "task",
+   "child": "Rassell",
+   "title": "Vaatwaser uit ruimen ",
+   "suggestedCost": null,
+   "createdAt": "2026-08-30T08:59:00.000Z"
+  },
+  {
+   "id": "3cd24147-f877-80d8-842e-e57f74303d22",
+   "type": "task",
+   "child": "Michelle",
+   "title": "De zetel opruimen ",
+   "suggestedCost": null,
+   "createdAt": "2026-08-31T05:47:00.000Z"
+  },
+  {
+   "id": "3cd24147-f877-80e6-b040-f1046e8139ae",
+   "type": "task",
+   "child": "Michelle",
+   "title": "Stofzuige ",
+   "suggestedCost": null,
+   "createdAt": "2026-08-31T05:49:00.000Z"
+  },
+  {
+   "id": "3cd24147-f877-80e9-be01-d04ff601e17f",
+   "type": "task",
+   "child": "Michelle",
+   "title": "huiswerk maken ",
+   "suggestedCost": null,
+   "createdAt": "2026-08-31T05:50:00.000Z"
+  },
+  {
+   "id": "3cd24147-f877-806a-bff0-ccd782016f35",
+   "type": "task",
+   "child": "Michelle",
+   "title": "De keuken  schoon maken ",
+   "suggestedCost": null,
+   "createdAt": "2026-08-31T05:50:00.000Z"
+  },
+  {
+   "id": "3cd24147-f877-80c1-9715-f97b5fb77280",
+   "type": "task",
+   "child": "Michelle",
+   "title": "Raphael's hoekje opruimen ",
+   "suggestedCost": null,
+   "createdAt": "2026-08-31T05:51:00.000Z"
+  },
+  {
+   "id": "3cd24147-f877-8077-889a-c527e6f624f4",
+   "type": "task",
+   "child": "Michelle",
+   "title": "De bladeren  opruimen ",
+   "suggestedCost": null,
+   "createdAt": "2026-08-31T05:51:00.000Z"
+  },
+  {
+   "id": "3cf24147-f877-8086-a0ec-d25637b83f61",
+   "type": "task",
+   "child": "Michelle",
+   "title": "Huiswerk maken ",
+   "suggestedCost": null,
+   "createdAt": "2026-09-02T05:24:00.000Z"
+  },
+  {
+   "id": "3cf24147-f877-8099-b5a0-c48d2fcc94cb",
+   "type": "task",
+   "child": "Michelle",
+   "title": "Alleen naar huis en alleen naar school",
+   "suggestedCost": null,
+   "createdAt": "2026-09-02T05:26:00.000Z"
+  }
+ ],
+ "planned": [
+  {
+   "id": "3e624147-f877-81e3-8669-e68d13b30606",
+   "title": "Blaadjes opruimen",
+   "person": "Beide",
+   "day": "2026-09-26",
+   "level": "🔥 Extra",
+   "points": 0,
+   "completed": false
+  },
+  {
+   "id": "3e624147-f877-81be-abb4-ddf41f00805f",
+   "title": "Stofzuigen",
+   "person": "Beide",
+   "day": "2026-09-26",
+   "level": "🔥 Extra",
+   "points": 0,
+   "completed": false
+  },
+  {
+   "id": "3e624147-f877-81ce-84bf-f83a268dd7f9",
+   "title": "Tanden Poetsen Avond",
+   "person": "Rassell",
+   "day": "2026-09-26",
+   "level": "⚡ Standaard",
+   "points": 0,
+   "completed": false
+  },
+  {
+   "id": "3e624147-f877-81fe-a17f-ef0dfd5a2be1",
+   "title": "Tanden Poetsen Avond",
+   "person": "Michelle",
+   "day": "2026-09-26",
+   "level": "⚡ Standaard",
+   "points": 0,
+   "completed": false
+  },
+  {
+   "id": "3e624147-f877-8168-87ff-d195b3407586",
+   "title": "Tanden Poetsen Ochtend",
+   "person": "Rassell",
+   "day": "2026-09-26",
+   "level": "⚡ Standaard",
+   "points": 3,
+   "completed": true
+  },
+  {
+   "id": "3e624147-f877-8141-a0df-f38d550ecd69",
+   "title": "Tanden Poetsen Ochtend",
+   "person": "Michelle",
+   "day": "2026-09-26",
+   "level": "⚡ Standaard",
+   "points": 3,
+   "completed": true
+  }
+ ],
+ "recurring": [
+  {
+   "id": "3e724147-f877-81e8-9fc3-eada8098aef9",
+   "title": "Blaadjes opruimen",
+   "person": "Beide",
+   "level": "🔥 Extra",
+   "days": [
+    "za"
+   ]
+  },
+  {
+   "id": "3e724147-f877-8163-8141-fec94fb0bb26",
+   "title": "Kamer opruimen",
+   "person": "Michelle",
+   "level": "🔥 Extra",
+   "days": [
+    "do"
+   ]
+  },
+  {
+   "id": "3e724147-f877-8155-a32c-d90e8c8002bc",
+   "title": "Kamer opruimen",
+   "person": "Rassell",
+   "level": "🔥 Extra",
+   "days": [
+    "do"
+   ]
+  },
+  {
+   "id": "3e724147-f877-81e9-b689-ea0d1eedc790",
+   "title": "Kleren wassen",
+   "person": "Michelle",
+   "level": "⚡ Standaard",
+   "days": [
+    "ma"
+   ]
+  },
+  {
+   "id": "3e724147-f877-8141-9be3-f154e2187983",
+   "title": "Kleren wassen",
+   "person": "Rassell",
+   "level": "⚡ Standaard",
+   "days": [
+    "di"
+   ]
+  },
+  {
+   "id": "3e724147-f877-81a7-870c-db18b080ea1c",
+   "title": "Stofzuigen",
+   "person": "Beide",
+   "level": "🔥 Extra",
+   "days": [
+    "za"
+   ]
+  },
+  {
+   "id": "3e724147-f877-81a2-8c11-ec65577b4bf5",
+   "title": "Tanden Poetsen Avond",
+   "person": "Michelle",
+   "level": "⚡ Standaard",
+   "days": [
+    "ma",
+    "di",
+    "wo",
+    "do",
+    "vr",
+    "za",
+    "zo"
+   ]
+  },
+  {
+   "id": "3e724147-f877-81a8-b4e0-f89eeb01171d",
+   "title": "Tanden Poetsen Avond",
+   "person": "Rassell",
+   "level": "⚡ Standaard",
+   "days": [
+    "ma",
+    "di",
+    "wo",
+    "do",
+    "vr",
+    "za",
+    "zo"
+   ]
+  },
+  {
+   "id": "3e724147-f877-81f1-9662-d2f034d2bcc3",
+   "title": "Tanden Poetsen Ochtend",
+   "person": "Michelle",
+   "level": "⚡ Standaard",
+   "days": [
+    "ma",
+    "di",
+    "wo",
+    "do",
+    "vr",
+    "za",
+    "zo"
+   ]
+  },
+  {
+   "id": "3e724147-f877-8122-9e98-feb54035dc93",
+   "title": "Tanden Poetsen Ochtend",
+   "person": "Rassell",
+   "level": "⚡ Standaard",
+   "days": [
+    "ma",
+    "di",
+    "wo",
+    "do",
+    "vr",
+    "za",
+    "zo"
+   ]
+  },
+  {
+   "id": "3e724147-f877-8151-a83e-d91b99e7c9a2",
+   "title": "Vuilbakken buitenzetten",
+   "person": "Rassell",
+   "level": "⚡ Standaard",
+   "days": [
+    "wo"
+   ]
+  }
+ ]
+}
