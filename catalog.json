@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-09-26T16:22:47.880Z",
+ "updatedAt": "2026-09-26T16:23:08.362Z",
  "today": "2026-09-26",
  "tomorrow": "2026-09-27",
  "rewards": [
@@ -240,14 +240,6 @@
    "emoji": "🩷",
    "lastUsed": "",
    "order": 3,
-   "next": false
-  },
-  {
-   "id": "3e724147-f877-81f8-84c4-ceedb7915432",
-   "title": "Test schat, wordt verwijderd",
-   "emoji": "🧪",
-   "lastUsed": "",
-   "order": 100,
    "next": false
   },
   {
