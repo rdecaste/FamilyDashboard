@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Parent Controls · Family Quest</title>
-<link rel="stylesheet" href="child-app.css">
-<link rel="stylesheet" href="parent.css">
+<link rel="stylesheet" href="child-app.css?v=2">
+<link rel="stylesheet" href="parent.css?v=2">
 </head>
 <body>
 <main>
@@ -20,9 +20,37 @@
 </section>
 <section class="child-section"><div class="child-head"><h2>Rassell</h2><button class="screen-off" type="button" data-child="Rassell">🚫 No screen time</button></div><div id="rassellTasks" class="tasks"></div></section>
 <section class="child-section"><div class="child-head"><h2>Michelle</h2><button class="screen-off" type="button" data-child="Michelle">🚫 No screen time</button></div><div id="michelleTasks" class="tasks"></div></section>
+<section class="manage" aria-labelledby="proposals-title">
+<h2 id="proposals-title">💡 Voorstellen <span id="proposal-count"></span></h2>
+<div id="proposal-list" class="manage-list"><div class="empty small">Laden…</div></div>
+<h2>🧹 Taakjes vandaag en morgen</h2>
+<div id="planned-list" class="manage-list"></div>
+<form class="manage-card add" data-kind="add-task">
+<div class="card-head"><strong>Nieuw taakje</strong></div>
+<div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. tafel dekken"></label><label>Voor<select name="person"><option>Rassell</option><option>Michelle</option><option>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label><label>Wanneer<select name="day"><option value="vandaag">Vandaag</option><option value="morgen">Morgen</option></select></label></div>
+<div class="card-actions"><button class="ok" data-act="add-task">Toevoegen</button></div>
+</form>
+<h2>🔁 Vaste taakjes</h2>
+<p class="manage-note">Worden elke ochtend om 05:30 klaargezet op de gekozen dagen.</p>
+<div id="recurring-list" class="manage-list"></div>
+<form class="manage-card add" data-kind="chore">
+<div class="card-head"><strong>Nieuw vast taakje</strong></div>
+<div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option>Rassell</option><option>Michelle</option><option>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label></div>
+<div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label></div>
+<div class="card-actions"><button class="ok" data-act="chore-save">Toevoegen</button></div>
+</form>
+<h2>🎁 Beloningen</h2>
+<div id="reward-list" class="manage-list"></div>
+<form class="manage-card add compact" data-kind="reward">
+<div class="card-fields"><label class="small">Emoji<input name="emoji" maxlength="4" placeholder="🎁"></label><label>Nieuwe beloning<input name="title" maxlength="60" placeholder="Bv. naar McDonald's"></label><label class="small">Punten<input name="cost" type="number" min="1" max="500"></label></div>
+<div class="card-actions"><button class="ok" data-act="reward-save">Toevoegen</button></div>
+</form>
+<p id="manage-message" class="message" aria-live="polite"></p>
+</section>
 <p id="message" class="message" aria-live="polite"></p>
 </main>
 <script src="bridge-status.js"></script>
 <script src="parent.js"></script>
+<script src="parent-manage.js?v=1"></script>
 </body>
 </html>
