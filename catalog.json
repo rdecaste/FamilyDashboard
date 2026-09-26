@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-09-26T07:55:45.033Z",
+ "updatedAt": "2026-09-26T08:01:57.984Z",
  "today": "2026-09-26",
  "tomorrow": "2026-09-27",
  "rewards": [
@@ -42,78 +42,6 @@
    "title": "Aleen naar huis",
    "suggestedCost": null,
    "createdAt": "2026-08-26T05:59:00.000Z"
-  },
-  {
-   "id": "3cc24147-f877-802b-a9bb-cfa08b5894ad",
-   "type": "task",
-   "child": "Rassell",
-   "title": "Vaatwaser uit ruimen ",
-   "suggestedCost": null,
-   "createdAt": "2026-08-30T08:59:00.000Z"
-  },
-  {
-   "id": "3cd24147-f877-80d8-842e-e57f74303d22",
-   "type": "task",
-   "child": "Michelle",
-   "title": "De zetel opruimen ",
-   "suggestedCost": null,
-   "createdAt": "2026-08-31T05:47:00.000Z"
-  },
-  {
-   "id": "3cd24147-f877-80e6-b040-f1046e8139ae",
-   "type": "task",
-   "child": "Michelle",
-   "title": "Stofzuige ",
-   "suggestedCost": null,
-   "createdAt": "2026-08-31T05:49:00.000Z"
-  },
-  {
-   "id": "3cd24147-f877-80e9-be01-d04ff601e17f",
-   "type": "task",
-   "child": "Michelle",
-   "title": "huiswerk maken ",
-   "suggestedCost": null,
-   "createdAt": "2026-08-31T05:50:00.000Z"
-  },
-  {
-   "id": "3cd24147-f877-806a-bff0-ccd782016f35",
-   "type": "task",
-   "child": "Michelle",
-   "title": "De keuken  schoon maken ",
-   "suggestedCost": null,
-   "createdAt": "2026-08-31T05:50:00.000Z"
-  },
-  {
-   "id": "3cd24147-f877-80c1-9715-f97b5fb77280",
-   "type": "task",
-   "child": "Michelle",
-   "title": "Raphael's hoekje opruimen ",
-   "suggestedCost": null,
-   "createdAt": "2026-08-31T05:51:00.000Z"
-  },
-  {
-   "id": "3cd24147-f877-8077-889a-c527e6f624f4",
-   "type": "task",
-   "child": "Michelle",
-   "title": "De bladeren  opruimen ",
-   "suggestedCost": null,
-   "createdAt": "2026-08-31T05:51:00.000Z"
-  },
-  {
-   "id": "3cf24147-f877-8086-a0ec-d25637b83f61",
-   "type": "task",
-   "child": "Michelle",
-   "title": "Huiswerk maken ",
-   "suggestedCost": null,
-   "createdAt": "2026-09-02T05:24:00.000Z"
-  },
-  {
-   "id": "3cf24147-f877-8099-b5a0-c48d2fcc94cb",
-   "type": "task",
-   "child": "Michelle",
-   "title": "Alleen naar huis en alleen naar school",
-   "suggestedCost": null,
-   "createdAt": "2026-09-02T05:26:00.000Z"
   }
  ],
  "planned": [
