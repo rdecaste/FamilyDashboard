@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Parent Controls · Family Quest</title>
 <link rel="stylesheet" href="child-app.css?v=2">
-<link rel="stylesheet" href="parent.css?v=2">
+<link rel="stylesheet" href="parent.css?v=3">
 </head>
 <body>
 <main>
@@ -45,12 +45,20 @@
 <div class="card-fields"><label class="small">Emoji<input name="emoji" maxlength="4" placeholder="🎁"></label><label>Nieuwe beloning<input name="title" maxlength="60" placeholder="Bv. naar McDonald's"></label><label class="small">Punten<input name="cost" type="number" min="1" max="500"></label></div>
 <div class="card-actions"><button class="ok" data-act="reward-save">Toevoegen</button></div>
 </form>
+<h2>🏆 Baasbeloningen</h2>
+<p class="manage-note">De schat als Michelle en Rassell de weekbaas verslaan. Elke maandag kiest het systeem de beloning die het langst niet gebruikt is.</p>
+<p id="treasure-now" class="treasure-now" hidden></p>
+<div id="treasure-list" class="manage-list"></div>
+<form class="manage-card add compact" data-kind="treasure">
+<div class="card-fields"><label class="small">Emoji<input name="emoji" maxlength="4" placeholder="🏆"></label><label>Nieuwe baasbeloning<input name="title" maxlength="100" placeholder="Bv. samen pannenkoeken bakken"></label></div>
+<div class="card-actions"><button class="ok" data-act="treasure-save">Toevoegen</button></div>
+</form>
 <p id="manage-message" class="message" aria-live="polite"></p>
 </section>
 <p id="message" class="message" aria-live="polite"></p>
 </main>
 <script src="bridge-status.js"></script>
 <script src="parent.js"></script>
-<script src="parent-manage.js?v=1"></script>
+<script src="parent-manage.js?v=2"></script>
 </body>
 </html>

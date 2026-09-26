@@ -14,3 +14,6 @@
 .manage-card.compact{grid-template-columns:minmax(0,1fr) auto;align-items:end}
 body.manage-busy .manage button{opacity:.55;pointer-events:none}
 @media(max-width:560px){.manage-card.compact{grid-template-columns:1fr}.manage .ok,.manage .no{flex:1 1 auto}.manage-row{flex-direction:column;align-items:stretch}}
+.treasure-now{margin:0 0 12px;padding:12px 16px;border-radius:14px;background:#f6c4531a;border:1px solid #f6c45340;color:#ffe3a3}
+.treasure-tag{display:inline-block;width:fit-content;justify-self:start;margin-right:6px;padding:2px 8px;border-radius:999px;background:#f6c453;color:#1a1300;font-size:12px;font-weight:800}
+.treasure-used{grid-column:1/-1;color:#aab3c4}

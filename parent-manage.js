@@ -1,4 +1,4 @@
-// Parent controls: approve proposals and manage chores, recurring chores and rewards.
+// Parent controls: approve proposals and manage chores, recurring chores, rewards and boss treasures.
 // Every change goes through the Make scenario "Family Dashboard — Proposals & Management",
 // which also republishes catalog.json and answers with the fresh catalog.
 (()=>{
@@ -64,6 +64,29 @@
         <div class="card-fields"><label class="small">Emoji<input name="emoji" value="${esc(r.emoji)}" maxlength="4"></label><label>Beloning<input name="title" value="${esc(r.title)}" maxlength="60"></label><label class="small">Punten<input name="cost" type="number" min="1" max="500" value="${Number(r.cost)}"></label></div>
         <div class="card-actions"><button class="ok" data-act="reward-save">Opslaan</button><button class="no" data-act="reward-remove">Verwijderen</button></div>
       </form>`).join('')||'<div class="empty small">Nog geen beloningen</div>';
+
+    // Boss treasures come in the order the Monday publish picks them; the first one is next.
+    const treasures=c.treasures||[];
+    $('treasure-list').innerHTML=treasures.map(t=>`
+      <form class="manage-card compact" data-id="${esc(t.id)}" data-kind="treasure">
+        <div class="card-fields"><label class="small">Emoji<input name="emoji" value="${esc(t.emoji)}" maxlength="4"></label><label>${t.next?'<span class="treasure-tag">Volgende week</span> ':''}Beloning<input name="title" value="${esc(t.title)}" maxlength="100"></label></div>
+        <div class="card-actions"><button class="ok" data-act="treasure-save">Opslaan</button><button class="no" data-act="treasure-remove">Verwijderen</button></div>
+        ${t.lastUsed?`<small class="treasure-used">Laatst gebruikt: week van ${esc(shortDate(t.lastUsed))}</small>`:''}
+      </form>`).join('')||'<div class="empty small">Nog geen baasbeloningen</div>';
+  }
+
+  function shortDate(ymd){
+    const [y,m,d]=String(ymd).split('-').map(Number);
+    return y?new Date(Date.UTC(y,m-1,d)).toLocaleDateString('nl-NL',{day:'numeric',month:'short',timeZone:'UTC'}):ymd;
+  }
+
+  async function showCurrentTreasure(){
+    try{
+      const r=await fetch(`boss.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;
+      const b=await r.json();if(!b||b.version!==1||!b.reward)return;
+      const state=b.chestOpenedAt?'kist geopend':b.defeatedAt?'verslagen, kist nog dicht':'baas nog niet verslagen';
+      const el=$('treasure-now');el.textContent=`Deze week (${state}): ${b.reward}`;el.hidden=false;
+    }catch(e){}
   }
 
   function fields(form){
@@ -77,7 +100,8 @@
     'reject':'Dit voorstel afwijzen?',
     'remove-task':'Dit taakje verwijderen?',
     'chore-remove':'Dit vaste taakje stoppen? Het komt dan niet meer terug.',
-    'reward-remove':'Deze beloning verwijderen?'
+    'reward-remove':'Deze beloning verwijderen?',
+    'treasure-remove':'Deze baasbeloning verwijderen?'
   };
 
   async function send(params,button){
@@ -126,4 +150,5 @@
     }catch(e){}
   }
   init();
+  showCurrentTreasure();
 })();
