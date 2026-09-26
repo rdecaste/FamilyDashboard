@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-09-26T07:06:05.004Z",
+ "updatedAt": "2026-09-26T17:25:41.355Z",
  "today": "2026-09-26",
  "weekStart": "2026-09-21",
  "weekEnd": "2026-09-27",
@@ -11,11 +11,11 @@
  "maxHp": 600,
  "hp": 0,
  "damagePerPoint": 10,
- "totalDamage": 620,
+ "totalDamage": 650,
  "contributions": {
   "michelle": {
-   "hits": 9,
-   "damage": 270
+   "hits": 10,
+   "damage": 300
   },
   "rassell": {
    "hits": 11,
@@ -27,6 +27,13 @@
   }
  },
  "recent": [
+  {
+   "child": "michelle",
+   "task": "Tanden Poetsen Avond",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-26"
+  },
   {
    "child": "rassell",
    "task": "Tanden Poetsen Ochtend",
@@ -54,17 +61,10 @@
    "points": 3,
    "damage": 30,
    "day": "2026-09-25"
-  },
-  {
-   "child": "rassell",
-   "task": "Tanden Poetsen Ochtend",
-   "points": 3,
-   "damage": 30,
-   "day": "2026-09-25"
   }
  ],
  "defeatedAt": "2026-09-26T06:53:00.000+00:00",
- "chestOpenedAt": "2026-09-26T07:06:05.004Z",
+ "chestOpenedAt": "2026-09-26T07:06:00.000+00:00",
  "reward": "Filmavond — jullie kiezen samen de film én de snacks.",
  "look": "a colossal armored desert scorpion-crab as big as a building, rust-bronze plated shell, a jagged bone-white crown, huge raised pincers, glowing amber slit eyes, sand pouring off its back",
  "tasks": [
@@ -106,7 +106,7 @@
    "title": "Tanden Poetsen Avond",
    "points": 3,
    "damage": 30,
-   "done": false
+   "done": true
   },
   {
    "id": "3e624147-f877-81be-abb4-ddf41f00805f",
