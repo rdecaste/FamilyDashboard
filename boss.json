@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-09-26T06:29:50.621Z",
+ "updatedAt": "2026-09-26T06:37:31.245Z",
  "today": "2026-09-26",
  "weekStart": "2026-09-21",
  "weekEnd": "2026-09-27",
@@ -9,13 +9,13 @@
  "name": "Scorrax, de Zandtiran",
  "location": "De Glazen Vlakte",
  "maxHp": 600,
- "hp": 40,
+ "hp": 10,
  "damagePerPoint": 10,
- "totalDamage": 560,
+ "totalDamage": 590,
  "contributions": {
   "michelle": {
-   "hits": 8,
-   "damage": 240
+   "hits": 9,
+   "damage": 270
   },
   "rassell": {
    "hits": 10,
@@ -27,6 +27,13 @@
   }
  },
  "recent": [
+  {
+   "child": "michelle",
+   "task": "Tanden Poetsen Ochtend",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-26"
+  },
   {
    "child": "michelle",
    "task": "Tanden Poetsen Avond",
@@ -53,13 +60,6 @@
    "task": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
-   "day": "2026-09-24"
-  },
-  {
-   "child": "rassell",
-   "task": "Kamer opruimen",
-   "points": 5,
-   "damage": 50,
    "day": "2026-09-24"
   }
  ],
@@ -90,7 +90,7 @@
    "title": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
-   "done": false
+   "done": true
   },
   {
    "id": "3e624147-f877-81ce-84bf-f83a268dd7f9",
