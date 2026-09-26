@@ -16,6 +16,9 @@
   const dayBoxes=sel=>`<div class="day-picks">${DAYS.map(([v,l])=>`<label><input type="checkbox" name="days" value="${v}"${(sel||[]).includes(v)?' checked':''}>${l}</label>`).join('')}</div>`;
   const levelLabel=l=>String(l||'').includes('Extra')?'🔥 Extra':'⚡ Standaard';
   const dayLabel=d=>d===catalog?.today?'Vandaag':d===catalog?.tomorrow?'Morgen':d;
+  // Lists on the Ouderpaneel are grouped per child: Rassell, Michelle, then chores for both.
+  const PEOPLE=[['Rassell','Rassell'],['Michelle','Michelle'],['Beide','Samen (Beide)']];
+  const byPerson=(items,key,row)=>PEOPLE.map(([p,label])=>{const list=items.filter(x=>(x[key]||'Beide')===p||(p==='Beide'&&!['Rassell','Michelle'].includes(x[key])));return list.length?`<p class="person-label p-${p.toLowerCase()}">${esc(label)} <span>(${list.length})</span></p>`+list.map(row).join(''):'';}).join('');
   const daysLabel=ds=>ds.length===7?'Elke dag':ds.map(d=>DAYS.find(x=>x[0]===d)?.[1]||d).join(' · ');
 
   function render(c){
@@ -25,7 +28,7 @@
     const ov=$('ov-proposals');
     if(ov){ov.querySelector('.proposal-val').textContent=proposals.length;ov.querySelector('.proposal-label').textContent=proposals.length?'wachten op jou':'niets te beoordelen';ov.classList.toggle('waiting',proposals.length>0);}
     const badge=$('nav-proposals');if(badge){badge.textContent=proposals.length;badge.hidden=!proposals.length;}
-    $('proposal-list').innerHTML=proposals.length?proposals.map(p=>p.type==='reward'?`
+    $('proposal-list').innerHTML=proposals.length?byPerson(proposals,'child',p=>p.type==='reward'?`
       <form class="manage-card" data-id="${esc(p.id)}" data-kind="reward-proposal">
         <div class="card-head"><strong>🎁 ${esc(p.title)}</strong><small>Beloning · voorstel van ${esc(p.child)}</small></div>
         <div class="card-fields">
@@ -45,25 +48,24 @@
         </div>
         <div class="repeat" hidden>${dayBoxes([])}</div>
         <div class="card-actions"><button class="ok" data-act="approve-task">Goedkeuren</button><button class="no" data-act="reject">Afwijzen</button></div>
-      </form>`).join(''):'<div class="empty small">Geen voorstellen</div>';
+      </form>`):'<div class="empty small">Geen voorstellen</div>';
 
-    // Open chores grouped by day, so today's list is not mixed with tomorrow's.
-    const planned=(c.planned||[]).filter(t=>!t.completed);
+    // Open chores per child, today's first.
+    const planned=(c.planned||[]).filter(t=>!t.completed).sort((x,y)=>String(x.day).localeCompare(String(y.day)));
     $('planned-count').textContent=planned.length?`(${planned.length} open)`:'';
-    const days=[...new Set(planned.map(t=>t.day))].sort();
-    $('planned-list').innerHTML=planned.length?days.map(d=>`<p class="list-label">${esc(dayLabel(d))}</p>`+planned.filter(t=>t.day===d).map(t=>`
-      <div class="manage-row"><div><strong>${esc(t.title)}</strong><small>${esc(t.person)} · ${levelLabel(t.level)}</small></div>
-      <button class="no" data-act="remove-task" data-id="${esc(t.id)}" data-title="${esc(t.title)}">Verwijderen</button></div>`).join('')).join(''):'<div class="empty small">Geen open taakjes voor vandaag of morgen</div>';
+    $('planned-list').innerHTML=planned.length?byPerson(planned,'person',t=>`
+      <div class="manage-row"><div><strong>${esc(t.title)}</strong><small>${esc(dayLabel(t.day))} · ${levelLabel(t.level)}</small></div>
+      <button class="no" data-act="remove-task" data-id="${esc(t.id)}" data-title="${esc(t.title)}">Verwijderen</button></div>`):'<div class="empty small">Geen open taakjes voor vandaag of morgen</div>';
 
     const recurring=c.recurring||[];
     $('recurring-count').textContent=recurring.length?`(${recurring.length})`:'';
-    $('recurring-list').innerHTML=recurring.map(t=>`
-      <details class="manage-row-edit"><summary><div><strong>${esc(t.title)}</strong><small>${esc(t.person)} · ${levelLabel(t.level)} · ${esc(daysLabel(t.days))}</small></div><span class="edit-link">Aanpassen</span></summary>
+    $('recurring-list').innerHTML=byPerson(recurring,'person',t=>`
+      <details class="manage-row-edit"><summary><div><strong>${esc(t.title)}</strong><small>${levelLabel(t.level)} · ${esc(daysLabel(t.days))}</small></div><span class="edit-link">Aanpassen</span></summary>
         <form class="manage-card" data-id="${esc(t.id)}" data-kind="chore">
           <div class="card-fields"><label>Naam<input name="title" value="${esc(t.title)}" maxlength="60"></label><label>Voor${whoSelect(t.person)}</label><label>Soort${levelSelect(levelKey(t.level))}</label></div>
           ${dayBoxes(t.days)}
           <div class="card-actions"><button class="ok" data-act="chore-save">Opslaan</button><button class="no" data-act="chore-remove">Stoppen</button></div>
-        </form></details>`).join('')||'<div class="empty small">Nog geen vaste taakjes</div>';
+        </form></details>`)||'<div class="empty small">Nog geen vaste taakjes</div>';
 
     // Rewards and boss treasures show as one line each; tap to edit.
     const rewards=c.rewards||[];
