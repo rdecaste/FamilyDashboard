@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-store">
 <title>Rassell — Family Dashboard</title>
-<link rel="stylesheet" href="child-app.css">
+<link rel="stylesheet" href="child-app.css?v=2">
 </head>
 <body>
 <main>
@@ -30,13 +30,22 @@
 <button class="reward cash" type="button" data-reward="cash" data-cost="42"><strong>€5 cash</strong><span>42 points</span></button>
 </div>
 </section>
+<section class="ideas" aria-labelledby="ideas-title">
+<h2 id="ideas-title">💡 Voorstellen</h2>
+<p class="ideas-intro">Heb je een idee voor een taakje of een beloning? Stel het voor, papa of mama kiest.</p>
+<form class="idea-form" data-kind="task"><label>Taakje voorstellen<input name="idea" maxlength="60" placeholder="Bv. de tafel dekken" autocomplete="off" required></label><button type="submit">Voorstellen</button></form>
+<form class="idea-form" data-kind="reward"><label>Beloning voorstellen<input name="idea" maxlength="60" placeholder="Bv. naar McDonald's" autocomplete="off" required></label><label class="idea-cost">Punten<input name="cost" type="number" min="1" max="500" inputmode="numeric" placeholder="?"></label><button type="submit">Voorstellen</button></form>
+<div id="my-ideas" class="my-ideas"></div>
+<p class="message" id="idea-message" aria-live="polite"></p>
+</section>
 <h2>Outstanding tasks</h2>
 <section class="tasks" id="tasks"></section>
 <p class="message" id="message" aria-live="polite"></p>
 </main>
 <script>const CHILD='Rassell';</script>
 <script src="bridge-status.js"></script>
-<script src="child-app.js"></script>
+<script src="child-app.js?v=2"></script>
+<script src="proposals.js?v=1"></script>
 <script src="boss-tasks.js?v=1"></script>
 </body>
 </html>
