@@ -1,5 +1,7 @@
 (() => {
-  const endpoint = 'https://hook.eu2.make.com/kptsvimcpfrgwxxahnq9bciqb9dlenuk';
+  // Asked only when the button is tapped; the Quest Engine (Cloudflare Worker)
+  // relays the bridge site, which does not allow browsers to read it directly.
+  const endpoint = 'https://quest-engine.quest-engine.workers.dev/bridge';
   const cacheKey = 'familyDashboard.sluiskilBridge.v1';
   const card = document.getElementById('bridge-card');
   const title = document.getElementById('bridge-title');
