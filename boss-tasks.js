@@ -3,7 +3,7 @@
 // Reads the "tasks" list in boss.json; draws nothing when boss.json is missing, from
 // another day, or when this week's boss is already defeated.
 (()=>{
-  const BOSS_URL='boss.json';
+  const BOSS_URL='https://quest-engine.quest-engine.workers.dev/family/boss';
   const bare=id=>String(id||'').replace(/-/g,'');
   const amsDay=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Amsterdam',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   document.head.insertAdjacentHTML('beforeend',`<style>

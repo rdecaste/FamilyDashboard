@@ -312,7 +312,7 @@ function refreshClock(){
 }
 async function refreshData(){
   try{
-    const r=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
+    const r=await fetch(`https://quest-engine.quest-engine.workers.dev/family/latest?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);
     const d=await r.json();
     renderChild('rassell',d.children.rassell);
     renderChild('michelle',d.children.michelle);
@@ -409,7 +409,7 @@ async function refreshWeather(){
 refreshClock();refreshData();refreshWeather();
 setInterval(refreshClock,30000);setInterval(refreshData,15000);setInterval(refreshWeather,600000);
 </script>
-<script src="boss.js?v=3"></script>
-<script src="boss-tasks.js?v=1"></script>
+<script src="boss.js?v=4"></script>
+<script src="boss-tasks.js?v=2"></script>
 </body>
 </html>

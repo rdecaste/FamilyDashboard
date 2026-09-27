@@ -1,5 +1,6 @@
-const WEBHOOK='https://hook.eu2.make.com/9otc8coig6ulfw6eeqt8oraph8rhi4y1';
-const SCREEN_WEBHOOK='https://hook.eu2.make.com/gstybp793srkspjvn017jj8r0mu41jv8';
+const ENGINE_URL='https://quest-engine.quest-engine.workers.dev';
+const WEBHOOK=ENGINE_URL+'/family/reset';
+const SCREEN_WEBHOOK=ENGINE_URL+'/family/screen';
 const KIDS=[['rassell','Rassell'],['michelle','Michelle']];
 const els={rassell:document.getElementById('rassellTasks'),michelle:document.getElementById('michelleTasks')};
 const openEls={rassell:document.getElementById('rassellOpen'),michelle:document.getElementById('michelleOpen')};
@@ -36,8 +37,8 @@ function renderBoss(b){
   card.querySelector('.boss-detail').textContent=`Rassell ${c.rassell?.damage||0} · Michelle ${c.michelle?.damage||0} schade`;
 }
 
-async function load(){try{const r=await fetch(`latest.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error('Dashboard laden lukte niet');render(await r.json());}catch(e){message.textContent=e.message;message.className='message error';}
-  try{const r=await fetch(`boss.json?t=${Date.now()}`,{cache:'no-store'});if(r.ok)renderBoss(await r.json());}catch(e){}}
+async function load(){try{const r=await fetch(`${ENGINE_URL}/family/latest?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error('Dashboard laden lukte niet');render(await r.json());}catch(e){message.textContent=e.message;message.className='message error';}
+  try{const r=await fetch(`${ENGINE_URL}/family/boss?t=${Date.now()}`,{cache:'no-store'});if(r.ok)renderBoss(await r.json());}catch(e){}}
 async function resetItem(button){
   if(button.dataset.busy==='true')return;
   button.dataset.busy='true';

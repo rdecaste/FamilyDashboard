@@ -2,8 +2,8 @@
 // and draws the boss card at the top of the child rail, above Michelle and Rassell.
 // If boss.json is missing or from an older week, the card is hidden.
 (()=>{
-  const BOSS_URL='boss.json';
-  const BOSS_WEBHOOK='https://hook.eu2.make.com/43q89kow1dc6avoq4co5hmao7ykxsev0';
+  const BOSS_URL='https://quest-engine.quest-engine.workers.dev/family/boss';
+  const BOSS_WEBHOOK='https://quest-engine.quest-engine.workers.dev/family/boss';
   // Weekly portrait uploaded by Make "Family Boss — Generate Weekly Portrait" as Family Dashboard/boss-<weekStart>.
   const PORTRAIT=week=>`https://res.cloudinary.com/a3xk0plk/image/upload/f_auto,q_auto,c_fill,g_auto,w_320,h_320/Family%20Dashboard/boss-${week}.png`;
   const PORTRAIT_RETRY=10*60*1000;
