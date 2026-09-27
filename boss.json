@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-09-27T04:15:12.833Z",
+ "updatedAt": "2026-09-27T10:48:12.188Z",
  "today": "2026-09-27",
  "weekStart": "2026-09-21",
  "weekEnd": "2026-09-27",
@@ -11,15 +11,15 @@
  "maxHp": 600,
  "hp": 0,
  "damagePerPoint": 10,
- "totalDamage": 650,
+ "totalDamage": 680,
  "contributions": {
   "michelle": {
    "hits": 10,
    "damage": 300
   },
   "rassell": {
-   "hits": 11,
-   "damage": 350
+   "hits": 12,
+   "damage": 380
   },
   "samen": {
    "hits": 0,
@@ -27,6 +27,13 @@
   }
  },
  "recent": [
+  {
+   "child": "rassell",
+   "task": "Tanden Poetsen Ochtend",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-27"
+  },
   {
    "child": "michelle",
    "task": "Tanden Poetsen Avond",
@@ -51,13 +58,6 @@
   {
    "child": "michelle",
    "task": "Tanden Poetsen Avond",
-   "points": 3,
-   "damage": 30,
-   "day": "2026-09-25"
-  },
-  {
-   "child": "michelle",
-   "task": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
    "day": "2026-09-25"
@@ -98,7 +98,7 @@
    "title": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
-   "done": false
+   "done": true
   }
  ]
 }
