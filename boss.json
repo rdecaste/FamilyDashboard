@@ -1,104 +1,76 @@
 {
  "version": 1,
- "updatedAt": "2026-09-27T18:04:49.044Z",
- "today": "2026-09-27",
- "weekStart": "2026-09-21",
- "weekEnd": "2026-09-27",
- "theme": "woestijn",
- "world": "Woestijnplaneet",
- "name": "Scorrax, de Zandtiran",
- "location": "Oase van de Twee Zonnen",
+ "updatedAt": "2026-09-28T04:15:15.191Z",
+ "today": "2026-09-28",
+ "weekStart": "2026-09-28",
+ "weekEnd": "2026-10-04",
+ "theme": "diepzee",
+ "world": "Diepzee-rijk",
+ "name": "De Kraken van de Diepte",
+ "location": "Het Koraalrif",
  "maxHp": 600,
- "hp": 0,
+ "hp": 600,
  "damagePerPoint": 10,
- "totalDamage": 770,
+ "totalDamage": 0,
  "contributions": {
   "michelle": {
-   "hits": 12,
-   "damage": 360
+   "hits": 0,
+   "damage": 0
   },
   "rassell": {
-   "hits": 13,
-   "damage": 410
+   "hits": 0,
+   "damage": 0
   },
   "samen": {
    "hits": 0,
    "damage": 0
   }
  },
- "recent": [
-  {
-   "child": "michelle",
-   "task": "Tanden Poetsen Avond",
-   "points": 3,
-   "damage": 30,
-   "day": "2026-09-27"
-  },
-  {
-   "child": "rassell",
-   "task": "Tanden Poetsen Avond",
-   "points": 3,
-   "damage": 30,
-   "day": "2026-09-27"
-  },
-  {
-   "child": "michelle",
-   "task": "Tanden Poetsen Ochtend",
-   "points": 3,
-   "damage": 30,
-   "day": "2026-09-27"
-  },
-  {
-   "child": "rassell",
-   "task": "Tanden Poetsen Ochtend",
-   "points": 3,
-   "damage": 30,
-   "day": "2026-09-27"
-  },
-  {
-   "child": "michelle",
-   "task": "Tanden Poetsen Avond",
-   "points": 3,
-   "damage": 30,
-   "day": "2026-09-26"
-  }
- ],
- "defeatedAt": "2026-09-26T06:53:00.000+00:00",
- "chestOpenedAt": "2026-09-26T07:06:00.000+00:00",
- "reward": "Filmavond — jullie kiezen samen de film én de snacks.",
- "look": "a colossal armored desert scorpion-crab as big as a building, rust-bronze plated shell, a jagged bone-white crown, huge raised pincers, glowing amber slit eyes, sand pouring off its back",
+ "recent": [],
+ "defeatedAt": null,
+ "chestOpenedAt": null,
+ "reward": "🍟 Samen naar de McDonald's",
+ "look": "a gigantic deep-purple kraken with barnacle-crusted skin and old scars, eight enormous curling tentacles, glowing teal slit eyes, rising out of dark water",
  "tasks": [
   {
-   "id": "3e824147-f877-814e-a6c0-e8dd543ea239",
+   "id": "3e924147-f877-819a-aaa7-d048b7eb3719",
    "child": "michelle",
    "title": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
-   "done": true
+   "done": false
   },
   {
-   "id": "3e824147-f877-8188-b9ab-e82a935c5fb7",
+   "id": "3e924147-f877-81c0-80e1-cf0a8aed1514",
+   "child": "michelle",
+   "title": "Kleren wassen",
+   "points": 3,
+   "damage": 30,
+   "done": false
+  },
+  {
+   "id": "3e924147-f877-8193-893f-e93ddc8fb8c7",
    "child": "rassell",
    "title": "Tanden Poetsen Avond",
    "points": 3,
    "damage": 30,
-   "done": true
+   "done": false
   },
   {
-   "id": "3e824147-f877-8100-b065-c8c098d0f061",
+   "id": "3e924147-f877-8132-a5e0-d7d9667acdbf",
    "child": "michelle",
    "title": "Tanden Poetsen Avond",
    "points": 3,
    "damage": 30,
-   "done": true
+   "done": false
   },
   {
-   "id": "3e824147-f877-81bf-8ab5-ec0d1bcec203",
+   "id": "3e924147-f877-81c5-99a8-cef48ec4b281",
    "child": "rassell",
    "title": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
-   "done": true
+   "done": false
   }
  ]
 }
