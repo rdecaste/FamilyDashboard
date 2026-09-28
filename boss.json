@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updatedAt": "2026-09-28T05:55:44.148Z",
+ "updatedAt": "2026-09-28T18:01:51.772Z",
  "today": "2026-09-28",
  "weekStart": "2026-09-28",
  "weekEnd": "2026-10-04",
@@ -9,13 +9,13 @@
  "name": "De Kraken van de Diepte",
  "location": "Het Koraalrif",
  "maxHp": 600,
- "hp": 510,
+ "hp": 480,
  "damagePerPoint": 10,
- "totalDamage": 90,
+ "totalDamage": 120,
  "contributions": {
   "michelle": {
-   "hits": 2,
-   "damage": 60
+   "hits": 3,
+   "damage": 90
   },
   "rassell": {
    "hits": 1,
@@ -27,6 +27,13 @@
   }
  },
  "recent": [
+  {
+   "child": "michelle",
+   "task": "Kleren wassen",
+   "points": 3,
+   "damage": 30,
+   "day": "2026-09-28"
+  },
   {
    "child": "michelle",
    "task": "Tanden Poetsen Ochtend",
@@ -68,7 +75,7 @@
    "title": "Kleren wassen",
    "points": 3,
    "damage": 30,
-   "done": false
+   "done": true
   },
   {
    "id": "3e924147-f877-8193-893f-e93ddc8fb8c7",
