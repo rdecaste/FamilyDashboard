@@ -1,13 +1,13 @@
 {
  "version": 1,
- "updatedAt": "2026-09-28T18:01:51.772Z",
- "today": "2026-09-28",
+ "updatedAt": "2026-09-29T04:15:13.264Z",
+ "today": "2026-09-29",
  "weekStart": "2026-09-28",
  "weekEnd": "2026-10-04",
  "theme": "diepzee",
  "world": "Diepzee-rijk",
  "name": "De Kraken van de Diepte",
- "location": "Het Koraalrif",
+ "location": "De Kelpjungle",
  "maxHp": 600,
  "hp": 480,
  "damagePerPoint": 10,
@@ -62,23 +62,15 @@
  "look": "a gigantic deep-purple kraken with barnacle-crusted skin and old scars, eight enormous curling tentacles, glowing teal slit eyes, rising out of dark water",
  "tasks": [
   {
-   "id": "3e924147-f877-819a-aaa7-d048b7eb3719",
+   "id": "3ea24147-f877-8132-a472-f3840162c511",
    "child": "michelle",
    "title": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
-   "done": true
+   "done": false
   },
   {
-   "id": "3e924147-f877-81c0-80e1-cf0a8aed1514",
-   "child": "michelle",
-   "title": "Kleren wassen",
-   "points": 3,
-   "damage": 30,
-   "done": true
-  },
-  {
-   "id": "3e924147-f877-8193-893f-e93ddc8fb8c7",
+   "id": "3ea24147-f877-8151-a500-e79cfe241c7a",
    "child": "rassell",
    "title": "Tanden Poetsen Avond",
    "points": 3,
@@ -86,20 +78,28 @@
    "done": false
   },
   {
-   "id": "3e924147-f877-8132-a5e0-d7d9667acdbf",
+   "id": "3ea24147-f877-819c-8820-c743a49051ba",
    "child": "michelle",
    "title": "Tanden Poetsen Avond",
    "points": 3,
    "damage": 30,
-   "done": true
+   "done": false
   },
   {
-   "id": "3e924147-f877-81c5-99a8-cef48ec4b281",
+   "id": "3ea24147-f877-81c9-9b37-ed0cf932fbfa",
+   "child": "rassell",
+   "title": "Kleren wassen",
+   "points": 3,
+   "damage": 30,
+   "done": false
+  },
+  {
+   "id": "3ea24147-f877-818d-9e1a-f22c5c5a4c9b",
    "child": "rassell",
    "title": "Tanden Poetsen Ochtend",
    "points": 3,
    "damage": 30,
-   "done": true
+   "done": false
   }
  ]
 }
