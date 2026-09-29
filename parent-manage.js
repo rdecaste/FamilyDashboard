@@ -2,7 +2,8 @@
 // Every change goes through the Make scenario "Family Dashboard — Proposals & Management",
 // which also republishes catalog.json and answers with the fresh catalog.
 (()=>{
-  const MANAGE_WEBHOOK='https://hook.eu2.make.com/t5o3sctyra256eyzxf8yfc7dzx8f40ab';
+  const ENGINE_URL='https://quest-engine.quest-engine.workers.dev';
+  const MANAGE_WEBHOOK=ENGINE_URL+'/family/manage';
   const DAYS=[['ma','Ma'],['di','Di'],['wo','Wo'],['do','Do'],['vr','Vr'],['za','Za'],['zo','Zo']];
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const $=id=>document.getElementById(id);
@@ -106,7 +107,7 @@
 
   async function showCurrentTreasure(){
     try{
-      const r=await fetch(`boss.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;
+      const r=await fetch(`${ENGINE_URL}/family/boss?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;
       const b=await r.json();if(!b||b.version!==1||!b.reward)return;
       const state=b.chestOpenedAt?'kist geopend':b.defeatedAt?'verslagen, kist nog dicht':'baas nog niet verslagen';
       const el=$('treasure-now');el.textContent=`Deze week (${state}): ${b.reward}`;el.hidden=false;
@@ -173,7 +174,7 @@
   });
 
   async function init(){
-    try{const r=await fetch(`catalog.json?t=${Date.now()}`,{cache:'no-store'});if(r.ok)render(await r.json());}catch(e){}
+    try{const r=await fetch(`${ENGINE_URL}/family/catalog?t=${Date.now()}`,{cache:'no-store'});if(r.ok)render(await r.json());}catch(e){}
     // catalog.json can be a few minutes old, so ask Make for the current state once.
     try{
       const r=await fetch(MANAGE_WEBHOOK,{method:'POST',body:new URLSearchParams({action:'state'})});

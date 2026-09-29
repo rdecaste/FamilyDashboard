@@ -2,7 +2,7 @@
 // catalog.json is written by the Make scenario "Family Dashboard — Proposals & Management".
 // Double taps are blocked here (pending list, recent sends, cooldown) and again in Make.
 (()=>{
-  const MANAGE_WEBHOOK='https://hook.eu2.make.com/t5o3sctyra256eyzxf8yfc7dzx8f40ab';
+  const MANAGE_WEBHOOK='https://quest-engine.quest-engine.workers.dev/family/manage';
   const RECENT_KEY='familyDashboard.recentProposals.v1',RECENT_MS=10*60*1000,COOLDOWN_MS=20000;
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const key=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -23,7 +23,7 @@
   }
   async function loadCatalog(){
     if(busy)return;
-    try{const r=await fetch(`catalog.json?t=${Date.now()}`,{cache:'no-store'});if(r.ok)show(await r.json());}catch(e){}
+    try{const r=await fetch(`https://quest-engine.quest-engine.workers.dev/family/catalog?t=${Date.now()}`,{cache:'no-store'});if(r.ok)show(await r.json());}catch(e){}
   }
   function isDouble(kind,title){
     const k=key(title),type=kind==='reward'?'reward':'task';
