@@ -47,7 +47,7 @@ async function resetItem(button){
   button.textContent='Bezig…';
   message.textContent='';
   try{
-    const r=await fetch(WEBHOOK,{method:'POST',body:new URLSearchParams({taskId,child})});
+    const r=await parentPost(WEBHOOK,{taskId,child});
     if(!r.ok)throw new Error('Reset failed');
     const data=await r.json();
     render(data);
@@ -57,7 +57,7 @@ async function resetItem(button){
     button.disabled=false;
     button.textContent='Terugzetten';
     button.dataset.busy='false';
-    message.textContent='Terugzetten lukte niet. Probeer het nog eens.';
+    message.textContent=err instanceof WrongPasscode?err.message:'Terugzetten lukte niet. Probeer het nog eens.';
     message.className='message error';
   }
 }
@@ -80,7 +80,7 @@ async function disableScreenTime(button){
   button.textContent='Bezig…';
   message.textContent='';
   try{
-    const r=await fetch(SCREEN_WEBHOOK,{method:'POST',body:new URLSearchParams({child})});
+    const r=await parentPost(SCREEN_WEBHOOK,{child});
     if(!r.ok)throw new Error('Screen-time override failed');
     await r.json();
     message.textContent=`${child}: vandaag geen schermtijd.`;
@@ -91,7 +91,7 @@ async function disableScreenTime(button){
     button.disabled=false;
     button.textContent='🚫 Geen schermtijd';
     button.dataset.busy='false';
-    message.textContent='Schermtijd aanpassen lukte niet. Probeer het nog eens.';
+    message.textContent=err instanceof WrongPasscode?err.message:'Schermtijd aanpassen lukte niet. Probeer het nog eens.';
     message.className='message error';
   }
 }

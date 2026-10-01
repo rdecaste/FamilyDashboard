@@ -136,7 +136,7 @@
     const label=button?.textContent;if(button)button.textContent='Bezig…';
     msg.textContent='';msg.className='message';
     try{
-      const r=await fetch(MANAGE_WEBHOOK,{method:'POST',body:new URLSearchParams(params)});
+      const r=await parentPost(MANAGE_WEBHOOK,params);
       if(!r.ok)throw new Error('');
       const data=await r.json();
       render(data);
@@ -145,12 +145,12 @@
       const extra=data.ok&&['approve-task','approve-reward','reject'].includes(params.action)?String(params.extra||'').split(',').filter(Boolean):[];
       for(let i=0;i<extra.length;i++){
         msg.textContent=`Dubbels opruimen… (${i+1} van ${extra.length})`;msg.className='message';
-        try{const x=await fetch(MANAGE_WEBHOOK,{method:'POST',body:new URLSearchParams({action:'reject',id:extra[i]})});if(x.ok)render(await x.json());}catch(e){}
+        try{const x=await parentPost(MANAGE_WEBHOOK,{action:'reject',id:extra[i]});if(x.ok)render(await x.json());}catch(e){}
       }
       if(extra.length){msg.textContent=`${data.message||'Klaar.'} Dubbels opgeruimd.`;msg.className='message success';}
     }catch(err){
       if(button)button.textContent=label;
-      msg.textContent='Dat lukte niet. Probeer het zo nog eens.';msg.className='message error';
+      msg.textContent=err instanceof WrongPasscode?err.message:'Dat lukte niet. Probeer het zo nog eens.';msg.className='message error';
     }finally{
       busy=false;document.body.classList.remove('manage-busy');
     }
