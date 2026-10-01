@@ -1,11 +1,13 @@
 # FamilyDashboard
 
-The family pages, served by GitHub Pages from `main` at https://rdecaste.github.io/FamilyDashboard/:
+The family pages, at https://family.quest-engine.workers.dev (Cloudflare):
 
-- `index.html`: the family dashboard (with the Family Boss and the Sluiskil bridge button)
-- `michelle.html`, `rassell.html`: the children's task pages
-- `parent.html`: the parent page (manage tasks, rewards and proposals)
+- `index.html` (`/`): the family dashboard on the TV (with the Family Boss and the Sluiskil bridge button); public
+- `michelle.html`, `rassell.html` (`/michelle`, `/rassell`): the children's task pages; public
+- `parent.html` (`/parent`): the parent page (manage tasks, rewards and proposals), behind Roy's Cloudflare Access login; its actions also need the family passcode (`parent-auth.js`, the Quest Engine's `FAMILY_PASSCODE`)
 
-Since 28 Sep 2026 the backend is the Quest Engine (Cloudflare Worker, `rdecaste/quest-engine`), replacing the Family Dashboard and Family Boss Make scenarios. The pages read `GET /family/latest`, `/family/boss` and `/family/catalog`, and send actions to `POST /family/complete`, `/reward`, `/reset`, `/screen`, `/manage` and `/boss`. The bridge button asks `GET /bridge`, only when tapped. `latest.json`, `boss.json` and `catalog.json` here are the last files Make published and are no longer updated.
+Since 28 Sep 2026 the backend is the Quest Engine (Cloudflare Worker, `rdecaste/quest-engine`), replacing the Family Dashboard and Family Boss Make scenarios. The pages read `GET /family/latest`, `/family/boss` and `/family/catalog`, and send actions to `POST /family/complete`, `/reward`, `/reset`, `/screen`, `/manage` and `/boss`. The bridge button asks `GET /bridge`, only when tapped.
 
-The morning jobs (chores, rollover, metrics, boss, portrait, family image) and the Sunday posters run in the Worker. How it works: Notion page "⚙️ Quest Engine (Cloudflare Worker)" under Quest log; routes at the top of the Worker's `src/index.js`. `docs/previews/` holds layout screenshots.
+The morning jobs (chores, rollover, metrics, boss, portrait, family image) and the Sunday posters run in the Worker. How it works: `docs/quest-engine.md` in rdecaste/quest-engine; routes at the top of the Worker's `src/index.js`. The data (days, tasks, rewards, chores, treasures, bosses) is in the Quest Engine's D1 database since 1 Oct 2026; rewards, fixed chores and boss settings are edited in D1 Data Studio. `docs/previews/` holds layout screenshots.
+
+A push to `main` deploys it to Cloudflare (Workers Builds); by hand: `npx wrangler deploy`. Only the pages are published (`.assetsignore`). The old `rdecaste.github.io` address forwards here until GitHub Pages is switched off.
