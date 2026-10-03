@@ -3,7 +3,8 @@
 // Reads the "tasks" list in boss.json; draws nothing when boss.json is missing, from
 // another day, or when this week's boss is already defeated.
 // Since 3 Oct 2026 it also draws each kid's own boss score (damage) and a bar towards
-// their 80% of the week (boss.json chores.kids) in the kid's section.
+// their 80% of the week (boss.json chores.kids) in the kid's section, in blue so it
+// reads apart from the boss's own HP bar (green once their part is done).
 (()=>{
   const BOSS_URL='https://quest-engine.quest-engine.workers.dev/family/boss';
   const bare=id=>String(id||'').replace(/-/g,'');
@@ -13,11 +14,11 @@
 .task.done .fb-dmg{opacity:.6}
 .task-name .fb-dmg{margin-left:0;margin-top:6px;font-size:15px}
 .task-name .fb-dmg-line{display:block}
-.fb-kid{margin:8px 0 10px;padding:8px 10px;border-radius:12px;background:rgba(255,138,71,.08);border:1px solid rgba(255,138,71,.28);font-size:14px;line-height:1.3}
+.fb-kid{margin:8px 0 10px;padding:8px 10px;border-radius:12px;background:rgba(79,163,255,.08);border:1px solid rgba(79,163,255,.3);font-size:14px;line-height:1.3}
 .fb-kid-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-.fb-kid-top b{color:#ffb38a;font-variant-numeric:tabular-nums}
+.fb-kid-top b{color:#8cc8ff;font-variant-numeric:tabular-nums}
 .fb-kid-bar{position:relative;height:10px;margin:7px 0 5px;border-radius:999px;background:rgba(255,255,255,.12);overflow:visible}
-.fb-kid-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#ff8a47,#ffd24a);transition:width .6s}
+.fb-kid-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#3d7bff,#5ad1ff);transition:width .6s}
 .fb-kid.ok .fb-kid-fill{background:linear-gradient(90deg,#3fd8a0,#7cf29a)}
 .fb-kid-mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:#fff;opacity:.85;border-radius:2px}
 .fb-kid-sub{display:flex;justify-content:space-between;gap:8px;opacity:.8;font-size:.9em}
