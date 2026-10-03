@@ -100,13 +100,14 @@
       const ch=b.chores,kids=ch&&ch.kids;
       const taak=n=>`${n} taakje${n===1?'':'s'}`;
       const short=kids?['michelle','rassell'].filter(k=>(kids[k]||{}).missing>0):[];
-      const lastHit=ch&&b.hp<=1&&(kids?short.length>0||ch.missing>0:ch.missing>0);
+      const lastHit=!kids&&ch&&b.hp<=1&&ch.missing>0;
       const togo=!lastHit?`nog ± ${left} ta${left===1?'ak':'ken'}`
         :kids&&short.length?`nog ${short.map(k=>`${NAME[k]} ${taak(kids[k].missing)}`).join(' en ')} af voor de laatste klap`
         :`nog ${taak(ch.missing)} af voor de laatste klap`;
-      const rule=kids?` · taakjes deze week: Michelle <b>${kids.michelle.pct}%</b>, Rassell <b>${kids.rassell.pct}%</b> (elk ${ch.need}% nodig)`
+      const rule=kids?` · ieder ${ch.need}% van de week nodig`
         :ch&&ch.total?` · <b>${ch.pct}%</b> taakjes af (${ch.need}% nodig)`:'';
-      $('fb-team').innerHTML=`<span class="fb-total">Samen <b>${nl(b.totalDamage)}</b> schade · ${togo}${rule}</span>`+chip('michelle','#3fd8c2')+chip('rassell','#ffb14a')+(((c.samen||{}).hits||0)?chip('samen','#c9b8ff'):'');
+      // From 3 Oct each kid's own score and bar sit in their own section (boss-tasks.js).
+      $('fb-team').innerHTML=`<span class="fb-total">Samen <b>${nl(b.totalDamage)}</b> schade · ${togo}${rule}</span>`+(kids?'':chip('michelle','#3fd8c2')+chip('rassell','#ffb14a')+(((c.samen||{}).hits||0)?chip('samen','#c9b8ff'):''));
     }else{
       const hits=((c.michelle||{}).hits||0)+((c.rassell||{}).hits||0)+((c.samen||{}).hits||0);
       const next=noon(b.weekStart);next.setUTCDate(next.getUTCDate()+7);
