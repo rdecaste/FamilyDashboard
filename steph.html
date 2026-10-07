@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b12">
+<title>Herinnering voor Roy</title>
+<link rel="stylesheet" href="steph.css?v=1">
+</head>
+<body>
+<!-- Steph's reminders for Roy (7 Oct 2026): each one is an open To-Do tagged
+     Steph in the Quest Engine's D1, which Roy OS shows as "From Steph".
+     Public page; the actions need the family passcode (parent-auth.js). -->
+<main>
+<header>
+<p class="eyebrow">Family Quest</p>
+<h1>Herinnering voor Roy</h1>
+<p class="sub">Komt meteen op Roy's scherm bij "From Steph".</p>
+</header>
+
+<form id="remind" autocomplete="off">
+<label for="text">Wat moet Roy onthouden?</label>
+<textarea id="text" name="text" rows="3" maxlength="140" required placeholder="Bijv. vuilnis buiten zetten"></textarea>
+<small class="counter"><span id="left">140</span> tekens over</small>
+<label for="due">Wanneer? <span class="opt">(mag leeg)</span></label>
+<div class="when">
+<button type="button" class="quick" data-days="0">Vandaag</button>
+<button type="button" class="quick" data-days="1">Morgen</button>
+<input id="due" name="due" type="date">
+</div>
+<button id="send" class="send" type="submit">Versturen</button>
+</form>
+
+<section aria-labelledby="openTitle">
+<h2 id="openTitle">Nog open <span id="count" class="count"></span></h2>
+<ul id="list" class="list"><li class="empty">Laden…</li></ul>
+</section>
+</main>
+<div class="toast" role="status" aria-live="polite"><p id="toast"></p></div>
+<script src="parent-auth.js?v=1"></script>
+<script src="steph.js?v=1"></script>
+</body>
+</html>

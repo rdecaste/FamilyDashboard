@@ -87,3 +87,6 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 @media(max-width:560px){.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.tabs button{font-size:13px}.tab-panel .child-head{flex-direction:row;align-items:center}.tab-panel .screen-off{width:auto;padding:10px 12px;font-size:13px}.tab-panel .reset{width:auto;padding:10px 12px;font-size:13px}.tab-panel .task{grid-template-columns:minmax(0,1fr) auto}}
 .dup-tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:99px;background:#fc818133;color:#fc8181;font-size:12px;font-weight:800;vertical-align:middle}
 .manage-row-edit.proposal{border-color:#f6c45333}
+
+/* Header links: Steph's reminder page and the dashboard (7 Oct 2026). */
+.top-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}

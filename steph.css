@@ -1,0 +1,25 @@
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#080b12;color:#f7f8fb;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+body{padding:max(20px,env(safe-area-inset-top)) 16px max(96px,env(safe-area-inset-bottom))}
+main{max-width:560px;margin:0 auto}
+.eyebrow{margin:0 0 6px;color:#aab3c4;text-transform:uppercase;letter-spacing:.1em;font-size:12px}
+h1{margin:0;font-size:clamp(28px,8vw,40px);line-height:1.1}
+.sub{margin:8px 0 22px;color:#aab3c4;font-size:15px}
+form{display:grid;gap:8px;background:#111722;border:1px solid #ffffff14;border-radius:20px;padding:18px}
+label{font-weight:700;font-size:15px;margin-top:6px}.opt{color:#aab3c4;font-weight:500}
+textarea,input[type=date]{width:100%;font:500 17px/1.35 inherit;font-family:inherit;color:#fff;background:#080b12;border:1px solid #ffffff2c;border-radius:12px;padding:12px;color-scheme:dark}
+textarea{resize:vertical;min-height:84px}textarea:focus,input:focus{outline:2px solid #f6c453;outline-offset:1px}
+.counter{justify-self:end;color:#aab3c4;font-size:12px;margin-top:-2px}
+.when{display:grid;grid-template-columns:1fr 1fr;gap:8px}.when input{grid-column:1/-1}
+button{appearance:none;font:700 16px/1 inherit;font-family:inherit;border-radius:12px;cursor:pointer;min-height:46px}
+.quick{border:1px solid #ffffff2c;background:#1b2231;color:#f7f8fb}.quick.on{background:#f6c453;border-color:#f6c453;color:#1a1300}
+.send{margin-top:10px;border:0;background:#68d391;color:#08150e;font-size:18px;min-height:54px}
+button:disabled{opacity:.5;cursor:wait}
+h2{margin:30px 0 12px;font-size:20px}.count{color:#aab3c4;font-weight:500;font-size:16px}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.list li{display:flex;align-items:center;gap:12px;background:#111722;border:1px solid #ffffff12;border-radius:16px;padding:12px 12px 12px 16px}
+.list .what{flex:1;min-width:0;overflow-wrap:anywhere}.list .what small{display:block;margin-top:3px;color:#aab3c4;font-size:13px}.list .what small.late{color:#fc8181}
+.list .done{flex:0 0 auto;border:1px solid #68d39166;background:#68d39118;color:#68d391;padding:0 14px;min-height:40px;font-size:14px}
+.list li.empty{justify-content:center;color:#aab3c4;background:transparent;border-style:dashed}
+.toast{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(520px,calc(100% - 32px));pointer-events:none}
+.toast p{margin:0;padding:12px 16px;border-radius:14px;background:#1b2231;border:1px solid #ffffff22;box-shadow:0 12px 30px #0008;text-align:center;font-weight:600}.toast p:empty{display:none}.toast p.error{border-color:#fc818166;color:#ffd9dc}

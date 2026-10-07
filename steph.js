@@ -1,0 +1,68 @@
+// Steph's reminders for Roy: POST /family/remind on the Quest Engine
+// (action add, list, done) with the family passcode from parent-auth.js.
+(function(){
+  const URL_REMIND='https://quest-engine.quest-engine.workers.dev/family/remind';
+  const $=id=>document.getElementById(id);
+  const form=$('remind'),text=$('text'),due=$('due'),send=$('send'),list=$('list'),toastEl=$('toast');
+  let timer;
+  function toast(msg,error){
+    toastEl.textContent=msg;toastEl.className=error?'error':'';
+    clearTimeout(timer);timer=setTimeout(()=>{toastEl.textContent='';},5000);
+  }
+  const dayOf=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+  function whenLabel(day){
+    if(!day)return '';
+    if(day===dayOf(0))return 'vandaag';
+    if(day===dayOf(1))return 'morgen';
+    const [y,m,d]=day.split('-').map(Number);
+    return new Date(y,m-1,d).toLocaleDateString('nl-NL',{weekday:'short',day:'numeric',month:'short'});
+  }
+  function render(reminders){
+    list.textContent='';
+    $('count').textContent=reminders.length?'('+reminders.length+')':'';
+    if(!reminders.length){const li=document.createElement('li');li.className='empty';li.textContent='Niets open. 🎉';list.append(li);return;}
+    for(const r of reminders){
+      const li=document.createElement('li');
+      const what=document.createElement('div');what.className='what';what.textContent=r.task;
+      if(r.due){const s=document.createElement('small');s.textContent='📅 '+whenLabel(r.due);if(r.due<dayOf(0))s.className='late';what.append(s);}
+      const b=document.createElement('button');b.type='button';b.className='done';b.textContent='klaar';
+      b.addEventListener('click',()=>act({action:'done',id:r.id}));
+      li.append(what,b);list.append(li);
+    }
+  }
+  // One call to the engine; answers its reminders list, or shows why not.
+  async function act(params){
+    [send,...list.querySelectorAll('button')].forEach(b=>b.disabled=true);
+    try{
+      const r=await parentPost(URL_REMIND,params);
+      const body=await r.json().catch(()=>({}));
+      if(Array.isArray(body.reminders))render(body.reminders);
+      if(!r.ok||!body.ok){toast(body.message||'Dat lukte niet. Probeer het zo nog eens.',true);return false;}
+      return body;
+    }catch(err){
+      if(err instanceof WrongPasscode){toast(err.message,true);if(params.action==='list')list.innerHTML='<li class="empty">Vul de gezinscode in om de lijst te zien.</li>';}
+      else toast('Geen verbinding. Probeer het zo nog eens.',true);
+      return false;
+    }finally{
+      [send,...list.querySelectorAll('button')].forEach(b=>b.disabled=false);
+    }
+  }
+  document.querySelectorAll('.quick').forEach(b=>b.addEventListener('click',()=>{
+    const day=dayOf(Number(b.dataset.days));
+    due.value=due.value===day?'':day;
+    syncQuick();
+  }));
+  function syncQuick(){document.querySelectorAll('.quick').forEach(b=>b.classList.toggle('on',due.value===dayOf(Number(b.dataset.days))));}
+  due.addEventListener('change',syncQuick);
+  text.addEventListener('input',()=>{$('left').textContent=140-text.value.length;});
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const t=text.value.trim();
+    if(!t){text.focus();return;}
+    const ok=await act({action:'add',text:t,due:due.value});
+    if(ok){toast('✅ Verstuurd naar Roy');form.reset();$('left').textContent='140';syncQuick();}
+  });
+  act({action:'list'});
+  // Keep the list fresh when she comes back to the page.
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')act({action:'list'});});
+})();
