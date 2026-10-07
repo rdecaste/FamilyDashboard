@@ -12,7 +12,7 @@ textarea{resize:vertical;min-height:84px}textarea:focus,input:focus{outline:2px 
 .counter{justify-self:end;color:#aab3c4;font-size:12px;margin-top:-2px}
 .when{display:grid;grid-template-columns:1fr 1fr;gap:8px}.when input{grid-column:1/-1}
 button{appearance:none;font:700 16px/1 inherit;font-family:inherit;border-radius:12px;cursor:pointer;min-height:46px}
-.quick{border:1px solid #ffffff2c;background:#1b2231;color:#f7f8fb}.quick.on{background:#f6c453;border-color:#f6c453;color:#1a1300}
+.quick{padding:0 14px;border:1px solid #ffffff2c;background:#1b2231;color:#f7f8fb}.quick.on{background:#f6c453;border-color:#f6c453;color:#1a1300}
 .send{margin-top:10px;border:0;background:#68d391;color:#08150e;font-size:18px;min-height:54px}
 button:disabled{opacity:.5;cursor:wait}
 h2{margin:30px 0 12px;font-size:20px}.count{color:#aab3c4;font-weight:500;font-size:16px}
