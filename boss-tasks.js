@@ -5,6 +5,7 @@
 // Since 3 Oct 2026 it also draws each kid's own boss score (damage) and a bar towards
 // their 80% of the week (boss.json chores.kids) in the kid's section, in blue so it
 // reads apart from the boss's own HP bar (green once their part is done).
+// Since 7 Oct it shows the damage still needed, not a number of chores (too predictable).
 (()=>{
   const BOSS_URL='https://quest-engine.quest-engine.workers.dev/family/boss';
   const bare=id=>String(id||'').replace(/-/g,'');
@@ -34,7 +35,7 @@
   // Each kid's own part of the boss: damage done and a bar to 80% of their week.
   function kidHtml(c,need){
     const pct=Math.max(0,Math.min(100,c.pct||0)),ok=!(c.hpLeft>0);
-    const sub=ok?'✓ jouw deel van de baas is klaar':`nog ± ${c.missing} taakje${c.missing===1?'':'s'} voor jouw deel`;
+    const sub=ok?'✓ jouw deel van de baas is klaar':`nog ${c.hpLeft} schade voor jouw deel`;
     return `<div class="fb-kid${ok?' ok':''}"><div class="fb-kid-top"><span>⚔ Weekbaas</span><span><b>${c.damage||0}</b> schade</span></div>`+
       `<div class="fb-kid-bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Taakjes deze week"><div class="fb-kid-fill" style="width:${pct}%"></div><i class="fb-kid-mark" style="left:${need}%"></i></div>`+
       `<div class="fb-kid-sub"><span>${pct}% van je week · ${need}% nodig</span><span>${sub}</span></div></div>`;
@@ -46,7 +47,7 @@
       const c=kids&&kids[key];
       let el=host.parentNode.querySelector(':scope > .fb-kid');
       if(!c){if(el)el.remove();return}
-      const sig=[c.damage,c.pct,c.hpLeft,c.missing,need].join('|');
+      const sig=[c.damage,c.pct,c.hpLeft,need].join('|');
       if(el&&el.dataset.sig===sig)return;
       if(el)el.remove();
       host.insertAdjacentHTML(where,kidHtml(c,need));

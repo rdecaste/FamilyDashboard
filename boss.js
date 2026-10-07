@@ -93,21 +93,14 @@
       $('fb-fill').style.width=pct+'%';$('fb-ghost').style.width=pct+'%';
       $('fb-hp').textContent=nl(b.hp);$('fb-max').textContent=nl(b.maxHp);
       const bar=$('fb-bar');bar.setAttribute('aria-valuenow',b.hp);bar.setAttribute('aria-valuemax',b.maxHp);bar.classList.toggle('low',pct>0&&pct<=25);
-      const perTask=(b.damagePerPoint||10)*3,left=Math.ceil(b.hp/perTask);
-      const chip=(k,col)=>{const n=(c[k]||{}).hits||0;return `<span class="fb-chip"><i style="background:${col}"></i>${NAME[k]} · ${n} treffer${n===1?'':'s'}</span>`};
       // Since 2 Oct 2026 the boss only falls once 80% of the week's chores are done (b.chores).
       // From 5 Oct (b.chores.kids) it is 80% of the whole week, for each kid as well.
+      // Since 7 Oct no count of chores still needed is shown (Roy: too predictable); HP and damage stay.
       const ch=b.chores,kids=ch&&ch.kids;
-      const taak=n=>`${n} taakje${n===1?'':'s'}`;
-      const short=kids?['michelle','rassell'].filter(k=>(kids[k]||{}).missing>0):[];
-      const lastHit=!kids&&ch&&b.hp<=1&&ch.missing>0;
-      const togo=!lastHit?`nog ± ${left} ta${left===1?'ak':'ken'}`
-        :kids&&short.length?`nog ${short.map(k=>`${NAME[k]} ${taak(kids[k].missing)}`).join(' en ')} af voor de laatste klap`
-        :`nog ${taak(ch.missing)} af voor de laatste klap`;
       const rule=kids?` · ieder ${ch.need}% van de week nodig`
         :ch&&ch.total?` · <b>${ch.pct}%</b> taakjes af (${ch.need}% nodig)`:'';
       // From 3 Oct each kid's own score and bar sit in their own section (boss-tasks.js).
-      $('fb-team').innerHTML=`<span class="fb-total">Samen <b>${nl(b.totalDamage)}</b> schade · ${togo}${rule}</span>`+(kids?'':chip('michelle','#3fd8c2')+chip('rassell','#ffb14a')+(((c.samen||{}).hits||0)?chip('samen','#c9b8ff'):''));
+      $('fb-team').innerHTML=`<span class="fb-total">Samen <b>${nl(b.totalDamage)}</b> schade${rule}</span>`+(kids?'':chip('michelle','#3fd8c2')+chip('rassell','#ffb14a')+(((c.samen||{}).hits||0)?chip('samen','#c9b8ff'):''));
     }else{
       const hits=((c.michelle||{}).hits||0)+((c.rassell||{}).hits||0)+((c.samen||{}).hits||0);
       const next=noon(b.weekStart);next.setUTCDate(next.getUTCDate()+7);
