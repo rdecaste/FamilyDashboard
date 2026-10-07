@@ -40,7 +40,7 @@
       if(!r.ok||!body.ok){toast(body.message||'Dat lukte niet. Probeer het zo nog eens.',true);return false;}
       return body;
     }catch(err){
-      if(err instanceof WrongPasscode){toast(err.message,true);if(params.action==='list')list.innerHTML='<li class="empty">Vul de gezinscode in om de lijst te zien.</li>';}
+      if(err instanceof WrongPasscode){toast(err.message,true);if(params.action==='list')askCode();}
       else toast('Geen verbinding. Probeer het zo nog eens.',true);
       return false;
     }finally{
@@ -62,7 +62,16 @@
     const ok=await act({action:'add',text:t,due:due.value});
     if(ok){toast('✅ Verstuurd naar Roy');form.reset();$('left').textContent='140';syncQuick();}
   });
-  act({action:'list'});
+  // The passcode is asked by a tap, not on load: a prompt on load leaves the page blank behind it.
+  const hasCode=()=>{try{return !!localStorage.getItem(FAMILY_PASSCODE_KEY);}catch(e){return false;}};
+  function askCode(){
+    list.textContent='';$('count').textContent='';
+    const li=document.createElement('li');li.className='empty';
+    const b=document.createElement('button');b.type='button';b.className='quick';b.textContent='🔑 Gezinscode invullen';
+    b.addEventListener('click',()=>act({action:'list'}));
+    li.append(b);list.append(li);
+  }
+  if(hasCode())act({action:'list'});else askCode();
   // Keep the list fresh when she comes back to the page.
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')act({action:'list'});});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&hasCode())act({action:'list'});});
 })();
