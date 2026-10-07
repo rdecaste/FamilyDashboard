@@ -7,13 +7,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ouderpaneel · Family Quest</title>
 <link rel="stylesheet" href="child-app.css?v=3">
-<link rel="stylesheet" href="parent.css?v=9">
+<link rel="stylesheet" href="parent.css?v=12">
+<link rel="stylesheet" href="remind.css?v=1">
 </head>
 <body>
 <main>
 <header class="top">
 <div><p class="eyebrow">Family Quest</p><h1>Ouderpaneel</h1><p class="updated">Bijgewerkt <span id="updated">—</span> · <span id="completedCount">0</span> vandaag afgevinkt</p></div>
-<div class="top-links"><a class="dashboard-link" href="steph" title="Steph's herinneringen voor Roy">📝 Steph</a><a class="dashboard-link" href="./">Dashboard</a></div>
+<a class="dashboard-link" href="./">Dashboard</a>
 </header>
 
 <section class="overview" aria-label="Overzicht">
@@ -24,7 +25,7 @@
 </section>
 
 <nav class="tabs" role="tablist" aria-label="Onderdelen">
-<button type="button" role="tab" data-tab="rassell" class="t-rassell"><span>🧒</span>Rassell<span class="badge" data-badge="Rassell" hidden></span></button><button type="button" role="tab" data-tab="michelle" class="t-michelle"><span>👧</span>Michelle<span class="badge" data-badge="Michelle" hidden></span></button><button type="button" role="tab" data-tab="beide" class="t-beide"><span>👫</span>Beide</button>
+<button type="button" role="tab" data-tab="rassell" class="t-rassell"><span>🧒</span>Rassell<span class="badge" data-badge="Rassell" hidden></span></button><button type="button" role="tab" data-tab="michelle" class="t-michelle"><span>👧</span>Michelle<span class="badge" data-badge="Michelle" hidden></span></button><button type="button" role="tab" data-tab="beide" class="t-beide"><span>👫</span>Beide</button><button type="button" role="tab" data-tab="steph" class="t-steph"><span>📝</span>Steph<span class="badge" data-remind-badge hidden></span></button>
 </nav>
 
 <div class="tab-panel p-rassell" role="tabpanel" data-panel="rassell">
@@ -156,12 +157,33 @@
 </section>
 </div>
 
+<div class="tab-panel p-steph" role="tabpanel" data-panel="steph" hidden>
+<section class="block remind" data-toast="manage-message">
+<p class="manage-note">Herinneringen voor Roy. Ze komen op Roy OS bij From Steph; Steph heeft ook haar eigen pagina: <a href="steph">/steph</a>.</p>
+<form autocomplete="off">
+<label for="remindText">Wat moet Roy onthouden?</label>
+<textarea id="remindText" name="text" rows="3" maxlength="140" required placeholder="Bijv. vuilnis buiten zetten"></textarea>
+<small class="counter"><span class="left">140</span> tekens over</small>
+<label for="remindDue">Wanneer? <span class="opt">(mag leeg)</span></label>
+<div class="when">
+<button type="button" class="quick" data-days="0">Vandaag</button>
+<button type="button" class="quick" data-days="1">Morgen</button>
+<input id="remindDue" name="due" type="date">
+</div>
+<button class="send" type="submit">Versturen</button>
+</form>
+<h2>Nog open <span class="count"></span></h2>
+<ul class="list"><li class="empty">Laden…</li></ul>
+</section>
+</div>
+
 <div class="toasts"><p id="message" class="message" aria-live="polite"></p><p id="manage-message" class="message" aria-live="polite"></p></div>
 </main>
 <script src="bridge-status.js"></script>
 <script src="parent-auth.js?v=1"></script>
 <script src="parent.js?v=5"></script>
 <script src="parent-manage.js?v=8"></script>
-<script src="parent-tabs.js?v=2"></script>
+<script src="remind.js?v=1"></script>
+<script src="parent-tabs.js?v=3"></script>
 </body>
 </html>

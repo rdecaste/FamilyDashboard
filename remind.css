@@ -1,0 +1,17 @@
+/* Steph's reminders for Roy: the form and the list, on /steph and in the parent page's Steph tab (remind.js). */
+.remind form{display:grid;gap:8px;background:#111722;border:1px solid #ffffff14;border-radius:20px;padding:18px}
+.remind label{font-weight:700;font-size:15px;margin-top:6px}.remind .opt{color:#aab3c4;font-weight:500}
+.remind textarea,.remind input[type=date]{width:100%;font:500 17px/1.35 system-ui;font-family:inherit;color:#fff;background:#080b12;border:1px solid #ffffff2c;border-radius:12px;padding:12px;color-scheme:dark}
+.remind textarea{resize:vertical;min-height:84px}.remind textarea:focus,.remind input:focus{outline:2px solid #f6c453;outline-offset:1px}
+.remind .counter{justify-self:end;color:#aab3c4;font-size:12px;margin-top:-2px}
+.remind .when{display:grid;grid-template-columns:1fr 1fr;gap:8px}.remind .when input{grid-column:1/-1}
+.remind button{appearance:none;font:700 16px/1 system-ui;font-family:inherit;border-radius:12px;cursor:pointer;min-height:46px}
+.remind .quick{padding:0 14px;border:1px solid #ffffff2c;background:#1b2231;color:#f7f8fb}.remind .quick.on{background:#f6c453;border-color:#f6c453;color:#1a1300}
+.remind .send{margin-top:10px;border:0;background:#68d391;color:#08150e;font-size:18px;min-height:54px}
+.remind button:disabled{opacity:.5;cursor:wait}
+.remind h2{margin:30px 0 12px;font-size:20px}.remind .count{color:#aab3c4;font-weight:500;font-size:16px}
+.remind .list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.remind .list li{display:flex;align-items:center;gap:12px;background:#111722;border:1px solid #ffffff12;border-radius:16px;padding:12px 12px 12px 16px}
+.remind .what{flex:1;min-width:0;overflow-wrap:anywhere}.remind .what small{display:block;margin-top:3px;color:#aab3c4;font-size:13px}.remind .what small.late{color:#fc8181}
+.remind .done{flex:0 0 auto;border:1px solid #68d39166;background:#68d39118;color:#68d391;padding:0 14px;min-height:40px;font-size:14px}
+.remind .list li.empty{justify-content:center;color:#aab3c4;background:transparent;border-style:dashed}

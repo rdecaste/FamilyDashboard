@@ -7,7 +7,7 @@
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}};
   const save=patch=>{try{localStorage.setItem(KEY,JSON.stringify({...read(),...patch}));}catch(e){}};
   // Old links pointed at sections; map them to the tab that holds them.
-  const HASH={rassell:'rassell',michelle:'michelle',beide:'beide',beloningen:'beide',baasschat:'beide',brug:'beide'};
+  const HASH={rassell:'rassell',michelle:'michelle',beide:'beide',beloningen:'beide',baasschat:'beide',brug:'beide',steph:'steph'};
 
   function show(name,remember=true){
     if(!names.includes(name))name=names[0];

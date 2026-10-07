@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080b12">
 <title>Herinnering voor Roy</title>
-<link rel="stylesheet" href="steph.css?v=2">
+<link rel="stylesheet" href="steph.css?v=3">
+<link rel="stylesheet" href="remind.css?v=1">
 </head>
 <body>
 <!-- Steph's reminders for Roy (7 Oct 2026): each one is an open To-Do tagged
@@ -18,26 +19,25 @@
 <p class="sub">Komt meteen op Roy's scherm bij "From Steph".</p>
 </header>
 
-<form id="remind" autocomplete="off">
-<label for="text">Wat moet Roy onthouden?</label>
-<textarea id="text" name="text" rows="3" maxlength="140" required placeholder="Bijv. vuilnis buiten zetten"></textarea>
-<small class="counter"><span id="left">140</span> tekens over</small>
-<label for="due">Wanneer? <span class="opt">(mag leeg)</span></label>
+<section class="remind" data-toast="toast">
+<form autocomplete="off">
+<label for="remindText">Wat moet Roy onthouden?</label>
+<textarea id="remindText" name="text" rows="3" maxlength="140" required placeholder="Bijv. vuilnis buiten zetten"></textarea>
+<small class="counter"><span class="left">140</span> tekens over</small>
+<label for="remindDue">Wanneer? <span class="opt">(mag leeg)</span></label>
 <div class="when">
 <button type="button" class="quick" data-days="0">Vandaag</button>
 <button type="button" class="quick" data-days="1">Morgen</button>
-<input id="due" name="due" type="date">
+<input id="remindDue" name="due" type="date">
 </div>
-<button id="send" class="send" type="submit">Versturen</button>
+<button class="send" type="submit">Versturen</button>
 </form>
-
-<section aria-labelledby="openTitle">
-<h2 id="openTitle">Nog open <span id="count" class="count"></span></h2>
-<ul id="list" class="list"><li class="empty">Laden…</li></ul>
+<h2>Nog open <span class="count"></span></h2>
+<ul class="list"><li class="empty">Laden…</li></ul>
 </section>
 </main>
 <div class="toast" role="status" aria-live="polite"><p id="toast"></p></div>
 <script src="parent-auth.js?v=1"></script>
-<script src="steph.js?v=2"></script>
+<script src="remind.js?v=1"></script>
 </body>
 </html>
