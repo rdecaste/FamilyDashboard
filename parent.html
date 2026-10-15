@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ouderpaneel · Family Quest</title>
 <link rel="stylesheet" href="child-app.css?v=3">
-<link rel="stylesheet" href="parent.css?v=13">
+<link rel="stylesheet" href="parent.css?v=14">
 <link rel="stylesheet" href="remind.css?v=1">
 </head>
 <body>
@@ -50,12 +50,12 @@
 </section>
 <section class="block manage">
 <details class="fold" data-fold="vast-rassell"><summary><h2>🔁 Vaste taakjes <span class="count" data-count="recurring" data-person="Rassell"></span></h2></summary>
-<p class="manage-note">Worden elke ochtend om 05:30 klaargezet op de gekozen dagen.</p>
+<p class="manage-note">Worden elke ochtend om 05:30 klaargezet op de gekozen dagen. 🔥 Extra met "Hele week": een extra klusje dat de hele week openstaat.</p>
 <div class="manage-list" data-list="recurring" data-person="Rassell"></div>
 <details class="add-toggle"><summary>＋ Nieuw vast taakje</summary>
 <form class="manage-card add" data-kind="chore">
 <div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option selected>Rassell</option><option>Michelle</option><option>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label></div>
-<div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label></div>
+<div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label><label class="week-pick" title="Extra klusje voor de hele week: zichtbaar van maandag tot zondag"><input type="checkbox" name="days" value="week">Hele week</label></div>
 <div class="card-actions"><button class="ok" data-act="chore-save">Toevoegen</button></div>
 </form>
 </details>
@@ -85,12 +85,12 @@
 </section>
 <section class="block manage">
 <details class="fold" data-fold="vast-michelle"><summary><h2>🔁 Vaste taakjes <span class="count" data-count="recurring" data-person="Michelle"></span></h2></summary>
-<p class="manage-note">Worden elke ochtend om 05:30 klaargezet op de gekozen dagen.</p>
+<p class="manage-note">Worden elke ochtend om 05:30 klaargezet op de gekozen dagen. 🔥 Extra met "Hele week": een extra klusje dat de hele week openstaat.</p>
 <div class="manage-list" data-list="recurring" data-person="Michelle"></div>
 <details class="add-toggle"><summary>＋ Nieuw vast taakje</summary>
 <form class="manage-card add" data-kind="chore">
 <div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option>Rassell</option><option selected>Michelle</option><option>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label></div>
-<div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label></div>
+<div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label><label class="week-pick" title="Extra klusje voor de hele week: zichtbaar van maandag tot zondag"><input type="checkbox" name="days" value="week">Hele week</label></div>
 <div class="card-actions"><button class="ok" data-act="chore-save">Toevoegen</button></div>
 </form>
 </details>
@@ -99,6 +99,7 @@
 </div>
 
 <div class="tab-panel p-beide" role="tabpanel" data-panel="beide" hidden>
+<section class="block" data-extras></section>
 <section class="block manage">
 <details class="fold" data-fold="planned-beide" open><summary><h2>🧹 Samen taakjes vandaag en morgen <span class="count" data-count="planned" data-person="Beide"></span></h2></summary>
 <div class="manage-list" data-list="planned" data-person="Beide"></div>
@@ -112,12 +113,12 @@
 </section>
 <section class="block manage">
 <details class="fold" data-fold="vast-beide"><summary><h2>🔁 Vaste taakjes samen <span class="count" data-count="recurring" data-person="Beide"></span></h2></summary>
-<p class="manage-note">Worden elke ochtend om 05:30 klaargezet op de gekozen dagen.</p>
+<p class="manage-note">Worden elke ochtend om 05:30 klaargezet op de gekozen dagen. 🔥 Extra met "Hele week": een extra klusje dat de hele week openstaat.</p>
 <div class="manage-list" data-list="recurring" data-person="Beide"></div>
 <details class="add-toggle"><summary>＋ Nieuw vast taakje</summary>
 <form class="manage-card add" data-kind="chore">
 <div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option>Rassell</option><option>Michelle</option><option selected>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label></div>
-<div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label></div>
+<div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label><label class="week-pick" title="Extra klusje voor de hele week: zichtbaar van maandag tot zondag"><input type="checkbox" name="days" value="week">Hele week</label></div>
 <div class="card-actions"><button class="ok" data-act="chore-save">Toevoegen</button></div>
 </form>
 </details>
@@ -180,9 +181,10 @@
 </main>
 <script src="bridge-status.js"></script>
 <script src="parent-auth.js?v=1"></script>
-<script src="parent.js?v=5"></script>
-<script src="parent-manage.js?v=8"></script>
+<script src="parent.js?v=6"></script>
+<script src="parent-manage.js?v=9"></script>
 <script src="remind.js?v=1"></script>
 <script src="parent-tabs.js?v=3"></script>
+<script src="extras.js?v=1"></script>
 </body>
 </html>

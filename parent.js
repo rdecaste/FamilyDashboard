@@ -23,6 +23,7 @@ function render(data){let count=0;for(const [key,name] of KIDS){const child=data
   openEls[key].innerHTML=open.length?`<p class="list-label">Nog te doen (${open.length})</p><div class="chips">${open.map(t=>`<span class="chip">${escapeHtml(t.title)}</span>`).join('')}</div>`:'<p class="list-label all-done">Niets meer open 🎉</p>';
   const rows=[...tasks.map(t=>itemHtml(t,name,false)),...rewards.map(t=>itemHtml(t,name,true))];els[key].innerHTML=(rows.length?`<p class="list-label">Gedaan (${rows.length})</p>`+rows.join(''):'<div class="empty small">Nog niets afgevinkt</div>');
   const screenButton=document.querySelector(`.screen-off[data-child="${name}"]`);if(screenButton){const off=String(child.screenTime||'').toLowerCase()==='no';screenButton.disabled=off;screenButton.textContent=off?'🚫 Geen schermtijd ✓':'🚫 Geen schermtijd';screenButton.dataset.busy='false';}}
+  if(window.FamilyExtras)FamilyExtras.render(data);
   document.getElementById('completedCount').textContent=count;document.getElementById('updated').textContent=data.updatedAt?new Date(data.updatedAt).toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}):'—';}
 
 // Top summary: the weekly boss, from boss.json.

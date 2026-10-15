@@ -14,7 +14,7 @@
   const whoSelect=sel=>`<select name="person">${opt('Rassell','Rassell',sel)}${opt('Michelle','Michelle',sel)}${opt('Beide','Beide',sel)}</select>`;
   const levelKey=l=>String(l||'').includes('Extra')?'extra':'standaard';
   const levelSelect=sel=>`<select name="level">${opt('standaard','⚡ Standaard (3)',sel)}${opt('extra','🔥 Extra (5)',sel)}</select>`;
-  const dayBoxes=sel=>`<div class="day-picks">${DAYS.map(([v,l])=>`<label><input type="checkbox" name="days" value="${v}"${(sel||[]).includes(v)?' checked':''}>${l}</label>`).join('')}</div>`;
+  const dayBoxes=sel=>`<div class="day-picks">${[...DAYS,['week','Hele week']].map(([v,l])=>`<label${v==='week'?' class="week-pick"':''}><input type="checkbox" name="days" value="${v}"${(sel||[]).includes(v)?' checked':''}>${l}</label>`).join('')}</div>`;
   const levelLabel=l=>String(l||'').includes('Extra')?'🔥 Extra':'⚡ Standaard';
   const dayLabel=d=>d===catalog?.today?'Vandaag':d===catalog?.tomorrow?'Morgen':d;
   // The Ouderpaneel has a tab per person: Rassell, Michelle and Beide (chores for both).
@@ -28,7 +28,7 @@
       const count=document.querySelector(`[data-count="${kind}"][data-person="${p}"]`);if(count)count.textContent=list.length?`(${list.length})`:'';
     }
   }
-  const daysLabel=ds=>ds.length===7?'Elke dag':ds.map(d=>DAYS.find(x=>x[0]===d)?.[1]||d).join(' · ');
+  const daysLabel=ds=>ds.includes('week')?'Hele week (extra klusje)':ds.length===7?'Elke dag':ds.map(d=>DAYS.find(x=>x[0]===d)?.[1]||d).join(' · ');
 
   function render(c){
     catalog=c;

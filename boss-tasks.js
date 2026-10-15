@@ -13,8 +13,8 @@
   document.head.insertAdjacentHTML('beforeend',`<style>
 .fb-dmg{display:inline-block;margin-left:.5em;padding:.05em .5em;border-radius:999px;background:rgba(255,138,71,.14);border:1px solid rgba(255,138,71,.4);color:#ffb38a;font-size:.78em;font-weight:800;line-height:1.35;white-space:nowrap;vertical-align:.08em;font-variant-numeric:tabular-nums;text-decoration:none}
 .task.done .fb-dmg{opacity:.6}
-.task-name .fb-dmg{margin-left:0;margin-top:6px;font-size:15px}
-.task-name .fb-dmg-line{display:block}
+.task-name .fb-dmg{margin-left:.35em;font-size:.6em;vertical-align:.15em}
+.task-name .fb-dmg-line{display:inline}
 .fb-kid{margin:8px 0 10px;padding:8px 10px;border-radius:12px;background:rgba(79,163,255,.08);border:1px solid rgba(79,163,255,.3);font-size:14px;line-height:1.3}
 .fb-kid-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
 .fb-kid-top b{color:#8cc8ff;font-variant-numeric:tabular-nums}
@@ -25,6 +25,8 @@
 .fb-kid-sub{display:flex;justify-content:space-between;gap:8px;opacity:.8;font-size:.9em}
 </style>`);
   let tasks=[],boss=null;
+  // A chore's title without its badges (+points, ⚔): the element's own text only.
+  const ownText=el=>[...el.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim();
   const NAMES={michelle:'Michelle',rassell:'Rassell'};
 
   function damageFor(key,title,id){
@@ -65,7 +67,7 @@
       for(const row of card.querySelectorAll('.tasks .task')){
         const span=row.querySelector('span:last-of-type');if(!span)continue;
         const old=span.querySelector('.fb-dmg');
-        const title=(old?span.textContent.replace(old.textContent,''):span.textContent).trim();
+        const title=ownText(span);
         const t=tasks.length&&damageFor(key,title);
         if(old&&(!t||old.textContent!==`⚔ ${t.damage}`))old.remove();
         if(t&&!span.querySelector('.fb-dmg'))span.insertAdjacentHTML('beforeend',badge(t,false));
@@ -76,7 +78,7 @@
     for(const row of document.querySelectorAll('#tasks .task')){
       const name=row.querySelector('.task-name'),btn=row.querySelector('[data-task-id]');if(!name)continue;
       const old=name.querySelector('.fb-dmg-line');
-      const title=(old?name.textContent.replace(old.textContent,''):name.textContent).trim();
+      const title=ownText(name);
       const t=tasks.length&&damageFor(key,title,btn&&btn.dataset.taskId);
       if(old&&(!t||!old.textContent.includes(`⚔ ${t.damage} `)))old.remove();
       if(t&&!name.querySelector('.fb-dmg-line'))name.insertAdjacentHTML('beforeend',`<span class="fb-dmg-line">${badge(t,true)}</span>`);
@@ -85,7 +87,7 @@
   let queued=false;
   const schedule=()=>{if(queued)return;queued=true;setTimeout(()=>{queued=false;annotate();if(typeof window.scheduleFit==='function')window.scheduleFit()},0)};
   // The pages redraw their task lists on every refresh; put the badges back each time.
-  new MutationObserver(muts=>{if(muts.some(m=>[...m.addedNodes].some(n=>!(n.classList&&(n.classList.contains('fb-dmg')||n.classList.contains('fb-dmg-line')||n.classList.contains('fb-kid'))))))schedule()})
+  new MutationObserver(muts=>{if(muts.some(m=>!(m.target.closest&&m.target.closest('.xc'))&&[...m.addedNodes].some(n=>!(n.classList&&(n.classList.contains('fb-dmg')||n.classList.contains('fb-dmg-line')||n.classList.contains('fb-kid'))))))schedule()})
     .observe(document.body,{childList:true,subtree:true});
 
   async function refresh(){
@@ -95,8 +97,11 @@
       tasks=b&&b.version===1&&b.today===amsDay()&&!b.defeatedAt&&Array.isArray(b.tasks)?b.tasks:[];
       boss=b&&b.version===1&&b.today===amsDay()?b:null;
     }catch(e){tasks=[];boss=null}
+    // For the extra klusjes (extras.js): damage per point, and no ⚔ once the boss is down.
+    api.state={perPoint:(boss&&boss.damagePerPoint)||10,live:!!boss&&!boss.defeatedAt};
     annotate();
+    if(window.FamilyExtras)window.FamilyExtras.redraw();
   }
-  window.FamilyBossTasks={refresh,annotate,set:list=>{tasks=list||[];annotate()}};
+  const api=window.FamilyBossTasks={refresh,annotate,set:list=>{tasks=list||[];annotate()},state:{perPoint:10,live:false}};
   refresh();setInterval(refresh,15000);
 })();
