@@ -52,7 +52,7 @@
 .child.xc .xc-tally{margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:clamp(14px,.75vw,19px)}
 /* child and parent pages */
 .xc-page{margin:0 0 38px}
-#tasks+.xc-page{margin-top:34px}
+#message+.xc-page{margin-top:16px}
 .xc-page .xc-title{font-size:20px}.xc-page .xc-sub{font-size:13px}
 .xc-page .xc-intro{margin:6px 0 14px;color:#aab3c4}
 .xc-page .xc-label{font-size:13px;margin:16px 0 8px}
@@ -114,7 +114,7 @@
     if(!card){
       const html=`<section class="xc xc-page" aria-label="Extra klusjes"><div class="xc-head"><h2 class="xc-title">✨ Extra klusjes</h2><span class="xc-sub">Bonus · wie eerst is</span></div>`+
         `<p class="xc-intro">${mode==='kid'?'Extra punten en schade aan de weekbaas. Wie het eerst doet, krijgt het. Niet gedaan? Dan verlies je niets.':'Telt niet mee voor de 80% van de baas; gedaan doet het wel schade. Geen straf als het blijft liggen.'}</p><div class="xc-body"></div><p class="xc-msg" aria-live="polite"></p></section>`;
-      if(mode==='kid'){const anchor=document.getElementById('tasks');anchor.insertAdjacentHTML('afterend',html);card=anchor.nextElementSibling;}
+      if(mode==='kid'){const anchor=document.getElementById('message')||document.getElementById('tasks');anchor.insertAdjacentHTML('afterend',html);card=anchor.nextElementSibling;}
       else{parentHost.innerHTML=html;card=parentHost.firstElementChild;}
       if(mode==='kid')card.addEventListener('click',take);
     }
