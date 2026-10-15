@@ -54,7 +54,7 @@
 <div class="manage-list" data-list="recurring" data-person="Rassell"></div>
 <details class="add-toggle"><summary>＋ Nieuw vast taakje</summary>
 <form class="manage-card add" data-kind="chore">
-<div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option selected>Rassell</option><option>Michelle</option><option>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label></div>
+<div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option selected>Rassell</option><option>Michelle</option><option>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label><label class="small">Punten<input name="points" type="number" min="1" max="20" inputmode="numeric" placeholder="auto"></label></div>
 <div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label><label class="week-pick" title="Extra klusje voor de hele week: zichtbaar van maandag tot zondag"><input type="checkbox" name="days" value="week">Hele week</label><label class="week-pick" title="Niet gedaan? Dan schuift het door naar de volgende dag tot het af is"><input type="checkbox" name="days" value="blijft">Tot gedaan</label></div>
 <div class="card-actions"><button class="ok" data-act="chore-save">Toevoegen</button></div>
 </form>
@@ -89,7 +89,7 @@
 <div class="manage-list" data-list="recurring" data-person="Michelle"></div>
 <details class="add-toggle"><summary>＋ Nieuw vast taakje</summary>
 <form class="manage-card add" data-kind="chore">
-<div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option>Rassell</option><option selected>Michelle</option><option>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label></div>
+<div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option>Rassell</option><option selected>Michelle</option><option>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label><label class="small">Punten<input name="points" type="number" min="1" max="20" inputmode="numeric" placeholder="auto"></label></div>
 <div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label><label class="week-pick" title="Extra klusje voor de hele week: zichtbaar van maandag tot zondag"><input type="checkbox" name="days" value="week">Hele week</label><label class="week-pick" title="Niet gedaan? Dan schuift het door naar de volgende dag tot het af is"><input type="checkbox" name="days" value="blijft">Tot gedaan</label></div>
 <div class="card-actions"><button class="ok" data-act="chore-save">Toevoegen</button></div>
 </form>
@@ -117,7 +117,7 @@
 <div class="manage-list" data-list="recurring" data-person="Beide"></div>
 <details class="add-toggle"><summary>＋ Nieuw vast taakje</summary>
 <form class="manage-card add" data-kind="chore">
-<div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option>Rassell</option><option>Michelle</option><option selected>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label></div>
+<div class="card-fields"><label>Naam<input name="title" maxlength="60" placeholder="Bv. hond uitlaten"></label><label>Voor<select name="person"><option>Rassell</option><option>Michelle</option><option selected>Beide</option></select></label><label>Soort<select name="level"><option value="standaard">⚡ Standaard (3)</option><option value="extra">🔥 Extra (5)</option></select></label><label class="small">Punten<input name="points" type="number" min="1" max="20" inputmode="numeric" placeholder="auto"></label></div>
 <div class="day-picks"><label><input type="checkbox" name="days" value="ma">Ma</label><label><input type="checkbox" name="days" value="di">Di</label><label><input type="checkbox" name="days" value="wo">Wo</label><label><input type="checkbox" name="days" value="do">Do</label><label><input type="checkbox" name="days" value="vr">Vr</label><label><input type="checkbox" name="days" value="za">Za</label><label><input type="checkbox" name="days" value="zo">Zo</label><label class="week-pick" title="Extra klusje voor de hele week: zichtbaar van maandag tot zondag"><input type="checkbox" name="days" value="week">Hele week</label><label class="week-pick" title="Niet gedaan? Dan schuift het door naar de volgende dag tot het af is"><input type="checkbox" name="days" value="blijft">Tot gedaan</label></div>
 <div class="card-actions"><button class="ok" data-act="chore-save">Toevoegen</button></div>
 </form>
@@ -182,7 +182,7 @@
 <script src="bridge-status.js"></script>
 <script src="parent-auth.js?v=1"></script>
 <script src="parent.js?v=6"></script>
-<script src="parent-manage.js?v=10"></script>
+<script src="parent-manage.js?v=11"></script>
 <script src="remind.js?v=1"></script>
 <script src="parent-tabs.js?v=3"></script>
 <script src="extras.js?v=1"></script>

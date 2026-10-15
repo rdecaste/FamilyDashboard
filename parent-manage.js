@@ -72,9 +72,9 @@
 
     const recurring=c.recurring||[];
     fill('recurring',recurring,'person',t=>`
-      <details class="manage-row-edit"><summary><div><strong>${esc(t.title)}</strong><small>${levelLabel(t.level)} · ${esc(daysLabel(t.days))}</small></div><span class="edit-link">Aanpassen</span></summary>
+      <details class="manage-row-edit"><summary><div><strong>${esc(t.title)}</strong><small>${levelLabel(t.level)} · ${t.points?Number(t.points):(String(t.level).includes('Extra')?5:3)} pt · ${esc(daysLabel(t.days))}</small></div><span class="edit-link">Aanpassen</span></summary>
         <form class="manage-card" data-id="${esc(t.id)}" data-kind="chore">
-          <div class="card-fields"><label>Naam<input name="title" value="${esc(t.title)}" maxlength="60"></label><label>Voor${whoSelect(t.person)}</label><label>Soort${levelSelect(levelKey(t.level))}</label></div>
+          <div class="card-fields"><label>Naam<input name="title" value="${esc(t.title)}" maxlength="60"></label><label>Voor${whoSelect(t.person)}</label><label>Soort${levelSelect(levelKey(t.level))}</label><label class="small">Punten<input name="points" type="number" min="1" max="20" inputmode="numeric" placeholder="auto" value="${t.points?Number(t.points):''}"></label></div>
           ${dayBoxes(t.days)}
           <div class="card-actions"><button class="ok" data-act="chore-save">Opslaan</button><button class="no" data-act="chore-remove">Stoppen</button></div>
         </form></details>`,'Nog geen vaste taakjes');
@@ -116,7 +116,7 @@
 
   function fields(form){
     const f=form.elements,out={};
-    for(const n of ['title','person','level','day','cost','emoji'])if(f[n]&&f[n].value!==undefined)out[n]=String(f[n].value).trim();
+    for(const n of ['title','person','level','day','cost','emoji','points'])if(f[n]&&f[n].value!==undefined)out[n]=String(f[n].value).trim();
     out.days=[...form.querySelectorAll('input[name="days"]:checked')].map(x=>x.value).join(',');
     return out;
   }
