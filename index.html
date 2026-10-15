@@ -168,6 +168,7 @@ body{background:#07111d}
 .task .pts{display:inline-block;margin-left:.5em;padding:.05em .5em;border-radius:999px;background:rgba(76,240,173,.12);border:1px solid rgba(76,240,173,.4);color:#8ff0c4;font-size:.78em;font-weight:800;line-height:1.35;white-space:nowrap;vertical-align:.08em;font-variant-numeric:tabular-nums;text-decoration:none}
 .task .pts+.fb-dmg{margin-left:.35em}
 .task.done .pts{opacity:.6}
+.task .since{display:inline-block;margin-left:.35em;padding:.05em .5em;border-radius:999px;background:#f6c45320;border:1px solid #f6c45366;color:#f6c453;font-size:.7em;font-weight:700;line-height:1.35;white-space:nowrap;vertical-align:.08em}
 
 /* Celebrate a child card that has finished every task today. */
 .child.all-done{box-shadow:0 8px 24px rgba(0,0,0,.16),0 0 0 1px rgba(76,240,173,.35),0 0 26px rgba(76,240,173,.28)}
@@ -261,7 +262,8 @@ function taskRows(data){
   if(!source.length)return '<div class="empty">Geen taken vandaag</div>';
   if(!open.length)return '<div class="empty all-done-msg"><span class="all-done-icon">🎉</span>Alles gedaan vandaag!</div>';
   const pts=t=>Number(t.points)>0?`<b class="pts">+${Number(t.points)}</b>`:'';
-  const visible=source.slice(0,4).map(t=>`<div class="task ${t._state}"><span class="check">${t._state==='done'?'✓':''}</span><span>${title(t)}${pts(t)}</span></div>`).join('');
+  const sinceTxt=t=>{if(!t||!t.since)return '';const d=new Date(t.since+'T12:00:00Z');return isNaN(d)?'':`<span class="since">sinds ${['zo','ma','di','wo','do','vr','za'][d.getUTCDay()]}</span>`;};
+  const visible=source.slice(0,4).map(t=>`<div class="task ${t._state}"><span class="check">${t._state==='done'?'✓':''}</span><span>${title(t)}${pts(t)}${sinceTxt(t)}</span></div>`).join('');
   return visible+(source.length>4?`<div class="more">+${source.length-4} meer</div>`:'');
 }
 function rewardRows(data){

@@ -14,3 +14,4 @@
 
 .task-name .pts{display:inline-block;margin-left:.5em;padding:.05em .5em;border-radius:999px;background:rgba(76,240,173,.12);border:1px solid rgba(76,240,173,.4);color:#8ff0c4;font-size:.6em;font-weight:800;line-height:1.35;white-space:nowrap;vertical-align:.15em}
 #message~.rewards{margin-top:38px}
+.task-name .since{display:inline-block;margin-left:.4em;padding:.05em .5em;border-radius:999px;background:#f6c45320;border:1px solid #f6c45366;color:#f6c453;font-size:.55em;font-weight:700;line-height:1.35;white-space:nowrap;vertical-align:.2em}
