@@ -22,21 +22,3 @@ function renderRewards(catalog){
   if(lastData)render(lastData);
 }
 window.addEventListener('family-catalog',e=>renderRewards(e.detail));
-const WEEKLY_CLOUD='a3xk0plk';
-function latestCompletedSunday(){
-  const now=new Date(),tz='Europe/Amsterdam';
-  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
-  const v=Object.fromEntries(parts.filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));
-  const sunday=new Date(Date.UTC(Number(v.year),Number(v.month)-1,Number(v.day),12));
-  sunday.setUTCDate(sunday.getUTCDate()-sunday.getUTCDay());
-  return sunday.toISOString().slice(0,10);
-}
-function loadWeeklySummary(){
-  const image=document.getElementById('weekly-image'),placeholder=document.getElementById('weekly-placeholder');
-  if(!image||!placeholder)return;
-  const weekEnd=latestCompletedSunday();
-  image.onload=()=>image.classList.add('loaded');
-  image.onerror=()=>{image.classList.remove('loaded');placeholder.textContent='Je eerste weekoverzicht verschijnt zondagavond.';};
-  image.src=`https://res.cloudinary.com/${WEEKLY_CLOUD}/image/upload/f_auto,q_auto,w_900,c_limit/Family%20Dashboard/${key}-weekly-${weekEnd}.png`;
-}
-loadWeeklySummary();setInterval(loadWeeklySummary,300000);
