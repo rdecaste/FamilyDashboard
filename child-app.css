@@ -11,3 +11,7 @@
 .ideas-fold>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;background:#111722;border:1px solid #ffffff12;border-radius:18px;cursor:pointer;list-style:none}.ideas-fold>summary::-webkit-details-marker{display:none}
 .ideas-fold>summary h2{margin:0}.ideas-fold>summary::after{content:'▾';color:#aab3c4;font-size:18px;transition:transform .2s}.ideas-fold:not([open])>summary::after{transform:rotate(-90deg)}
 .ideas-fold[open]>summary{margin-bottom:14px}.ideas-count{color:#f6c453;font-size:15px;font-weight:600}
+
+.task-name .pts{display:inline-block;margin-left:.5em;padding:.05em .5em;border-radius:999px;background:rgba(76,240,173,.12);border:1px solid rgba(76,240,173,.4);color:#8ff0c4;font-size:.6em;font-weight:800;line-height:1.35;white-space:nowrap;vertical-align:.15em}
+#message~.rewards{margin-top:38px}
+.task-name .since{display:inline-block;margin-left:.4em;padding:.05em .5em;border-radius:999px;background:#f6c45320;border:1px solid #f6c45366;color:#f6c453;font-size:.55em;font-weight:700;line-height:1.35;white-space:nowrap;vertical-align:.2em}

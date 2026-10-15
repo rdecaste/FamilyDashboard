@@ -89,3 +89,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .manage-row-edit.proposal{border-color:#f6c45333}
 
 .tabs .t-steph.active{background:#ff7ac8;border-color:#ff7ac8;color:#2a0a1e}.p-steph .remind{max-width:640px}
+
+/* Extra klusjes (extras.js) and the "Hele week" day pick */
+.day-picks .week-pick{border-color:#c9b8ff66;color:#ddd2ff}.day-picks .week-pick input{accent-color:#c9b8ff}
+[data-extras] .xc-page{margin-bottom:10px}[data-extras] .reset{padding:10px 14px;font-size:14px}

@@ -10,7 +10,8 @@ let lastData=null;
 // would bring back the Complete button of a task that is still being saved.
 let saving=0;
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function render(data){lastData=data;const child=data.children[key];const balance=Number(child.points??0);points.textContent=balance;const allowed=(child.screenTime||'Yes')!=='No';const value=screen.querySelector('.screen-value');if(value)value.textContent=allowed?'YES ✓':'NO ✕';screen.classList.toggle('no',!allowed);screen.classList.toggle('yes',allowed);for(const b of rewardButtons()){const cost=Number(b.dataset.cost);b.disabled=balance<cost;b.title=b.disabled?`You need ${cost-balance} more points`:'';}const items=child.outstandingTasks||[];tasks.innerHTML=items.length?items.map(t=>`<article class="task"><div class="task-name">${escapeHtml(typeof t==='string'?t:t.title)}</div><button class="complete" type="button" data-task-id="${escapeHtml(t.id||'')}" ${t.id?'':'disabled'}>Complete</button></article>`).join(''):'<div class="empty">Everything is done ✓</div>';}
+const sinceTxt=t=>{if(!t||!t.since)return '';const d=new Date(t.since+'T12:00:00Z');return isNaN(d)?'':`<span class="since">sinds ${['zo','ma','di','wo','do','vr','za'][d.getUTCDay()]}</span>`;};
+function render(data){lastData=data;const child=data.children[key];const balance=Number(child.points??0);points.textContent=balance;const allowed=(child.screenTime||'Yes')!=='No';const value=screen.querySelector('.screen-value');if(value)value.textContent=allowed?'YES ✓':'NO ✕';screen.classList.toggle('no',!allowed);screen.classList.toggle('yes',allowed);for(const b of rewardButtons()){const cost=Number(b.dataset.cost);b.disabled=balance<cost;b.title=b.disabled?`You need ${cost-balance} more points`:'';}const items=child.outstandingTasks||[];tasks.innerHTML=items.length?items.map(t=>`<article class="task"><div class="task-name">${escapeHtml(typeof t==='string'?t:t.title)}${t.points?`<b class="pts">+${Number(t.points)}</b>`:''}${sinceTxt(t)}</div><button class="complete" type="button" data-task-id="${escapeHtml(t.id||'')}" ${t.id?'':'disabled'}>Complete</button></article>`).join(''):'<div class="empty">Everything is done ✓</div>';if(window.FamilyExtras)FamilyExtras.render(data);}
 async function load(){if(saving)return;try{const r=await fetch(`${ENGINE_URL}/family/latest?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error('Could not load dashboard');render(await r.json());message.textContent='';}catch(e){message.textContent=e.message;message.className='message error';}}
 tasks.addEventListener('click',async event=>{const button=event.target.closest('button[data-task-id]');if(!button)return;button.disabled=true;button.textContent='Saving…';message.textContent='';saving++;try{const r=await fetch(COMPLETE_WEBHOOK,{method:'POST',body:new URLSearchParams({taskId:button.dataset.taskId,child:CHILD})});if(!r.ok)throw new Error('Could not complete task');const data=await r.json();button.textContent='Done';button.classList.add('done');saving--;render(data);}catch(e){saving=Math.max(0,saving-1);button.disabled=false;button.textContent='Complete';message.textContent=e.message;message.className='message error';await load();}});
 document.querySelector('.rewards').addEventListener('click',async event=>{const button=event.target.closest('button[data-reward]');if(!button||button.disabled)return;const label=button.querySelector('strong').textContent,cost=button.dataset.cost;if(!confirm(`Redeem ${label} for ${cost} points?`))return;const original=button.innerHTML;rewardButtons().forEach(b=>b.disabled=true);button.innerHTML='<strong>Redeeming…</strong>';message.textContent='';saving++;try{const r=await fetch(REWARD_WEBHOOK,{method:'POST',body:new URLSearchParams({child:CHILD,reward:button.dataset.reward})});if(!r.ok)throw new Error('Could not redeem reward');const data=await r.json();saving--;render(data);message.textContent=`${label} redeemed.`;message.className='message success';}catch(e){saving=Math.max(0,saving-1);button.innerHTML=original;message.textContent='Redemption failed. Refresh and try again.';message.className='message error';await load();}});
@@ -22,21 +23,3 @@ function renderRewards(catalog){
   if(lastData)render(lastData);
 }
 window.addEventListener('family-catalog',e=>renderRewards(e.detail));
-const WEEKLY_CLOUD='a3xk0plk';
-function latestCompletedSunday(){
-  const now=new Date(),tz='Europe/Amsterdam';
-  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
-  const v=Object.fromEntries(parts.filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));
-  const sunday=new Date(Date.UTC(Number(v.year),Number(v.month)-1,Number(v.day),12));
-  sunday.setUTCDate(sunday.getUTCDate()-sunday.getUTCDay());
-  return sunday.toISOString().slice(0,10);
-}
-function loadWeeklySummary(){
-  const image=document.getElementById('weekly-image'),placeholder=document.getElementById('weekly-placeholder');
-  if(!image||!placeholder)return;
-  const weekEnd=latestCompletedSunday();
-  image.onload=()=>image.classList.add('loaded');
-  image.onerror=()=>{image.classList.remove('loaded');placeholder.textContent='Je eerste weekoverzicht verschijnt zondagavond.';};
-  image.src=`https://res.cloudinary.com/${WEEKLY_CLOUD}/image/upload/f_auto,q_auto,w_900,c_limit/Family%20Dashboard/${key}-weekly-${weekEnd}.png`;
-}
-loadWeeklySummary();setInterval(loadWeeklySummary,300000);

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-store">
 <title>Michelle — Family Dashboard</title>
-<link rel="stylesheet" href="child-app.css?v=3">
+<link rel="stylesheet" href="child-app.css?v=6">
 </head>
 <body>
 <main>
@@ -16,10 +16,9 @@
 <div class="points"><strong id="points">—</strong><span>points</span></div>
 </header>
 <div class="screen-banner" id="screen"><span class="dot"></span><div><span class="screen-label">Screen time today</span><strong class="screen-value">—</strong></div></div>
-<section class="weekly-summary" aria-labelledby="weekly-title">
-<div class="weekly-heading"><div><p class="eyebrow">Jouw week</p><h2 id="weekly-title">Weekoverzicht voor Michelle</h2></div><span>Elke zondag vernieuwd</span></div>
-<div class="weekly-poster"><img id="weekly-image" alt="Wekelijks overzicht met feedback voor Michelle"><div id="weekly-placeholder">Je eerste weekoverzicht wordt gemaakt…</div></div>
-</section>
+<h2>Outstanding tasks</h2>
+<section class="tasks" id="tasks"></section>
+<p class="message" id="message" aria-live="polite"></p>
 <section class="rewards">
 <h2>Redeem points</h2>
 <div class="reward-grid">
@@ -37,13 +36,11 @@
 <p class="message" id="idea-message" aria-live="polite"></p>
 </details>
 </section>
-<h2>Outstanding tasks</h2>
-<section class="tasks" id="tasks"></section>
-<p class="message" id="message" aria-live="polite"></p>
 </main>
 <script>const CHILD='Michelle';</script>
-<script src="child-app.js?v=3"></script>
+<script src="child-app.js?v=6"></script>
 <script src="proposals.js?v=3"></script>
-<script src="boss-tasks.js?v=5"></script>
+<script src="boss-tasks.js?v=6"></script>
+<script src="extras.js?v=2"></script>
 </body>
 </html>
